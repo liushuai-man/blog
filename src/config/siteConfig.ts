@@ -20,7 +20,10 @@ export const siteConfig: SiteConfig = {
 
   // 站点关键词
   keywords: [
-    '软弹适中',
+    '刘帅',
+    '个人博客',
+    '全栈开发',
+    'AI Agent',
     '前端',
     '后端',
     'Vue',
