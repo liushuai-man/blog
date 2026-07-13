@@ -3,7 +3,7 @@ title: 《NeteaseCloudMusicApi 项目依赖安装避坑指南》
 published: 2025-10-18
 description: "在 Windows 系统（MINGW64 终端）部署 NeteaseCloudMusicApi 项目时，解决依赖安装失败、模块缺失（如 express）、镜像源错误等问题，包含操作步骤、错误原因、避坑要点及图示指引。"
 tags: ["NeteaseCloudMusicApi", "依赖安装"]
-category: 项目
+category: 项目开发
 draft: false
 ---
 
