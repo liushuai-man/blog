@@ -7,7 +7,7 @@ const SITE_LANG = 'zh_CN';
 
 export const siteConfig: SiteConfig = {
   // 站点标题
-  title: '软弹适中',
+  title: '个人博客',
 
   // 站点副标题
   subtitle: '个人博客网站',
