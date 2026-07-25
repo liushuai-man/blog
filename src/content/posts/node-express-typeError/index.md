@@ -2,8 +2,8 @@
 title: Express + TypeScript 中“没有类型包”的解决方案
 published: 2026-04-18
 description: '在 Node.js 中，使用 TypeScript 开发时，可能会遇到无类型包报错的问题。本文将介绍 3 种终极解决方案，帮助你解决这个问题。'
-tags: ['Node', 'Express', 'TypeScript']
-category: 后端
+tags: ['Node', 'Express', 'TypeScript','后端']
+category: Node.js
 draft: false
 ---
 

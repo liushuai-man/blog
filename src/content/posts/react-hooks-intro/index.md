@@ -2,8 +2,8 @@
 title: 一分钟了解React中的hooks
 published: 2026-03-02
 description: "在 React 16.8 中，hooks 是新增的特性，用于在函数组件中使用类组件的状态（state）和生命周期能力。"
-tags: ["React"]
-category: 前端
+tags: ["React","前端"]
+category: React
 draft: false
 ---
 

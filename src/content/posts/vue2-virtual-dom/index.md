@@ -3,7 +3,7 @@ title: Vue2-虚拟DOM树和虚拟节点
 published: 2025-12-20
 description: "在 Vue2 中，虚拟 DOM 树（Virtual DOM）是一种用于优化页面渲染的机制。它通过用真实 DOM 结构真实 DOM 结构，来减少真实 DOM 操作的次数，提升页面渲染性能。"
 tags: ["Vue2", "Virtual DOM", "VNode"]
-category: 前端
+category: Vue2
 draft: false
 ---
 

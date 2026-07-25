@@ -3,7 +3,7 @@ title: Vue2 项目实战避坑指南：ESLint、Vant、Yarn 版本冲突全解�
 published: 2025-12-06
 description: "在 Vue2 项目开发中，版本冲突是前端工程师绕不开的 “坑”—— 尤其是 ESLint 语法校验、Vant 组件库集成、Yarn/NPM 包管理器选择等场景，稍有不慎就会出现依赖报错、编译失败等问题。"
 tags: ["Vue2", "ESLint", "Vant", "Yarn"]
-category: 前端
+category: Vue2
 draft: false
 ---
 

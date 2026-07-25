@@ -3,7 +3,7 @@ title: Vue2 - Dep到底是什么？如何简单快速理解Dep组件
 published: 2025-12-27
 description: "在 Vue2 中，Dep 组件是响应式系统的核心组件之一，用于收集和通知依赖。本文将详细介绍 Dep 组件的原理和实现。"
 tags: ["Vue2", "Dep"]
-category: 前端
+category: Vue2
 draft: false
 ---
 

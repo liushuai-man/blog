@@ -2,8 +2,8 @@
 title: 深入理解 React Ref 机制：useRef 与 forwardRef 的协作原理
 published: 2026-03-22
 description: '在 React 16.8 中，useRef 是新增的特性，用于在函数组件中访问 DOM 元素或可变值。forwardRef 则用于将组件的引用传递给子组件。本文将详细介绍 useRef 和 forwardRef 的协作原理。'
-tags: ['React']
-category: 前端
+tags: ['React','前端']
+category: React
 draft: false
 ---
 

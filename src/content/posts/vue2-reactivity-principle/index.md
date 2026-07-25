@@ -3,7 +3,7 @@ title: Vue2 的数据响应式原理&&给实例新增响应式属性
 published: 2026-01-24
 description: '在 Vue2 中，响应式数据的核心方法是 Object.defineProperty()。它允许你为对象定义新属性，或修改已有属性的特性（如是否可枚举、可修改、可删除等），是实现数据劫持（如 Vue 2 响应式）的基础。'
 tags: ['Vue2']
-category: 前端
+category: Vue2
 draft: false
 ---
 
