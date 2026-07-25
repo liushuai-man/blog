@@ -1,6 +1,6 @@
 ---
 title: Node.js 的高并发处理
-published: 2026-07-10
+published: 2026-07-12
 description: 'Node.js 是单线程的，那么他是如何实现高并发异步处理？本文将介绍 Node.js 高并发处理的基本原理，以及如何在 Node.js 中使用高并发处理。'
 tags: ['Node.js', '高并发']
 category: 后端
