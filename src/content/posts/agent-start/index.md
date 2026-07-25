@@ -2,8 +2,8 @@
 title: AI Agent 开发入门指南
 published: 2026-04-25
 description: '一个简单的AI Agent入门指南，带你快速上手AI Agent的开发。'
-tags: ['AI Agent', 'AI']
-category: AI
+tags: ['AI Agent']
+category: Agent
 draft: false
 ---
 
