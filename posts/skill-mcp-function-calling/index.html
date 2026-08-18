@@ -1000,7 +1000,7 @@ html[data-waves-enabled=false] #header-waves{display:none!important}html[data-wa
 
 
 
-<table><thead><tr><th>概念</th><th>核心问题</th><th>典型内容</th><th>更像什么</th></tr></thead><tbody><tr><td><strong>Skill</strong></td><td>这类任务应该如何完成？</td><td>指令、步骤、模板、检查规则、脚本</td><td>操作手册</td></tr><tr><td><strong>MCP</strong></td><td>外部系统如何统一接入？</td><td>工具、资源、能力发现、鉴权与通信</td><td>USB / 插座标准</td></tr><tr><td><strong>Function Calling</strong></td><td>模型如何请求执行一个具体操作？</td><td>函数名、参数 Schema、调用结果</td><td>按下某个按钮</td></tr></tbody></table><p>下面这张图比“三个重叠的圆”更准确：三者不是互斥方案，而是经常一起出现的三层结构。</p><div class="mermaid-diagram-container"><div class="mermaid-wrapper" id="mermaid-uvx8qh"><div class="mermaid" data-mermaid-code="flowchart TB
+<table><thead><tr><th>概念</th><th>核心问题</th><th>典型内容</th><th>更像什么</th></tr></thead><tbody><tr><td><strong>Skill</strong></td><td>这类任务应该如何完成？</td><td>指令、步骤、模板、检查规则、脚本</td><td>操作手册</td></tr><tr><td><strong>MCP</strong></td><td>外部系统如何统一接入？</td><td>工具、资源、能力发现、鉴权与通信</td><td>USB / 插座标准</td></tr><tr><td><strong>Function Calling</strong></td><td>模型如何请求执行一个具体操作？</td><td>函数名、参数 Schema、调用结果</td><td>按下某个按钮</td></tr></tbody></table><p>下面这张图比“三个重叠的圆”更准确：三者不是互斥方案，而是经常一起出现的三层结构。</p><div class="mermaid-diagram-container"><div class="mermaid-wrapper" id="mermaid-agvsig"><div class="mermaid" data-mermaid-code="flowchart TB
     U[&#x22;用户目标：更新并发布一篇博客&#x22;]
     S[&#x22;Skill：任务方法层&#x22;]
     A[&#x22;Agent / 模型：判断下一步&#x22;]
@@ -1694,7 +1694,7 @@ html[data-waves-enabled=false] #header-waves{display:none!important}html[data-wa
 <li>模型调用 <code>update_post</code>，把文章保存为草稿；</li>
 <li>Skill 要求继续执行链接与格式复查；</li>
 <li>Agent 报告结果，但不自动发布。</li>
-</ol><div class="mermaid-diagram-container"><div class="mermaid-wrapper" id="mermaid-lxnz1s"><div class="mermaid" data-mermaid-code="sequenceDiagram
+</ol><div class="mermaid-diagram-container"><div class="mermaid-wrapper" id="mermaid-inzxl5"><div class="mermaid" data-mermaid-code="sequenceDiagram
     actor User as 用户
     participant Agent as Agent
     participant Skill as 博客更新 Skill
@@ -2362,7 +2362,7 @@ html[data-waves-enabled=false] #header-waves{display:none!important}html[data-wa
 <li><strong>Skill</strong> 规定整件事的顺序、边界和质量标准。</li>
 </ul><p>换句话说，Function Calling 本身并不知道什么叫“高质量的博客更新”。它只负责表达一次具体的工具调用请求。</p></section>
 <section><h2 id="六它们没有简单的一一包含关系">六、它们没有简单的一一包含关系<a class="anchor" href="#六它们没有简单的一一包含关系"><span class="anchor-icon" data-pagefind-ignore="">#</span></a></h2><p>理解三者时，还要避开“谁包含谁”的思维陷阱。</p><section><h3 id="1-function-calling-不一定需要-mcp">1. Function Calling 不一定需要 MCP<a class="anchor" href="#1-function-calling-不一定需要-mcp"><span class="anchor-icon" data-pagefind-ignore="">#</span></a></h3><p>应用可以直接把本地函数定义和参数 Schema 提供给模型。只有几个应用内函数时，引入 MCP 未必必要。</p></section><section><h3 id="2-mcp-不只等于-function-calling">2. MCP 不只等于 Function Calling<a class="anchor" href="#2-mcp-不只等于-function-calling"><span class="anchor-icon" data-pagefind-ignore="">#</span></a></h3><p>一个 MCP Server 可以暴露多个工具，还可以提供资源等上下文能力。它解决的是标准化接入，而不是某一次调用的业务逻辑。</p></section><section><h3 id="3-skill-不一定需要-mcp">3. Skill 不一定需要 MCP<a class="anchor" href="#3-skill-不一定需要-mcp"><span class="anchor-icon" data-pagefind-ignore="">#</span></a></h3><p>如果任务只涉及本地文件、已有上下文或纯文本处理，Skill 可以完全不连接远程服务。</p></section><section><h3 id="4-skill-也不一定每一步都调用函数">4. Skill 也不一定每一步都调用函数<a class="anchor" href="#4-skill-也不一定每一步都调用函数"><span class="anchor-icon" data-pagefind-ignore="">#</span></a></h3><p>很多步骤只是阅读、推理、写作和验证。工具调用只是完成工作流的一种手段，而不是工作流本身。</p><p>因此，更准确的总结是：</p><blockquote><p><strong>Function Calling 可以独立使用；MCP 可以为它提供标准化的工具来源；Skill 可以在更高层组织这些调用。</strong></p></blockquote></section></section>
-<section><h2 id="七到底应该怎么选">七、到底应该怎么选？<a class="anchor" href="#七到底应该怎么选"><span class="anchor-icon" data-pagefind-ignore="">#</span></a></h2><div class="mermaid-diagram-container"><div class="mermaid-wrapper" id="mermaid-tfs6jb"><div class="mermaid" data-mermaid-code="flowchart TD
+<section><h2 id="七到底应该怎么选">七、到底应该怎么选？<a class="anchor" href="#七到底应该怎么选"><span class="anchor-icon" data-pagefind-ignore="">#</span></a></h2><div class="mermaid-diagram-container"><div class="mermaid-wrapper" id="mermaid-wfxnhf"><div class="mermaid" data-mermaid-code="flowchart TD
     Q1{&#x22;是否只需调用应用内的少量函数？&#x22;}
     Q2{&#x22;能力是否需要被多个 Agent 或客户端复用？&#x22;}
     Q3{&#x22;任务是否有稳定、重复的步骤和质量规则？&#x22;}
