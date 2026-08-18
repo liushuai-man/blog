@@ -34,15 +34,15 @@ draft: false
 
 ```mermaid
 flowchart TB
-    U["用户目标<br/>更新并发布一篇博客"]
-    S["Skill：任务方法层<br/>步骤、规范、模板、检查规则"]
-    A["Agent / 模型<br/>判断下一步该做什么"]
-    FC["Function Calling：调用机制<br/>选择工具 + 生成结构化参数"]
-    MCP["MCP：标准连接层<br/>发现和连接外部能力"]
-    L["应用内函数<br/>检查链接 / 渲染 Markdown"]
-    CMS["CMS MCP Server<br/>读取、更新、发布文章"]
-    DAM["素材库 MCP Server<br/>搜索、上传图片"]
-    ANA["分析平台 MCP Server<br/>读取文章数据"]
+    U["用户目标：更新并发布一篇博客"]
+    S["Skill：任务方法层"]
+    A["Agent / 模型：判断下一步"]
+    FC["Function Calling：调用机制"]
+    MCP["MCP：标准连接层"]
+    L["应用内函数"]
+    CMS["CMS MCP Server"]
+    DAM["素材库 MCP Server"]
+    ANA["分析平台 MCP Server"]
 
     U --> S
     S --> A
@@ -52,13 +52,6 @@ flowchart TB
     MCP --> CMS
     MCP --> DAM
     MCP --> ANA
-
-    classDef skill fill:#7c3aed,color:#fff,stroke:#5b21b6
-    classDef mcp fill:#0f766e,color:#fff,stroke:#115e59
-    classDef call fill:#ea580c,color:#fff,stroke:#c2410c
-    class S skill
-    class MCP mcp
-    class FC call
 ```
 
 *Skill 位于任务编排层；Function Calling 位于单次调用层；MCP 位于外部能力的标准连接层。*
@@ -230,28 +223,23 @@ sequenceDiagram
 
 ```mermaid
 flowchart TD
-    Q1{"是否只需调用<br/>应用内的少量函数？"}
-    Q2{"能力是否需要被多个<br/>Agent 或客户端复用？"}
-    Q3{"任务是否有稳定、重复的<br/>步骤和质量规则？"}
+    Q1{"是否只需调用应用内的少量函数？"}
+    Q2{"能力是否需要被多个 Agent 或客户端复用？"}
+    Q3{"任务是否有稳定、重复的步骤和质量规则？"}
+
     F["Function Calling"]
     M["MCP + 工具调用"]
     S["Skill"]
     ALL["Skill + MCP + Function Calling"]
 
-    Q1 -- "是" --> F
-    Q1 -- "否" --> Q2
-    Q2 -- "是" --> Q3
-    Q2 -- "否" --> S
-    Q3 -- "否" --> M
-    Q3 -- "是" --> ALL
+    Q1 -- 是 --> F
+    Q1 -- 否 --> Q2
+    Q2 -- 是 --> Q3
+    Q2 -- 否 --> S
+    Q3 -- 否 --> M
+    Q3 -- 是 --> ALL
 
-    classDef skill fill:#7c3aed,color:#fff,stroke:#5b21b6
-    classDef mcp fill:#0f766e,color:#fff,stroke:#115e59
-    classDef call fill:#ea580c,color:#fff,stroke:#c2410c
-    class S skill
-    class M mcp
-    class F call
-    class ALL skill
+
 ```
 
 也可以直接按下面四条判断：
