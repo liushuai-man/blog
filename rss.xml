@@ -1,4 +1,155 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>个人博客</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.1.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年8月8日 19:26:12</lastBuildDate><item><title>用 Python 写一个简单的网页爬虫</title><link>https://liushuai-man.github.io/blog/posts/python-web-scraping-guide/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/python-web-scraping-guide/</guid><description>从 HTTP 请求、网页解析到数据保存，循序渐进地完成一个 Python 爬虫，并说明爬取数据时需要遵守的边界。</description><pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;如果把网页看成一本放在网上的书，爬虫做的事情就是：自动翻开这本书，找到需要的内容，再把它们整理好保存下来。&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>个人博客</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.1.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年8月18日 20:25:39</lastBuildDate><item><title>别再混淆 Skill、MCP 和 Function Calling 了</title><link>https://liushuai-man.github.io/blog/posts/skill-mcp-function-calling/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/skill-mcp-function-calling/</guid><description>用“更新并发布一篇博客”看懂 Skill、MCP 与 Function Calling 如何分工、组合，以及什么时候该用谁。</description><pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;你可能听过下面三种说法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Function Calling 让模型“调用工具”；&lt;/li&gt;
+&lt;li&gt;MCP 让模型“连接工具和数据”；&lt;/li&gt;
+&lt;li&gt;Skill 也能让模型“完成一项任务”。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;听上去，它们似乎都在解决同一件事：&lt;strong&gt;让 AI 不只回答问题，还能真正做事。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;但如果把三者当成同类技术，就很容易陷入错误的比较。它们关注的并不是同一个问题，而是处在不同的抽象层：&lt;/p&gt;
+&lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;Function Calling 解决“一次调用怎么发生”，MCP 解决“工具怎么接进来”，Skill 解决“一整件事应该怎么做”。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;这篇文章不堆定义。我们用一个贯穿全文的任务——“更新一篇博客并保存为草稿”——把三者彻底拆开，再重新组合起来。&lt;/p&gt;
+&lt;section&gt;&lt;h2&gt;一、先看全景：三者不在同一个抽象层&lt;a href=&quot;#一先看全景三者不在同一个抽象层&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;概念&lt;/th&gt;&lt;th&gt;核心问题&lt;/th&gt;&lt;th&gt;典型内容&lt;/th&gt;&lt;th&gt;更像什么&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;strong&gt;Skill&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;这类任务应该如何完成？&lt;/td&gt;&lt;td&gt;指令、步骤、模板、检查规则、脚本&lt;/td&gt;&lt;td&gt;操作手册&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;strong&gt;MCP&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;外部系统如何统一接入？&lt;/td&gt;&lt;td&gt;工具、资源、能力发现、鉴权与通信&lt;/td&gt;&lt;td&gt;USB / 插座标准&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;strong&gt;Function Calling&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;模型如何请求执行一个具体操作？&lt;/td&gt;&lt;td&gt;函数名、参数 Schema、调用结果&lt;/td&gt;&lt;td&gt;按下某个按钮&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;下面这张图比“三个重叠的圆”更准确：三者不是互斥方案，而是经常一起出现的三层结构。&lt;/p&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;flowchart TB
+    U[&quot;用户目标&amp;lt;br/&amp;gt;更新并发布一篇博客&quot;]
+    S[&quot;Skill：任务方法层&amp;lt;br/&amp;gt;步骤、规范、模板、检查规则&quot;]
+    A[&quot;Agent / 模型&amp;lt;br/&amp;gt;判断下一步该做什么&quot;]
+    FC[&quot;Function Calling：调用机制&amp;lt;br/&amp;gt;选择工具 + 生成结构化参数&quot;]
+    MCP[&quot;MCP：标准连接层&amp;lt;br/&amp;gt;发现和连接外部能力&quot;]
+    L[&quot;应用内函数&amp;lt;br/&amp;gt;检查链接 / 渲染 Markdown&quot;]
+    CMS[&quot;CMS MCP Server&amp;lt;br/&amp;gt;读取、更新、发布文章&quot;]
+    DAM[&quot;素材库 MCP Server&amp;lt;br/&amp;gt;搜索、上传图片&quot;]
+    ANA[&quot;分析平台 MCP Server&amp;lt;br/&amp;gt;读取文章数据&quot;]
+
+    U --&amp;gt; S
+    S --&amp;gt; A
+    A --&amp;gt; FC
+    FC --&amp;gt; L
+    FC --&amp;gt; MCP
+    MCP --&amp;gt; CMS
+    MCP --&amp;gt; DAM
+    MCP --&amp;gt; ANA
+
+    classDef skill fill:#7c3aed,color:#fff,stroke:#5b21b6
+    classDef mcp fill:#0f766e,color:#fff,stroke:#115e59
+    classDef call fill:#ea580c,color:#fff,stroke:#c2410c
+    class S skill
+    class MCP mcp
+    class FC call&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;Skill 位于任务编排层；Function Calling 位于单次调用层；MCP 位于外部能力的标准连接层。&lt;/em&gt;&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;二、Function Calling：模型发出的结构化调用请求&lt;a href=&quot;#二function-calling模型发出的结构化调用请求&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Function Calling（也常叫 Tool Calling）是一种让模型请求外部能力的机制。基本流程是：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;应用把可用函数及参数结构告诉模型；&lt;/li&gt;
+&lt;li&gt;模型判断当前任务是否需要调用函数；&lt;/li&gt;
+&lt;li&gt;模型返回函数名和结构化参数；&lt;/li&gt;
+&lt;li&gt;应用或工具运行环境真正执行函数；&lt;/li&gt;
+&lt;li&gt;执行结果返回模型，模型再继续回答或决定下一步。&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;例如，模型可能返回这样一次调用请求：&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;{&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;  &lt;/span&gt;&lt;span&gt;&quot;name&quot;&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;&lt;span&gt;&quot;update_blog_post&quot;&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;3&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;  &lt;/span&gt;&lt;span&gt;&quot;arguments&quot;&lt;/span&gt;&lt;span&gt;: {&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;4&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;    &lt;/span&gt;&lt;span&gt;&quot;post_id&quot;&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;&lt;span&gt;&quot;agent-tools-101&quot;&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;5&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;    &lt;/span&gt;&lt;span&gt;&quot;title&quot;&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;&lt;span&gt;&quot;Skill、MCP 与 Function Calling&quot;&lt;/span&gt;&lt;span&gt;,&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;6&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;    &lt;/span&gt;&lt;span&gt;&quot;status&quot;&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;&lt;span&gt;&quot;draft&quot;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;7&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;  &lt;/span&gt;&lt;/span&gt;&lt;span&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;8&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;}&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;最常见的误区是：&lt;strong&gt;模型输出了这段 JSON，不等于博客已经更新。&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;它只是在说：“我希望调用 &lt;code&gt;update_blog_post&lt;/code&gt;，参数是这些。”真正的权限检查、API 请求、重试、回滚和错误处理，仍然由外部程序负责。模型提出请求，执行环境决定是否以及如何执行。&lt;/p&gt;&lt;p&gt;OpenAI 官方文档也将 Function Calling 称为 Tool Calling，并把它描述为模型连接应用所提供数据与动作的方式。完整流程可参考 &lt;a href=&quot;https://developers.openai.com/api/docs/guides/function-calling&quot; target=&quot;_blank&quot;&gt;OpenAI Function Calling 文档&lt;/a&gt;。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;三、MCP：让外部能力以统一方式被发现和连接&lt;a href=&quot;#三mcp让外部能力以统一方式被发现和连接&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;如果说 Function Calling 关心的是“这一次要调用哪个工具、传什么参数”，那么 MCP（Model Context Protocol）更关心：&lt;strong&gt;这些外部工具和上下文能力是怎样接入 AI 客户端的？&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;它通常处理这些问题：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;AI 客户端怎样发现服务提供的能力；&lt;/li&gt;
+&lt;li&gt;工具、资源和上下文怎样被描述；&lt;/li&gt;
+&lt;li&gt;请求与结果怎样传输；&lt;/li&gt;
+&lt;li&gt;身份认证与权限怎样衔接；&lt;/li&gt;
+&lt;li&gt;同一套服务怎样被不同 Agent 或客户端复用。&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;一个 CMS MCP Server 可能暴露下面这些能力：&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;CMS MCP Server&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;├── Tools&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;3&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;│   ├── search_posts&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;4&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;│   ├── get_post&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;5&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;│   ├── update_post&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;6&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;│   ├── upload_image&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;7&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;│   └── publish_post&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;8&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;└── Resources&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;9&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;    &lt;/span&gt;&lt;/span&gt;&lt;span&gt;├── brand_guidelines&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;10&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;    &lt;/span&gt;&lt;/span&gt;&lt;span&gt;├── editorial_calendar&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;11&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;&lt;span&gt;    &lt;/span&gt;&lt;/span&gt;&lt;span&gt;└── category_definitions&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;这样，CMS 不必为每一个 AI 客户端重新设计一套专用接入方式。客户端连接 MCP Server 后，就能发现它提供的工具和上下文，再把合适的能力交给模型使用。&lt;/p&gt;&lt;p&gt;需要注意：&lt;strong&gt;MCP 不等于某一个函数。&lt;/strong&gt; 一个 MCP Server 可以提供多个工具，也可以提供资源等其他上下文能力。OpenAI 的 Responses API 可以连接远程 MCP Server，并把其中的能力提供给模型使用，详见 &lt;a href=&quot;https://developers.openai.com/api/docs/guides/tools-connectors-mcp&quot; target=&quot;_blank&quot;&gt;OpenAI MCP 与 Connectors 文档&lt;/a&gt;。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;四、Skill：把经验封装成可复用的工作方法&lt;a href=&quot;#四skill把经验封装成可复用的工作方法&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Skill 既不是一个函数，也不只是 API 描述。它更像一份能被 Agent 按需加载的专业操作手册，通常会说明：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;什么时候应该使用它；&lt;/li&gt;
+&lt;li&gt;任务应该按什么顺序执行；&lt;/li&gt;
+&lt;li&gt;需要读取哪些资料；&lt;/li&gt;
+&lt;li&gt;可以调用哪些工具；&lt;/li&gt;
+&lt;li&gt;必须遵守哪些约束；&lt;/li&gt;
+&lt;li&gt;怎样检查结果；&lt;/li&gt;
+&lt;li&gt;失败时怎样处理。&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;以“博客更新 Skill”为例，它可能规定：&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;1. 读取原文、目标读者和编辑规范&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;2. 检查可能过时的事实&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;3&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;3. 生成修改提纲&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;4&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;4. 保留原有观点与语气&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;5&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;5. 更新正文&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;6&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;6. 生成关系图与摘要&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;7&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;7. 执行链接、事实和格式检查&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;8&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;8. 保存为草稿，不直接发布&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;它回答的不是“怎样调用 &lt;code&gt;update_post&lt;/code&gt;”，而是：&lt;strong&gt;一篇博客应该按照什么流程更新，怎样才算完成得好。&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;因此，一个 Skill 可以使用多个工具，也可以完全不调用工具。纯写作、代码审查或本地文件整理等 Skill，可能只包含阅读、推理、编辑与验证。OpenAI 对 Skills 的说明同样强调可复用工作流，以及将指令、资源和脚本组织起来并按需加载，参见 &lt;a href=&quot;https://learn.chatgpt.com/docs/build-skills&quot; target=&quot;_blank&quot;&gt;OpenAI Skills 文档&lt;/a&gt;。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;五、用一次博客更新，把三者串起来&lt;a href=&quot;#五用一次博客更新把三者串起来&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;现在，用户提出一个具体目标：&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;更新《AI Agent 工具生态》这篇博客，补充 Skill、MCP 和 Function Calling，并保存为草稿。&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;Agent 的完整工作过程可能是：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;匹配并加载“博客更新工作流” Skill；&lt;/li&gt;
+&lt;li&gt;Skill 要求先读取原文和编辑规范；&lt;/li&gt;
+&lt;li&gt;Agent 通过 CMS MCP Server 发现 &lt;code&gt;get_post&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;模型发起一次工具调用，读取文章；&lt;/li&gt;
+&lt;li&gt;Agent 按 Skill 中的规则分析和改写；&lt;/li&gt;
+&lt;li&gt;模型调用 &lt;code&gt;upload_image&lt;/code&gt; 上传关系图；&lt;/li&gt;
+&lt;li&gt;模型调用 &lt;code&gt;update_post&lt;/code&gt;，把文章保存为草稿；&lt;/li&gt;
+&lt;li&gt;Skill 要求继续执行链接与格式复查；&lt;/li&gt;
+&lt;li&gt;Agent 报告结果，但不自动发布。&lt;/li&gt;
+&lt;/ol&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;sequenceDiagram
+    actor User as 用户
+    participant Agent as Agent
+    participant Skill as 博客更新 Skill
+    participant MCP as CMS MCP Server
+    participant CMS as 内容管理系统
+
+    User-&amp;gt;&amp;gt;Agent: 更新文章并保存为草稿
+    Agent-&amp;gt;&amp;gt;Skill: 加载更新流程和质量规则
+    Skill--&amp;gt;&amp;gt;Agent: 读取→核查→改写→配图→复查
+    Agent-&amp;gt;&amp;gt;MCP: get_post(post_id)
+    MCP-&amp;gt;&amp;gt;CMS: 获取文章
+    CMS--&amp;gt;&amp;gt;MCP: 原始内容
+    MCP--&amp;gt;&amp;gt;Agent: 工具调用结果
+    Agent-&amp;gt;&amp;gt;Agent: 按 Skill 规则完成改写
+    Agent-&amp;gt;&amp;gt;MCP: update_post(content, status=&quot;draft&quot;)
+    MCP-&amp;gt;&amp;gt;CMS: 保存草稿
+    CMS--&amp;gt;&amp;gt;MCP: 保存成功
+    MCP--&amp;gt;&amp;gt;Agent: 草稿地址与版本号
+    Agent--&amp;gt;&amp;gt;User: 已更新并保存为草稿&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;这段流程展示了三者真正的关系：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;MCP&lt;/strong&gt; 决定怎样连接 CMS，并让能力可被发现；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Function Calling&lt;/strong&gt; 表现为 &lt;code&gt;get_post&lt;/code&gt;、&lt;code&gt;upload_image&lt;/code&gt;、&lt;code&gt;update_post&lt;/code&gt; 等一次次具体调用；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Skill&lt;/strong&gt; 规定整件事的顺序、边界和质量标准。&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;换句话说，Function Calling 本身并不知道什么叫“高质量的博客更新”。它只负责表达一次具体的工具调用请求。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;六、它们没有简单的一一包含关系&lt;a href=&quot;#六它们没有简单的一一包含关系&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;理解三者时，还要避开“谁包含谁”的思维陷阱。&lt;/p&gt;&lt;section&gt;&lt;h3&gt;1. Function Calling 不一定需要 MCP&lt;a href=&quot;#1-function-calling-不一定需要-mcp&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;应用可以直接把本地函数定义和参数 Schema 提供给模型。只有几个应用内函数时，引入 MCP 未必必要。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;2. MCP 不只等于 Function Calling&lt;a href=&quot;#2-mcp-不只等于-function-calling&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;一个 MCP Server 可以暴露多个工具，还可以提供资源等上下文能力。它解决的是标准化接入，而不是某一次调用的业务逻辑。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;3. Skill 不一定需要 MCP&lt;a href=&quot;#3-skill-不一定需要-mcp&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;如果任务只涉及本地文件、已有上下文或纯文本处理，Skill 可以完全不连接远程服务。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;4. Skill 也不一定每一步都调用函数&lt;a href=&quot;#4-skill-也不一定每一步都调用函数&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;很多步骤只是阅读、推理、写作和验证。工具调用只是完成工作流的一种手段，而不是工作流本身。&lt;/p&gt;&lt;p&gt;因此，更准确的总结是：&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;Function Calling 可以独立使用；MCP 可以为它提供标准化的工具来源；Skill 可以在更高层组织这些调用。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;/section&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;七、到底应该怎么选？&lt;a href=&quot;#七到底应该怎么选&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;flowchart TD
+    Q1{&quot;是否只需调用&amp;lt;br/&amp;gt;应用内的少量函数？&quot;}
+    Q2{&quot;能力是否需要被多个&amp;lt;br/&amp;gt;Agent 或客户端复用？&quot;}
+    Q3{&quot;任务是否有稳定、重复的&amp;lt;br/&amp;gt;步骤和质量规则？&quot;}
+    F[&quot;Function Calling&quot;]
+    M[&quot;MCP + 工具调用&quot;]
+    S[&quot;Skill&quot;]
+    ALL[&quot;Skill + MCP + Function Calling&quot;]
+
+    Q1 -- &quot;是&quot; --&amp;gt; F
+    Q1 -- &quot;否&quot; --&amp;gt; Q2
+    Q2 -- &quot;是&quot; --&amp;gt; Q3
+    Q2 -- &quot;否&quot; --&amp;gt; S
+    Q3 -- &quot;否&quot; --&amp;gt; M
+    Q3 -- &quot;是&quot; --&amp;gt; ALL
+
+    classDef skill fill:#7c3aed,color:#fff,stroke:#5b21b6
+    classDef mcp fill:#0f766e,color:#fff,stroke:#115e59
+    classDef call fill:#ea580c,color:#fff,stroke:#c2410c
+    class S skill
+    class M mcp
+    class F call
+    class ALL skill&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;也可以直接按下面四条判断：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;只需要模型调用几个应用内函数&lt;/strong&gt;：使用 Function Calling；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;希望同一套工具被多个 Agent 或客户端复用&lt;/strong&gt;：考虑 MCP；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;某类任务反复出现，并且有稳定步骤和质量标准&lt;/strong&gt;：封装成 Skill；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;希望 AI 稳定完成跨系统的复杂任务&lt;/strong&gt;：组合使用 Skill + MCP + Function Calling。&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;当然，现实系统不会永远落在流程图的单一路径上。例如，一个重复任务即使只调用少量本地函数，也同样值得封装成 Skill。选择的关键不是追求“技术全家桶”，而是先确认你真正缺的是&lt;strong&gt;调用机制、连接标准，还是工作方法&lt;/strong&gt;。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;八、最后再记一次&lt;a href=&quot;#八最后再记一次&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;如果只记住一句话，就记住这句：&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;Function Calling 给 Agent 一双“手”，MCP 统一“插座”，Skill 则告诉它先做什么、后做什么，以及怎样才算做好。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;三者不是竞争关系。一个成熟的 Agent，往往正是用 Skill 沉淀方法，用 MCP 接入外部世界，再通过一次次 Function Calling 把计划变成行动。&lt;/p&gt;&lt;/section&gt;</content:encoded></item><item><title>用 Python 写一个简单的网页爬虫</title><link>https://liushuai-man.github.io/blog/posts/python-web-scraping-guide/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/python-web-scraping-guide/</guid><description>从 HTTP 请求、网页解析到数据保存，循序渐进地完成一个 Python 爬虫，并说明爬取数据时需要遵守的边界。</description><pubDate>Sun, 02 Aug 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;如果把网页看成一本放在网上的书，爬虫做的事情就是：自动翻开这本书，找到需要的内容，再把它们整理好保存下来。&lt;/p&gt;
 &lt;p&gt;这篇文章不追求复杂的爬虫框架，而是从一次最基本的 HTTP 请求开始，写一个能翻页、能解析、能保存结果的小爬虫。示例网站使用专门供学习者练习的 &lt;a href=&quot;https://quotes.toscrape.com/&quot; target=&quot;_blank&quot;&gt;Quotes to Scrape&lt;/a&gt;，适合第一次动手。&lt;/p&gt;
 &lt;section&gt;&lt;h2&gt;一、爬虫简介&lt;a href=&quot;#一爬虫简介&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;section&gt;&lt;h3&gt;1. 什么是爬虫&lt;a href=&quot;#1-什么是爬虫&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;网络爬虫（Web Crawler）是一段按照一定规则访问网页并提取信息的程序。&lt;/p&gt;&lt;p&gt;我们平时打开网页时，是人在浏览器里点击链接、阅读内容；爬虫则把这些重复操作交给程序完成。例如：&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;收集公开的文章标题，做个人阅读清单；&lt;/li&gt;
