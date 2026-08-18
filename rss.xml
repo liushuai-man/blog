@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>个人博客</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.1.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年8月18日 20:25:39</lastBuildDate><item><title>别再混淆 Skill、MCP 和 Function Calling 了</title><link>https://liushuai-man.github.io/blog/posts/skill-mcp-function-calling/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/skill-mcp-function-calling/</guid><description>用“更新并发布一篇博客”看懂 Skill、MCP 与 Function Calling 如何分工、组合，以及什么时候该用谁。</description><pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;你可能听过下面三种说法：&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>个人博客</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.1.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年8月18日 20:36:26</lastBuildDate><item><title>别再混淆 Skill、MCP 和 Function Calling 了</title><link>https://liushuai-man.github.io/blog/posts/skill-mcp-function-calling/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/skill-mcp-function-calling/</guid><description>用“更新并发布一篇博客”看懂 Skill、MCP 与 Function Calling 如何分工、组合，以及什么时候该用谁。</description><pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;你可能听过下面三种说法：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Function Calling 让模型“调用工具”；&lt;/li&gt;
 &lt;li&gt;MCP 让模型“连接工具和数据”；&lt;/li&gt;
@@ -38,15 +38,15 @@
 
 
 &lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;概念&lt;/th&gt;&lt;th&gt;核心问题&lt;/th&gt;&lt;th&gt;典型内容&lt;/th&gt;&lt;th&gt;更像什么&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;strong&gt;Skill&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;这类任务应该如何完成？&lt;/td&gt;&lt;td&gt;指令、步骤、模板、检查规则、脚本&lt;/td&gt;&lt;td&gt;操作手册&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;strong&gt;MCP&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;外部系统如何统一接入？&lt;/td&gt;&lt;td&gt;工具、资源、能力发现、鉴权与通信&lt;/td&gt;&lt;td&gt;USB / 插座标准&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;strong&gt;Function Calling&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;模型如何请求执行一个具体操作？&lt;/td&gt;&lt;td&gt;函数名、参数 Schema、调用结果&lt;/td&gt;&lt;td&gt;按下某个按钮&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;下面这张图比“三个重叠的圆”更准确：三者不是互斥方案，而是经常一起出现的三层结构。&lt;/p&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;flowchart TB
-    U[&quot;用户目标&amp;lt;br/&amp;gt;更新并发布一篇博客&quot;]
-    S[&quot;Skill：任务方法层&amp;lt;br/&amp;gt;步骤、规范、模板、检查规则&quot;]
-    A[&quot;Agent / 模型&amp;lt;br/&amp;gt;判断下一步该做什么&quot;]
-    FC[&quot;Function Calling：调用机制&amp;lt;br/&amp;gt;选择工具 + 生成结构化参数&quot;]
-    MCP[&quot;MCP：标准连接层&amp;lt;br/&amp;gt;发现和连接外部能力&quot;]
-    L[&quot;应用内函数&amp;lt;br/&amp;gt;检查链接 / 渲染 Markdown&quot;]
-    CMS[&quot;CMS MCP Server&amp;lt;br/&amp;gt;读取、更新、发布文章&quot;]
-    DAM[&quot;素材库 MCP Server&amp;lt;br/&amp;gt;搜索、上传图片&quot;]
-    ANA[&quot;分析平台 MCP Server&amp;lt;br/&amp;gt;读取文章数据&quot;]
+    U[&quot;用户目标：更新并发布一篇博客&quot;]
+    S[&quot;Skill：任务方法层&quot;]
+    A[&quot;Agent / 模型：判断下一步&quot;]
+    FC[&quot;Function Calling：调用机制&quot;]
+    MCP[&quot;MCP：标准连接层&quot;]
+    L[&quot;应用内函数&quot;]
+    CMS[&quot;CMS MCP Server&quot;]
+    DAM[&quot;素材库 MCP Server&quot;]
+    ANA[&quot;分析平台 MCP Server&quot;]
 
     U --&amp;gt; S
     S --&amp;gt; A
@@ -55,14 +55,7 @@
     FC --&amp;gt; MCP
     MCP --&amp;gt; CMS
     MCP --&amp;gt; DAM
-    MCP --&amp;gt; ANA
-
-    classDef skill fill:#7c3aed,color:#fff,stroke:#5b21b6
-    classDef mcp fill:#0f766e,color:#fff,stroke:#115e59
-    classDef call fill:#ea580c,color:#fff,stroke:#c2410c
-    class S skill
-    class MCP mcp
-    class FC call&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;Skill 位于任务编排层；Function Calling 位于单次调用层；MCP 位于外部能力的标准连接层。&lt;/em&gt;&lt;/p&gt;&lt;/section&gt;
+    MCP --&amp;gt; ANA&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;Skill 位于任务编排层；Function Calling 位于单次调用层；MCP 位于外部能力的标准连接层。&lt;/em&gt;&lt;/p&gt;&lt;/section&gt;
 &lt;section&gt;&lt;h2&gt;二、Function Calling：模型发出的结构化调用请求&lt;a href=&quot;#二function-calling模型发出的结构化调用请求&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Function Calling（也常叫 Tool Calling）是一种让模型请求外部能力的机制。基本流程是：&lt;/p&gt;&lt;ol&gt;
 &lt;li&gt;应用把可用函数及参数结构告诉模型；&lt;/li&gt;
 &lt;li&gt;模型判断当前任务是否需要调用函数；&lt;/li&gt;
@@ -122,28 +115,23 @@
 &lt;/ul&gt;&lt;p&gt;换句话说，Function Calling 本身并不知道什么叫“高质量的博客更新”。它只负责表达一次具体的工具调用请求。&lt;/p&gt;&lt;/section&gt;
 &lt;section&gt;&lt;h2&gt;六、它们没有简单的一一包含关系&lt;a href=&quot;#六它们没有简单的一一包含关系&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;理解三者时，还要避开“谁包含谁”的思维陷阱。&lt;/p&gt;&lt;section&gt;&lt;h3&gt;1. Function Calling 不一定需要 MCP&lt;a href=&quot;#1-function-calling-不一定需要-mcp&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;应用可以直接把本地函数定义和参数 Schema 提供给模型。只有几个应用内函数时，引入 MCP 未必必要。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;2. MCP 不只等于 Function Calling&lt;a href=&quot;#2-mcp-不只等于-function-calling&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;一个 MCP Server 可以暴露多个工具，还可以提供资源等上下文能力。它解决的是标准化接入，而不是某一次调用的业务逻辑。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;3. Skill 不一定需要 MCP&lt;a href=&quot;#3-skill-不一定需要-mcp&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;如果任务只涉及本地文件、已有上下文或纯文本处理，Skill 可以完全不连接远程服务。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;4. Skill 也不一定每一步都调用函数&lt;a href=&quot;#4-skill-也不一定每一步都调用函数&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;很多步骤只是阅读、推理、写作和验证。工具调用只是完成工作流的一种手段，而不是工作流本身。&lt;/p&gt;&lt;p&gt;因此，更准确的总结是：&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;Function Calling 可以独立使用；MCP 可以为它提供标准化的工具来源；Skill 可以在更高层组织这些调用。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;/section&gt;&lt;/section&gt;
 &lt;section&gt;&lt;h2&gt;七、到底应该怎么选？&lt;a href=&quot;#七到底应该怎么选&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;flowchart TD
-    Q1{&quot;是否只需调用&amp;lt;br/&amp;gt;应用内的少量函数？&quot;}
-    Q2{&quot;能力是否需要被多个&amp;lt;br/&amp;gt;Agent 或客户端复用？&quot;}
-    Q3{&quot;任务是否有稳定、重复的&amp;lt;br/&amp;gt;步骤和质量规则？&quot;}
+    Q1{&quot;是否只需调用应用内的少量函数？&quot;}
+    Q2{&quot;能力是否需要被多个 Agent 或客户端复用？&quot;}
+    Q3{&quot;任务是否有稳定、重复的步骤和质量规则？&quot;}
+
     F[&quot;Function Calling&quot;]
     M[&quot;MCP + 工具调用&quot;]
     S[&quot;Skill&quot;]
     ALL[&quot;Skill + MCP + Function Calling&quot;]
 
-    Q1 -- &quot;是&quot; --&amp;gt; F
-    Q1 -- &quot;否&quot; --&amp;gt; Q2
-    Q2 -- &quot;是&quot; --&amp;gt; Q3
-    Q2 -- &quot;否&quot; --&amp;gt; S
-    Q3 -- &quot;否&quot; --&amp;gt; M
-    Q3 -- &quot;是&quot; --&amp;gt; ALL
+    Q1 -- 是 --&amp;gt; F
+    Q1 -- 否 --&amp;gt; Q2
+    Q2 -- 是 --&amp;gt; Q3
+    Q2 -- 否 --&amp;gt; S
+    Q3 -- 否 --&amp;gt; M
+    Q3 -- 是 --&amp;gt; ALL
 
-    classDef skill fill:#7c3aed,color:#fff,stroke:#5b21b6
-    classDef mcp fill:#0f766e,color:#fff,stroke:#115e59
-    classDef call fill:#ea580c,color:#fff,stroke:#c2410c
-    class S skill
-    class M mcp
-    class F call
-    class ALL skill&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;也可以直接按下面四条判断：&lt;/p&gt;&lt;ul&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;也可以直接按下面四条判断：&lt;/p&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;只需要模型调用几个应用内函数&lt;/strong&gt;：使用 Function Calling；&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;希望同一套工具被多个 Agent 或客户端复用&lt;/strong&gt;：考虑 MCP；&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;某类任务反复出现，并且有稳定步骤和质量标准&lt;/strong&gt;：封装成 Skill；&lt;/li&gt;
