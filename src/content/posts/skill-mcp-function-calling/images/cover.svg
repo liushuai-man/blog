@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Skill、MCP、Function Calling</title>
+  <desc id="desc">展示 AI Agent 从任务方法、结构化调用到外部系统连接的三层能力关系</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07111f"/>
+      <stop offset="1" stop-color="#10243a"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#9fb5ca" stroke-opacity=".07"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#000" flood-opacity=".28"/>
+    </filter>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <text x="110" y="118" fill="#8fa6bc" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="24" letter-spacing="5">AI AGENT · 三层能力栈</text>
+  <text x="110" y="205" fill="#f5f8fb" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="62" font-weight="700">别再混淆</text>
+  <text x="110" y="281" fill="#f5f8fb" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="62" font-weight="700">Skill、MCP 和 Function Calling 了</text>
+  <text x="112" y="329" fill="#9fb5ca" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="25">方法决定怎么做，协议负责接进来，调用让行动真正发生</text>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="421" width="340" height="230" rx="22" fill="#191238" stroke="#8b5cf6" stroke-width="2"/>
+    <rect x="137" y="450" width="76" height="30" rx="15" fill="#7c3aed"/>
+    <text x="175" y="472" text-anchor="middle" fill="#fff" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" font-weight="700">方法层</text>
+    <text x="137" y="536" fill="#fff" font-family="Arial, sans-serif" font-size="42" font-weight="700">Skill</text>
+    <text x="137" y="581" fill="#c4b5fd" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="23">步骤 · 规范 · 模板 · 检查</text>
+    <path d="M137 615h190" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <path d="M470 536h96" stroke="#567087" stroke-width="3"/>
+  <path d="m556 526 18 10-18 10" fill="none" stroke="#567087" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g filter="url(#shadow)">
+    <rect x="590" y="393" width="420" height="286" rx="26" fill="#231c19" stroke="#f97316" stroke-width="2"/>
+    <circle cx="800" cy="452" r="30" fill="#ea580c"/>
+    <path d="M788 452h24M800 440v24" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+    <text x="800" y="526" text-anchor="middle" fill="#fff" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="29" font-weight="700">AI Agent</text>
+    <rect x="642" y="558" width="316" height="74" rx="14" fill="#351e14" stroke="#f97316"/>
+    <text x="800" y="588" text-anchor="middle" fill="#fdba74" font-family="Arial, sans-serif" font-size="20" font-weight="700">FUNCTION CALLING</text>
+    <text x="800" y="615" text-anchor="middle" fill="#d5e0e9" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="18">选择工具 + 生成参数</text>
+  </g>
+
+  <path d="M1030 536h96" stroke="#567087" stroke-width="3"/>
+  <path d="m1116 526 18 10-18 10" fill="none" stroke="#567087" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g filter="url(#shadow)">
+    <rect x="1150" y="421" width="340" height="230" rx="22" fill="#0d2c31" stroke="#14b8a6" stroke-width="2"/>
+    <rect x="1177" y="450" width="76" height="30" rx="15" fill="#0f766e"/>
+    <text x="1215" y="472" text-anchor="middle" fill="#fff" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="17" font-weight="700">连接层</text>
+    <text x="1177" y="536" fill="#fff" font-family="Arial, sans-serif" font-size="42" font-weight="700">MCP</text>
+    <text x="1177" y="581" fill="#99f6e4" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="23">发现 · 连接 · 复用外部能力</text>
+    <circle cx="1200" cy="618" r="8" fill="#14b8a6"/><circle cx="1234" cy="618" r="8" fill="#14b8a6"/><circle cx="1268" cy="618" r="8" fill="#14b8a6"/>
+  </g>
+
+  <path d="M1320 674v42M1320 716H800M800 716v42M1320 716h-260M1060 716v42M1320 716h260M1450 716v42" fill="none" stroke="#547086" stroke-width="3"/>
+  <g font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" text-anchor="middle">
+    <rect x="700" y="758" width="200" height="68" rx="14" fill="#172b3e" stroke="#49647b"/><text x="800" y="800" fill="#c7d6e2">CMS</text>
+    <rect x="960" y="758" width="200" height="68" rx="14" fill="#172b3e" stroke="#49647b"/><text x="1060" y="800" fill="#c7d6e2">数据库</text>
+    <rect x="1350" y="758" width="200" height="68" rx="14" fill="#172b3e" stroke="#49647b"/><text x="1450" y="800" fill="#c7d6e2">素材库</text>
+  </g>
+</svg>
