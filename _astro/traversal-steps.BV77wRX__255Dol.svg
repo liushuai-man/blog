@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="950" viewBox="0 0 1200 950" role="img" aria-labelledby="title desc">
+  <title id="title">二叉树广度优先与深度优先遍历步骤</title>
+  <desc id="desc">同一棵二叉树使用队列进行广度优先遍历、使用栈进行深度优先遍历的逐步状态对比。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#07152f"/><stop offset="1" stop-color="#172554"/></linearGradient>
+    <style>
+      .title{font:700 30px system-ui,sans-serif;fill:#f8fafc}.sub{font:600 19px system-ui,sans-serif;fill:#cbd5e1}
+      .label{font:600 17px system-ui,sans-serif;fill:#e2e8f0}.small{font:15px ui-monospace,monospace;fill:#cbd5e1}
+      .edge{stroke:#64748b;stroke-width:3}.node{fill:#0f172a;stroke:#94a3b8;stroke-width:3}.nodeText{font:700 18px system-ui,sans-serif;fill:white;text-anchor:middle;dominant-baseline:middle}
+      .bfs{stroke:#22d3ee;fill:#083344}.dfs{stroke:#f59e0b;fill:#451a03}.box{fill:#0f172a;stroke:#334155;stroke-width:2;rx:14}
+    </style>
+  </defs>
+  <rect width="1200" height="950" rx="28" fill="url(#bg)"/>
+  <text x="60" y="55" class="title">遍历步骤：队列向两端流动，栈只在一端进出</text>
+  <g transform="translate(0,20)">
+    <line x1="600" y1="95" x2="420" y2="175" class="edge"/><line x1="600" y1="95" x2="780" y2="175" class="edge"/>
+    <line x1="420" y1="175" x2="330" y2="255" class="edge"/><line x1="420" y1="175" x2="510" y2="255" class="edge"/>
+    <line x1="780" y1="175" x2="690" y2="255" class="edge"/><line x1="780" y1="175" x2="870" y2="255" class="edge"/>
+    <g><circle cx="600" cy="95" r="27" class="node"/><text x="600" y="95" class="nodeText">A</text></g>
+    <g><circle cx="420" cy="175" r="27" class="node"/><text x="420" y="175" class="nodeText">B</text></g>
+    <g><circle cx="780" cy="175" r="27" class="node"/><text x="780" y="175" class="nodeText">C</text></g>
+    <g><circle cx="330" cy="255" r="27" class="node"/><text x="330" y="255" class="nodeText">D</text></g>
+    <g><circle cx="510" cy="255" r="27" class="node"/><text x="510" y="255" class="nodeText">E</text></g>
+    <g><circle cx="690" cy="255" r="27" class="node"/><text x="690" y="255" class="nodeText">F</text></g>
+    <g><circle cx="870" cy="255" r="27" class="node"/><text x="870" y="255" class="nodeText">G</text></g>
+  </g>
+  <line x1="600" y1="320" x2="600" y2="900" stroke="#334155" stroke-width="2"/>
+  <text x="55" y="365" class="title" fill="#22d3ee">BFS · 队列 FIFO</text><text x="655" y="365" class="title" fill="#f59e0b">DFS · 栈 LIFO</text>
+  <text x="55" y="400" class="sub">出队一个，按左→右把孩子入队</text><text x="655" y="400" class="sub">弹出一个，按右→左把孩子压栈</text>
+  <g transform="translate(55,435)">
+    <rect width="490" height="82" class="box"/><text x="18" y="29" class="label">① 访问 A</text><text x="18" y="59" class="small">队首 → [ B, C ] → 队尾</text>
+    <rect y="100" width="490" height="82" class="box"/><text x="18" y="129" class="label">② 访问 B</text><text x="18" y="159" class="small">队首 → [ C, D, E ] → 队尾</text>
+    <rect y="200" width="490" height="82" class="box"/><text x="18" y="229" class="label">③ 访问 C</text><text x="18" y="259" class="small">队首 → [ D, E, F, G ] → 队尾</text>
+    <rect y="300" width="490" height="82" class="box"/><text x="18" y="329" class="label">④ 依次访问 D、E、F、G</text><text x="18" y="359" class="small">队列清空；顺序 A B C D E F G</text>
+  </g>
+  <g transform="translate(655,435)">
+    <rect width="490" height="82" class="box"/><text x="18" y="29" class="label">① 访问 A</text><text x="18" y="59" class="small">栈底 [ C, B ] ← 栈顶</text>
+    <rect y="100" width="490" height="82" class="box"/><text x="18" y="129" class="label">② 访问 B</text><text x="18" y="159" class="small">栈底 [ C, E, D ] ← 栈顶</text>
+    <rect y="200" width="490" height="82" class="box"/><text x="18" y="229" class="label">③ 访问 D，再回退访问 E</text><text x="18" y="259" class="small">栈底 [ C ] ← 栈顶</text>
+    <rect y="300" width="490" height="82" class="box"/><text x="18" y="329" class="label">④ 访问 C、F、G</text><text x="18" y="359" class="small">栈清空；先序 A B D E C F G</text>
+  </g>
+</svg>
