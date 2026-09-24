@@ -1,4 +1,193 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>个人博客</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.1.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年8月29日 21:37:10</lastBuildDate><item><title>二叉树遍历：为什么广度优先用队列，深度优先用栈？</title><link>https://liushuai-man.github.io/blog/posts/binary-tree-bfs-dfs/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/binary-tree-bfs-dfs/</guid><description>从“下一步该访问谁”出发，用图解和 JavaScript 代码理解二叉树 BFS 为什么使用队列、DFS 为什么使用栈。</description><pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;学习二叉树遍历时，我们经常直接记住两组搭配：&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>个人博客</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.1.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年9月24日 17:17:20</lastBuildDate><item><title>浏览器插件与桌面端通信方案调研</title><link>https://liushuai-man.github.io/blog/posts/extension-desktop-bridge-research/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/extension-desktop-bridge-research/</guid><description>从浏览器插件采集 API 配置到桌面端批量写入，调研 Native Messaging、Loopback HTTP 与 Deeplink 三种通信路径的原理、对比与选型。</description><pubDate>Thu, 24 Sep 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;中转站桌面端按分组保存上游渠道的 Base URL 与 API Key。用户从多个渠道取得配置后，需要反复切换窗口、逐组录入，容易填错地址、密钥和目标分组。本项目明确交付 Chrome／Edge 浏览器插件：在浏览器内收集、整理、预览多条配置，再一键交给中转站桌面端确认并批量写入。&lt;/p&gt;
+&lt;p&gt;插件不是桌面端导入页的附属入口。本文是落地前的技术调研，要回答两个独立问题：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;插件如何从不同来源取得完整配置&lt;/strong&gt;（采集层）；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;插件怎样把含密钥的数据可靠送到桌面端&lt;/strong&gt;（通信层）。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;两层可以组合，不能把某一种来源方式或通信方式写成唯一流程。&lt;/p&gt;
+&lt;section&gt;&lt;h2&gt;一、共同主干&lt;a href=&quot;#一共同主干&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;四条来源路径最终汇入同一条主干：插件承担浏览器侧的收集与整理，桌面端承担最终的冲突判断与持久化。&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;用户在插件中选择来源 → 插件映射统一格式并校验 → 插件脱敏预览 → 发送到桌面端 → 桌面端比对已有分组、让用户决定新增／覆盖／跳过 → 写入并返回逐项结果。&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;四条路径最终使用同一数据结构、预览页和桌面写入流程；新增站点只实现“来源适配器”，不重写导入链路。&lt;/p&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;flowchart LR
+    A[&quot;选择来源&quot;] --&amp;gt; B[&quot;映射统一格式 + 校验&quot;]
+    B --&amp;gt; C[&quot;脱敏预览&quot;]
+    C --&amp;gt; D[&quot;发送到桌面端&quot;]
+    D --&amp;gt; E[&quot;比对已有分组&quot;]
+    E --&amp;gt; F{&quot;新增 / 覆盖 / 跳过&quot;}
+    F --&amp;gt; G[&quot;写入并返回逐项结果&quot;]
+    G --&amp;gt; H[&quot;回执到插件&quot;]&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;二、通信层：插件 → 客户端的三种路径&lt;a href=&quot;#二通信层插件--客户端的三种路径&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;调研覆盖三种独立的通信方式，按数据通道是否“能直接传完整 JSON”分为三类。&lt;/p&gt;&lt;section&gt;&lt;h3&gt;1. Native Messaging（原生消息）&lt;a href=&quot;#1-native-messaging原生消息&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;浏览器原生提供的与本地程序通信能力。浏览器通过进程管道直接与一个 Native Host 可执行程序双向收发 JSON。&lt;/p&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;flowchart LR
+    P[&quot;浏览器插件&quot;] --&amp;gt;|1. connectNative| B[&quot;浏览器&quot;]
+    B --&amp;gt;|2. 读注册表，拉起 Host| H[&quot;Native Host 可执行程序&quot;]
+    B &amp;lt;--&amp;gt;|3. stdin/stdout 4字节前缀 JSON| H
+    H &amp;lt;--&amp;gt;|4. IPC 命名管道转发| C[&quot;桌面主客户端&quot;]
+    C --&amp;gt;|5. 原路返回结果| H
+    H --&amp;gt;|6. 返回| B
+    B --&amp;gt; P
+    P -.-&amp;gt;|连接断开| X[&quot;Host 进程自动退出&quot;]&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：双向直接传完整 JSON；浏览器侧做插件白名单鉴权；不需要端口；Host 进程按需拉起。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;2. Loopback HTTP（本地回环 HTTP）&lt;a href=&quot;#2-loopback-http本地回环-http&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;桌面客户端在本机 &lt;code&gt;127.0.0.1&lt;/code&gt; 开启 HTTP 服务，插件以普通 HTTP 请求与其通信。&lt;/p&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;flowchart LR
+    C[&quot;桌面客户端常驻&quot;] --&amp;gt;|1. 开 127.0.0.1 服务 + 短时 Token| S[&quot;本地 HTTP 服务&quot;]
+    P[&quot;浏览器插件&quot;] --&amp;gt;|2. 携带 Token POST JSON| S
+    S --&amp;gt;|3. 校验 Token/来源| C
+    C --&amp;gt;|4. 返回 taskId| P
+    P --&amp;gt;|5. 轮询 taskId 查询结果| S
+    S --&amp;gt; C&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：客户端常驻后台，服务持续监听，不随单次请求关闭；结果通过 &lt;code&gt;taskId&lt;/code&gt; 轮询获取。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;3. Deeplink（自定义协议唤起）&lt;a href=&quot;#3-deeplink自定义协议唤起&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;Deeplink 只负责“唤起程序 + 传递短 ID”，不承担主数据通道。大量网页数据需通过反向请求拉取。&lt;/p&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;flowchart LR
+    P[&quot;浏览器插件&quot;] --&amp;gt;|1. 数据存本地临时存储| L[&quot;本地缓存 + taskId&quot;]
+    P --&amp;gt;|2. 生成 myclient://taskId| B[&quot;浏览器&quot;]
+    B --&amp;gt;|打开 deeplink| O[&quot;操作系统捕获协议&quot;]
+    O --&amp;gt;|3. 唤起并传 taskId| C[&quot;桌面客户端&quot;]
+    C --&amp;gt;|4. 反向请求插件| P
+    P --&amp;gt;|5. 用 taskId 返回完整数据| C&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;核心特点&lt;/strong&gt;：只能传短 ID，传不了大量网页数据；客户端拿到 &lt;code&gt;taskId&lt;/code&gt; 后反向去和插件通信（一般用本地 &lt;code&gt;127.0.0.1&lt;/code&gt; 简易接口）取回完整数据；这一步正是 CCSwitch 的核心逻辑。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;4. 三种路径对比&lt;a href=&quot;#4-三种路径对比&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;维度&lt;/th&gt;&lt;th&gt;Native Messaging&lt;/th&gt;&lt;th&gt;Loopback HTTP&lt;/th&gt;&lt;th&gt;Deeplink&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;数据通道&lt;/td&gt;&lt;td&gt;双向管道，直接传完整 JSON&lt;/td&gt;&lt;td&gt;本地 HTTP，传完整 JSON&lt;/td&gt;&lt;td&gt;只传短 ID，需反向拉取&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;是否需要端口&lt;/td&gt;&lt;td&gt;否&lt;/td&gt;&lt;td&gt;是（127.0.0.1）&lt;/td&gt;&lt;td&gt;否（反向拉取时仍需端口）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;鉴权&lt;/td&gt;&lt;td&gt;浏览器插件白名单&lt;/td&gt;&lt;td&gt;短时 Token + 来源校验&lt;/td&gt;&lt;td&gt;协议唤起 + 反向接口鉴权&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;进程生命周期&lt;/td&gt;&lt;td&gt;Host 按需拉起，断开即退出&lt;/td&gt;&lt;td&gt;客户端常驻，服务持续监听&lt;/td&gt;&lt;td&gt;客户端按需唤起&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;结果获取&lt;/td&gt;&lt;td&gt;同步原路返回&lt;/td&gt;&lt;td&gt;taskId 轮询&lt;/td&gt;&lt;td&gt;反向接口轮询&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;适配主数据通道&lt;/td&gt;&lt;td&gt;✅ 推荐&lt;/td&gt;&lt;td&gt;⚠️ 调试期备选&lt;/td&gt;&lt;td&gt;❌ 仅附加唤起能力&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;优先主推 Native Messaging；开发调试期备选 Loopback HTTP；Deeplink 只作为附加唤起能力，不做主数据通道。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;/section&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;三、技术栈选型&lt;a href=&quot;#三技术栈选型&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;围绕“MV3 插件 + Native Messaging + 桌面端”三条线选型，优先复用成熟框架与官方示例，不重复造轮子。&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;层&lt;/th&gt;&lt;th&gt;选型&lt;/th&gt;&lt;th&gt;说明&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;插件框架&lt;/td&gt;&lt;td&gt;&lt;strong&gt;WXT&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;原生支持 MV3 项目结构、content script、background 与构建&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;通信主通道&lt;/td&gt;&lt;td&gt;&lt;strong&gt;Chrome Native Messaging&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;浏览器原生能力，无需端口，按需拉起 Host&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;桌面端转发&lt;/td&gt;&lt;td&gt;&lt;strong&gt;命名管道 / IPC&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;Native Host 与常驻主客户端之间转发&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;调试期备选&lt;/td&gt;&lt;td&gt;&lt;strong&gt;127.0.0.1 + 短时 Token&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;不依赖 Host 安装，便于联调&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;附加唤起&lt;/td&gt;&lt;td&gt;&lt;strong&gt;自定义协议 deeplink&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;仅唤起程序 + 传短 ID&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;浏览器适配&lt;/td&gt;&lt;td&gt;&lt;strong&gt;Chrome + Edge 双注册&lt;/strong&gt;&lt;/td&gt;&lt;td&gt;注意 Edge host 注册与扩展 ID 规则差异&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;四、竞品参考：CodexSwitch&lt;a href=&quot;#四竞品参考codexswitch&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;CodexSwitch 是同类需求的现成方案，可直接对照其唤起与导入逻辑。&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;GitHub：&lt;code&gt;https://github.com/H1d3rOne/CodexSwitch&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;介绍文档：CodexSwitch 介绍文档&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;五、可参考的开源代码&lt;a href=&quot;#五可参考的开源代码&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;CC Switch 源码与导入逻辑&lt;/strong&gt;：&lt;code&gt;https://github.com/farion1231/cc-switch&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;Deep Link 官方说明：&lt;code&gt;https://github.com/farion1231/cc-switch/blob/main/docs/user-manual/en/2-providers/2.1-add.md&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;重点看：导入确认、预览和桌面端写入，&lt;strong&gt;不直接复制含 Key 的链接传输&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;WXT 与示例&lt;/strong&gt;：&lt;code&gt;https://github.com/wxt-dev/wxt&lt;/code&gt;、&lt;code&gt;https://github.com/wxt-dev/wxt-examples&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;重点看：MV3 项目结构、content script、后台和构建。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Chrome Native Messaging 文档与示例仓库&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;文档：&lt;code&gt;https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;示例：&lt;code&gt;https://github.com/GoogleChrome/chrome-extensions-samples&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;注意：旧仓库里的 Native Messaging 示例属于 &lt;strong&gt;MV2&lt;/strong&gt;，扩展端应按 &lt;strong&gt;MV3&lt;/strong&gt; 实现。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Edge host 注册与扩展 ID 规则&lt;/strong&gt;：&lt;code&gt;https://learn.microsoft.com/en-us/microsoft-edge/extensions/developer-guide/native-messaging&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;六、验证顺序与安全边界&lt;a href=&quot;#六验证顺序与安全边界&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;验证按从“来源稳定”到“来源需授权”的顺序推进，先打通可控路径，再逐步外探。&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;阶段&lt;/th&gt;&lt;th&gt;来源&lt;/th&gt;&lt;th&gt;重点验证&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;A&lt;/td&gt;&lt;td&gt;多条粘贴／文件导入&lt;/td&gt;&lt;td&gt;字段映射、逐项错误、脱敏预览、桌面确认、批量写入和回执&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;B&lt;/td&gt;&lt;td&gt;目标站点&lt;/td&gt;&lt;td&gt;Key 是否完整可见、需要何种权限、页面改版风险&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;C&lt;/td&gt;&lt;td&gt;稳定且授权的接口&lt;/td&gt;&lt;td&gt;仅当来源提供稳定且授权的接口时才做&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;D&lt;/td&gt;&lt;td&gt;页面按钮体验&lt;/td&gt;&lt;td&gt;最后测试页面按钮体验&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;&lt;strong&gt;先用真实样例打通 A，再用目标站点打通 B；只有来源提供稳定且授权的接口时才做 C；最后测试 D。&lt;/strong&gt;&lt;/p&gt;&lt;section&gt;&lt;h3&gt;安全边界&lt;a href=&quot;#安全边界&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;API Key 仅在插件导入会话和本机通道中短暂存在，不进入 URL、浏览器持久存储、日志或无关云服务。&lt;/li&gt;
+&lt;li&gt;插件按站点申请最小权限；页面只显示掩码时退回 A，不绕过来源限制。&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;验收指标&lt;a href=&quot;#验收指标&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;验收看的是端到端的可靠性与泄露面，而不只看按钮能否点通：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;批量导入耗时&lt;/li&gt;
+&lt;li&gt;字段错误率&lt;/li&gt;
+&lt;li&gt;重复项处理&lt;/li&gt;
+&lt;li&gt;安装成功率&lt;/li&gt;
+&lt;li&gt;失败重试&lt;/li&gt;
+&lt;li&gt;密钥泄露面&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;&lt;/section&gt;</content:encoded></item><item><title>二叉树遍历：为什么广度优先用队列，深度优先用栈？</title><link>https://liushuai-man.github.io/blog/posts/binary-tree-bfs-dfs/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/binary-tree-bfs-dfs/</guid><description>从“下一步该访问谁”出发，用图解和 JavaScript 代码理解二叉树 BFS 为什么使用队列、DFS 为什么使用栈。</description><pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;学习二叉树遍历时，我们经常直接记住两组搭配：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;广度优先遍历（BFS）使用&lt;strong&gt;队列&lt;/strong&gt;；&lt;/li&gt;
 &lt;li&gt;深度优先遍历（DFS）使用&lt;strong&gt;栈&lt;/strong&gt;。&lt;/li&gt;
