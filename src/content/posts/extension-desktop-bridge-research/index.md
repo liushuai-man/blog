@@ -24,16 +24,7 @@ draft: false
 
 四条路径最终使用同一数据结构、预览页和桌面写入流程；新增站点只实现“来源适配器”，不重写导入链路。
 
-```mermaid
-flowchart LR
-    A["选择来源"] --> B["映射统一格式 + 校验"]
-    B --> C["脱敏预览"]
-    C --> D["发送到桌面端"]
-    D --> E["比对已有分组"]
-    E --> F{"新增 / 覆盖 / 跳过"}
-    F --> G["写入并返回逐项结果"]
-    G --> H["回执到插件"]
-```
+![共同主干流程](./images/1.png)
 
 ## 二、通信层：插件 → 客户端的三种路径
 
@@ -43,17 +34,7 @@ flowchart LR
 
 浏览器原生提供的与本地程序通信能力。浏览器通过进程管道直接与一个 Native Host 可执行程序双向收发 JSON。
 
-```mermaid
-flowchart LR
-    P["浏览器插件"] -->|1. connectNative| B["浏览器"]
-    B -->|2. 读注册表，拉起 Host| H["Native Host 可执行程序"]
-    B <-->|3. stdin/stdout 4字节前缀 JSON| H
-    H <-->|4. IPC 命名管道转发| C["桌面主客户端"]
-    C -->|5. 原路返回结果| H
-    H -->|6. 返回| B
-    B --> P
-    P -.->|连接断开| X["Host 进程自动退出"]
-```
+![Native Messaging 流程](./images/2.png)
 
 **核心特点**：双向直接传完整 JSON；浏览器侧做插件白名单鉴权；不需要端口；Host 进程按需拉起。
 
@@ -61,15 +42,7 @@ flowchart LR
 
 桌面客户端在本机 `127.0.0.1` 开启 HTTP 服务，插件以普通 HTTP 请求与其通信。
 
-```mermaid
-flowchart LR
-    C["桌面客户端常驻"] -->|1. 开 127.0.0.1 服务 + 短时 Token| S["本地 HTTP 服务"]
-    P["浏览器插件"] -->|2. 携带 Token POST JSON| S
-    S -->|3. 校验 Token/来源| C
-    C -->|4. 返回 taskId| P
-    P -->|5. 轮询 taskId 查询结果| S
-    S --> C
-```
+![Loopback HTTP 流程](./images/3.png)
 
 **核心特点**：客户端常驻后台，服务持续监听，不随单次请求关闭；结果通过 `taskId` 轮询获取。
 
@@ -77,15 +50,7 @@ flowchart LR
 
 Deeplink 只负责“唤起程序 + 传递短 ID”，不承担主数据通道。大量网页数据需通过反向请求拉取。
 
-```mermaid
-flowchart LR
-    P["浏览器插件"] -->|1. 数据存本地临时存储| L["本地缓存 + taskId"]
-    P -->|2. 生成 myclient://taskId| B["浏览器"]
-    B -->|打开 deeplink| O["操作系统捕获协议"]
-    O -->|3. 唤起并传 taskId| C["桌面客户端"]
-    C -->|4. 反向请求插件| P
-    P -->|5. 用 taskId 返回完整数据| C
-```
+![Deeplink 流程](./images/4.png)
 
 **核心特点**：只能传短 ID，传不了大量网页数据；客户端拿到 `taskId` 后反向去和插件通信（一般用本地 `127.0.0.1` 简易接口）取回完整数据；这一步正是 CCSwitch 的核心逻辑。
 
