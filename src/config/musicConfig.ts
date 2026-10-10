@@ -25,8 +25,8 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	// Meting API 配置
 	meting: {
 		// Meting API 地址
-		// 默认使用官方 API，也可以使用自定义 API
-		api: "https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r",
+		// 默认使用可用的第三方 API（官方 api.i-meto.com 的 type=url 接口已返回 404）
+		api: "https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
 		// 音乐平台：netease=网易云音乐, tencent=QQ音乐, kugou=酷狗音乐, xiami=虾米音乐, baidu=百度音乐
 		server: "netease",
 		// 类型：song=单曲, playlist=歌单, album=专辑, search=搜索, artist=艺术家
@@ -37,8 +37,8 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 		auth: "",
 		// 备用 API 配置（当主 API 失败时使用）
 		fallbackApis: [
-			"https://api.injahow.cn/meting/?server=:server&type=:type&id=:id",
 			"https://api.moeyao.cn/meting/?server=:server&type=:type&id=:id",
+			"https://api.i-meto.com/meting/api?server=:server&type=:type&id=:id&r=:r",
 		],
 	},
 
