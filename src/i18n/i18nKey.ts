@@ -72,6 +72,10 @@ enum I18nKey {
 	themeColor = "themeColor",
 	themeMono = "themeMono",
 
+	// 页面特效
+	effects = "effects",
+	sakuraEffect = "sakuraEffect",
+
 	lightMode = "lightMode",
 	darkMode = "darkMode",
 	systemMode = "systemMode",

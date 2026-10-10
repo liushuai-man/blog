@@ -79,6 +79,8 @@ export const zh_CN: Translation = {
 
 	[Key.themeColor]: "主题色相",
 	[Key.themeMono]: "黑白灰",
+	[Key.effects]: "特效",
+	[Key.sakuraEffect]: "樱花特效",
 
 	[Key.lightMode]: "亮色",
 	[Key.darkMode]: "暗色",

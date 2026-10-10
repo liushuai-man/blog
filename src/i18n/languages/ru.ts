@@ -81,6 +81,8 @@ export const ru: Translation = {
 
 	[Key.themeColor]: "Цвет темы",
 	[Key.themeMono]: "Монохром",
+	[Key.effects]: "Эффекты",
+	[Key.sakuraEffect]: "Эффект сакуры",
 
 	[Key.lightMode]: "Светлая",
 	[Key.darkMode]: "Тёмная",

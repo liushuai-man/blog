@@ -4,6 +4,9 @@ export const sakuraConfig: SakuraConfig = {
 	// 是否启用樱花特效
 	enable: true,
 
+	// 是否允许用户在显示设置面板中开关樱花特效
+	switchable: true,
+
 	// 樱花数量
 	sakuraNum: 21,
 
