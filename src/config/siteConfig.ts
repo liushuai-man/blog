@@ -127,8 +127,6 @@ export const siteConfig: SiteConfig = {
     sponsor: false,
     // 留言板页面开关，需要配置评论系统
     guestbook: false,
-    // 相册页面开关
-    gallery: false,
   },
 
   // 分类导航栏开关，在首页和归档页顶部显示分类快捷导航

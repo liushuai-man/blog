@@ -171,9 +171,6 @@ export default defineConfig({
         if (pathname === '/guestbook/' && !siteConfig.pages.guestbook) {
           return false;
         }
-        if (pathname === '/gallery/' && !siteConfig.pages.gallery) {
-          return false;
-        }
 
         return true;
       },

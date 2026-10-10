@@ -33,9 +33,4 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		url: "/guestbook/",
 		icon: "material-symbols:chat",
 	},
-	[LinkPreset.Gallery]: {
-		name: i18n(I18nKey.gallery),
-		url: "/gallery/",
-		icon: "material-symbols:photo-library",
-	},
 };

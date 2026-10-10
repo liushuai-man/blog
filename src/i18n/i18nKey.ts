@@ -227,14 +227,6 @@ enum I18nKey {
 	codeCollapsibleExpanded = "codeCollapsibleExpanded",
 	codeCollapsibleCollapsed = "codeCollapsibleCollapsed",
 
-	// 相册页面
-	gallery = "gallery",
-	galleryDescription = "galleryDescription",
-	galleryPhotos = "galleryPhotos",
-	galleryAlbums = "galleryAlbums",
-	galleryNoAlbums = "galleryNoAlbums",
-	galleryBackToAlbums = "galleryBackToAlbums",
-
 	// 密码保护
 	passwordProtected = "passwordProtected",
 	passwordProtectedDesc = "passwordProtectedDesc",
