@@ -69,6 +69,7 @@ export const ru: Translation = {
 	[Key.postsCount]: "постов",
 
 	[Key.themeColor]: "Цвет темы",
+	[Key.themeMono]: "Монохром",
 
 	[Key.lightMode]: "Светлая",
 	[Key.darkMode]: "Тёмная",

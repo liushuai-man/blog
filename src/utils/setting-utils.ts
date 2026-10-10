@@ -84,6 +84,36 @@ export function setHue(hue: number): void {
 	r.style.setProperty("--hue", String(hue));
 }
 
+// 黑白灰（无彩色）主题：通过把彩度系数设为 0 让整套主题变为灰阶
+export function getMono(): boolean {
+	if (typeof window === "undefined" || !window.localStorage) {
+		return false;
+	}
+	return localStorage.getItem("themeMono") === "true";
+}
+
+export function setMono(mono: boolean): void {
+	if (
+		typeof window === "undefined" ||
+		!window.localStorage ||
+		typeof document === "undefined"
+	) {
+		return;
+	}
+	localStorage.setItem("themeMono", String(mono));
+	applyMonoToDocument(mono);
+}
+
+export function applyMonoToDocument(mono: boolean): void {
+	if (typeof document === "undefined") {
+		return;
+	}
+	document.documentElement.style.setProperty(
+		"--hue-chroma",
+		mono ? "0" : "1",
+	);
+}
+
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
 	// 检查是否在浏览器环境中
 	if (typeof document === "undefined") {

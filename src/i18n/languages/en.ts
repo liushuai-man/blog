@@ -69,6 +69,7 @@ export const en: Translation = {
 	[Key.postsCount]: "posts",
 
 	[Key.themeColor]: "Theme Color",
+	[Key.themeMono]: "Monochrome",
 
 	[Key.lightMode]: "Light",
 	[Key.darkMode]: "Dark",

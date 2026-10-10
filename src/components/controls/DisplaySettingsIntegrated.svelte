@@ -15,6 +15,7 @@ import {
 	getDefaultOverlayOpacity,
 	getDefaultWavesEnabled,
 	getHue,
+	getMono,
 	getStoredBannerCarouselEnabled,
 	getStoredBannerTitleEnabled,
 	getStoredOverlayBlur,
@@ -25,6 +26,7 @@ import {
 	setBannerCarouselEnabled,
 	setBannerTitleEnabled,
 	setHue,
+	setMono,
 	setOverlayBlur,
 	setOverlayCardOpacity,
 	setOverlayOpacity,
@@ -38,6 +40,10 @@ import type { WALLPAPER_MODE } from "@/types/config";
 
 let hue = $state(getHue());
 const defaultHue = getDefaultHue();
+// 黑白灰（无彩色）主题开关
+let mono = $state(getMono());
+// 主题色区块是否为默认状态（色相默认且未开启黑白灰）
+let themeColorIsDefault = $derived(hue === defaultHue && !mono);
 let wallpaperMode: WALLPAPER_MODE = $state(backgroundWallpaper.mode);
 const defaultWallpaperMode = backgroundWallpaper.mode;
 let currentLayout: "list" | "grid" = $state("list");
@@ -131,6 +137,7 @@ const hasAnyContent =
 
 function resetHue() {
 	hue = getDefaultHue();
+	mono = false;
 	requestAnimationFrame(refreshAllRangeProgress);
 }
 
@@ -354,6 +361,10 @@ $effect(() => {
 });
 
 $effect(() => {
+	setMono(mono);
+});
+
+$effect(() => {
 	if (wallpaperMode === WALLPAPER_OVERLAY) {
 		if (isOverlayOpacitySwitchable) {
 			setOverlayOpacity(overlayOpacity);
@@ -380,7 +391,7 @@ $effect(() => {
             >
                 {i18n(I18nKey.themeColor)}
                 <button aria-label="Reset to Default" class="btn-regular w-7 h-7 rounded-md  active:scale-90"
-                        class:opacity-0={hue === defaultHue} class:pointer-events-none={hue === defaultHue} onclick={resetHue}>
+                        class:opacity-0={themeColorIsDefault} class:pointer-events-none={themeColorIsDefault} onclick={resetHue}>
                     <div class="text-(--btn-content)">
                         <Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.875rem]"></Icon>
                     </div>
@@ -396,6 +407,23 @@ $effect(() => {
         <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
             <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
                    class="slider" id="colorSlider" step="5" style="width: 100%">
+        </div>
+        <!-- 黑白灰（无彩色）主题：透明色块按钮 -->
+        <div class="flex items-center gap-2 mt-2">
+            <button
+                aria-label={i18n(I18nKey.themeMono)}
+                title={i18n(I18nKey.themeMono)}
+                class="w-full btn-regular rounded-md py-1.5 px-3 flex items-center gap-2 text-left active:scale-95 transition-all relative overflow-hidden"
+                class:bg-(--btn-regular-bg-hover)={mono}
+                onclick={() => (mono = !mono)}
+            >
+                <span class="w-5 h-5 rounded-md shrink-0 border border-black/10 dark:border-white/20"
+                      style="background: linear-gradient(135deg, #000 0%, #808080 50%, #fff 100%);"></span>
+                <span class="text-sm flex-1">{i18n(I18nKey.themeMono)}</span>
+                {#if mono}
+                    <Icon icon="material-symbols:check-circle" class="text-[1rem] shrink-0 text-(--primary)"></Icon>
+                {/if}
+            </button>
         </div>
     </div>
     {/if}
