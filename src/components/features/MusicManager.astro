@@ -100,6 +100,34 @@ const managerConfigStr = JSON.stringify({
     audio.style.display = 'none';
     document.body.appendChild(audio);
 
+    // ── Web Audio analyser (供外部可视化组件使用) ─────────────
+    var audioCtx = null;
+    var analyser = null;
+    var sourceNode = null;
+
+    function ensureAnalyser() {
+        try {
+            if (!analyser) {
+                var AC = window.AudioContext;
+                if (!AC) return null;
+                audioCtx = new AC();
+                sourceNode = audioCtx.createMediaElementSource(audio);
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.8;
+                sourceNode.connect(analyser);
+                analyser.connect(audioCtx.destination);
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume().catch(function () {});
+            }
+            return analyser;
+        } catch (e) {
+            console.warn('Audio analyser init failed:', e);
+            return null;
+        }
+    }
+
     // ── State ────────────────────────────────────────────────
     var state = {
         playlist: [],
@@ -434,7 +462,8 @@ const managerConfigStr = JSON.stringify({
         seek: seek,
         seekToTime: seekToTime,
         playTrackByIndex: playTrackByIndex,
-        loadTrack: loadTrack
+        loadTrack: loadTrack,
+        ensureAnalyser: ensureAnalyser
     };
 })();
 </script>

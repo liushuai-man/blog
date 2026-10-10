@@ -40,6 +40,7 @@ export const zh_TW: Translation = {
 	[Key.musicCover]: "封面",
 	[Key.musicNoCover]: "暫無封面",
 	[Key.musicAudioPlayer]: "音頻播放器",
+	[Key.musicVisualizer]: "MIDI 視覺化",
 
 	// 公告欄
 	[Key.announcement]: "公告",

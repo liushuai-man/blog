@@ -40,6 +40,7 @@ export const ru: Translation = {
 	[Key.musicCover]: "Обложка",
 	[Key.musicNoCover]: "Нет обложки",
 	[Key.musicAudioPlayer]: "Аудиоплеер",
+	[Key.musicVisualizer]: "MIDI-визуализатор",
 
 	// Объявление
 	[Key.announcement]: "Объявление",

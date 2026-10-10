@@ -23,6 +23,9 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
       url: '/about/',
       icon: 'material-symbols:person',
     },
+
+    // 音乐
+    LinkPreset.Music,
   ];
 
   // 根据配置决定是否添加友链，在siteConfig关闭pages.friends时导航栏不显示友链

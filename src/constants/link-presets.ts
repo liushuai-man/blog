@@ -33,4 +33,9 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		url: "/guestbook/",
 		icon: "material-symbols:chat",
 	},
+	[LinkPreset.Music]: {
+		name: i18n(I18nKey.music),
+		url: "/music/",
+		icon: "material-symbols:music-note",
+	},
 };
