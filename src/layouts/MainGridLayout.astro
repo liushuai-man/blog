@@ -1,7 +1,4 @@
 ---
-import Live2DWidget from "@components/features/Live2DWidget.astro";
-
-import SpineModel from "@components/features/SpineModel.astro";
 import Footer from "@components/layout/Footer.astro";
 import Navbar from "@components/layout/Navbar.astro";
 import SideBar from "@components/layout/SideBar.astro";
@@ -13,7 +10,6 @@ import TypewriterText from "@/components/features/TypewriterText.astro";
 import CategoryBar from "@/components/layout/CategoryBar.astro";
 import {
 	backgroundWallpaper,
-	live2dModelConfig,
 	sidebarLayoutConfig,
 	siteConfig,
 } from "@/config";
@@ -939,9 +935,6 @@ const bannerCarouselInterval = Math.max(
                 <Footer></Footer>
             </div>
         </div>
-
-        <SpineModel></SpineModel>
-        {live2dModelConfig.enable && <Live2DWidget config={live2dModelConfig} />}
     </div>
 </div>
 
