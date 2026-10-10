@@ -404,26 +404,21 @@ $effect(() => {
                 </div>
             </div>
         </div>
-        <div class="w-full h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
-            <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
-                   class="slider" id="colorSlider" step="5" style="width: 100%">
-        </div>
-        <!-- 黑白灰（无彩色）主题：透明色块按钮 -->
-        <div class="flex items-center gap-2 mt-2">
+        <div class="flex items-center gap-2">
+            <div class="flex-1 h-6 px-1 bg-[oklch(0.80_0.10_0)] dark:bg-[oklch(0.70_0.10_0)] rounded select-none">
+                <input aria-label={i18n(I18nKey.themeColor)} type="range" min="0" max="360" bind:value={hue}
+                       class="slider" id="colorSlider" step="5" style="width: 100%">
+            </div>
+            <!-- 黑白灰（无彩色）主题：紧邻色相滑杆的色块按钮 -->
             <button
                 aria-label={i18n(I18nKey.themeMono)}
                 title={i18n(I18nKey.themeMono)}
-                class="w-full btn-regular rounded-md py-1.5 px-3 flex items-center gap-2 text-left active:scale-95 transition-all relative overflow-hidden"
-                class:bg-(--btn-regular-bg-hover)={mono}
+                aria-pressed={mono}
+                class="w-7 h-7 shrink-0 rounded-md border border-black/10 dark:border-white/25 active:scale-90 transition-all bg-[linear-gradient(135deg,#000_0%,#808080_50%,#fff_100%)]"
+                class:ring-2={mono}
+                class:ring-(--primary)={mono}
                 onclick={() => (mono = !mono)}
-            >
-                <span class="w-5 h-5 rounded-md shrink-0 border border-black/10 dark:border-white/20"
-                      style="background: linear-gradient(135deg, #000 0%, #808080 50%, #fff 100%);"></span>
-                <span class="text-sm flex-1">{i18n(I18nKey.themeMono)}</span>
-                {#if mono}
-                    <Icon icon="material-symbols:check-circle" class="text-[1rem] shrink-0 text-(--primary)"></Icon>
-                {/if}
-            </button>
+            ></button>
         </div>
     </div>
     {/if}

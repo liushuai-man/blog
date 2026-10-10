@@ -41,6 +41,16 @@ export const zh_TW: Translation = {
 	[Key.musicNoCover]: "暫無封面",
 	[Key.musicAudioPlayer]: "音頻播放器",
 	[Key.musicVisualizer]: "MIDI 視覺化",
+	[Key.musicModeVisualize]: "視覺化",
+	[Key.musicModePerform]: "演奏",
+	[Key.musicInstrPiano]: "鋼琴",
+	[Key.musicInstrHarmonica]: "口琴",
+	[Key.musicHarmonicaBlow]: "吹",
+	[Key.musicHarmonicaDraw]: "吸",
+	[Key.musicPianoHint]:
+		"鍵盤 Z X C V B N M / Q W E R T Y U 彈奏，黑鍵 S D G H J / 2 3 5 6 7；也可用滑鼠點擊琴鍵",
+	[Key.musicHarmonicaHint]:
+		"數字列 1-0 - = 吹音，字母列 Q-P [ ] 吸音；也可用滑鼠點擊音孔",
 
 	// 公告欄
 	[Key.announcement]: "公告",

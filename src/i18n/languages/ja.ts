@@ -41,6 +41,16 @@ export const ja: Translation = {
 	[Key.musicNoCover]: "カバーなし",
 	[Key.musicAudioPlayer]: "オーディオプレーヤー",
 	[Key.musicVisualizer]: "MIDI ビジュアライザー",
+	[Key.musicModeVisualize]: "ビジュアライズ",
+	[Key.musicModePerform]: "演奏",
+	[Key.musicInstrPiano]: "ピアノ",
+	[Key.musicInstrHarmonica]: "ハーモニカ",
+	[Key.musicHarmonicaBlow]: "吹く",
+	[Key.musicHarmonicaDraw]: "吸う",
+	[Key.musicPianoHint]:
+		"Z X C V B N M / Q W E R T Y U で演奏（黒鍵: S D G H J / 2 3 5 6 7）、クリックでも演奏できます",
+	[Key.musicHarmonicaHint]:
+		"数字列 1-0 - = 吹く、文字列 Q-P [ ] 吸う；クリックでも演奏できます",
 
 	// お知らせ
 	[Key.announcement]: "お知らせ",

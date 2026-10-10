@@ -41,6 +41,16 @@ export const en: Translation = {
 	[Key.musicNoCover]: "No cover available",
 	[Key.musicAudioPlayer]: "Audio Player",
 	[Key.musicVisualizer]: "MIDI Visualizer",
+	[Key.musicModeVisualize]: "Visualize",
+	[Key.musicModePerform]: "Perform",
+	[Key.musicInstrPiano]: "Piano",
+	[Key.musicInstrHarmonica]: "Harmonica",
+	[Key.musicHarmonicaBlow]: "Blow",
+	[Key.musicHarmonicaDraw]: "Draw",
+	[Key.musicPianoHint]:
+		"Play with Z X C V B N M / Q W E R T Y U (black keys: S D G H J / 2 3 5 6 7), or click the keys",
+	[Key.musicHarmonicaHint]:
+		"Number row 1-0 - = blow, letter row Q-P [ ] draw; or click the holes",
 
 	// Announcement
 	[Key.announcement]: "Announcement",

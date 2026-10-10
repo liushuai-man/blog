@@ -41,6 +41,16 @@ export const ru: Translation = {
 	[Key.musicNoCover]: "Нет обложки",
 	[Key.musicAudioPlayer]: "Аудиоплеер",
 	[Key.musicVisualizer]: "MIDI-визуализатор",
+	[Key.musicModeVisualize]: "Визуализация",
+	[Key.musicModePerform]: "Игра",
+	[Key.musicInstrPiano]: "Пианино",
+	[Key.musicInstrHarmonica]: "Губная гармоника",
+	[Key.musicHarmonicaBlow]: "Выдох",
+	[Key.musicHarmonicaDraw]: "Вдох",
+	[Key.musicPianoHint]:
+		"Играйте на Z X C V B N M / Q W E R T Y U (чёрные: S D G H J / 2 3 5 6 7) или кликайте по клавишам",
+	[Key.musicHarmonicaHint]:
+		"Цифровой ряд 1-0 - = выдох, буквенный Q-P [ ] вдох; или кликайте по отверстиям",
 
 	// Объявление
 	[Key.announcement]: "Объявление",
