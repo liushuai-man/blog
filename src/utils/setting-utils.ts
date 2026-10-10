@@ -12,7 +12,6 @@ import type { LIGHT_DARK_MODE, WALLPAPER_MODE } from "@/types/config";
 import {
 	backgroundWallpaper,
 	expressiveCodeConfig,
-	sakuraConfig,
 	siteConfig,
 } from "../config";
 import { isHomePage as checkIsHomePage } from "./layout-utils";
@@ -22,10 +21,6 @@ declare global {
 	interface Window {
 		initSemifullScrollDetection?: () => void;
 		semifullScrollHandler?: () => void;
-		__sakuraEffect?: {
-			setEnabled: (enabled: boolean) => void;
-			isRunning: () => boolean;
-		};
 	}
 }
 
@@ -907,48 +902,6 @@ export function applyWavesEnabledToDocument(enabled: boolean): void {
 			wavesElement.style.display = "none";
 			wavesElement.classList.add("waves-disabled");
 		}
-	}
-}
-
-// Sakura effect functions
-export function getDefaultSakuraEnabled(): boolean {
-	return sakuraConfig.enable;
-}
-
-export function getStoredSakuraEnabled(): boolean {
-	if (
-		typeof localStorage === "undefined" ||
-		typeof localStorage.getItem !== "function"
-	) {
-		return getDefaultSakuraEnabled();
-	}
-	const stored = localStorage.getItem("sakuraEnabled");
-	if (stored === null) {
-		return getDefaultSakuraEnabled();
-	}
-	return stored === "true";
-}
-
-export function setSakuraEnabled(enabled: boolean): void {
-	if (
-		typeof localStorage === "undefined" ||
-		typeof localStorage.setItem !== "function"
-	) {
-		return;
-	}
-	localStorage.setItem("sakuraEnabled", String(enabled));
-	applySakuraEnabledToDocument(enabled);
-}
-
-export function applySakuraEnabledToDocument(enabled: boolean): void {
-	if (typeof document === "undefined") {
-		return;
-	}
-	// 更新 html 属性，便于 CSS 或其它脚本感知当前状态
-	document.documentElement.setAttribute("data-sakura-enabled", String(enabled));
-	// 通知已在运行的樱花管理器立即启动 / 停止
-	if (typeof window !== "undefined" && window.__sakuraEffect) {
-		window.__sakuraEffect.setEnabled(enabled);
 	}
 }
 
