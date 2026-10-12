@@ -126,7 +126,6 @@ const strings = {
     var manualEnergy = new Float32Array(NUM_KEYS);
     var analyser = null;
     var freqData = null;
-    var analyserAttempted = false;
     var isPlaying = false;
     var rafId = null;
     var themeHue = 165;
@@ -258,10 +257,9 @@ const strings = {
     }
 
     function attachAnalyser() {
-        if (analyser || analyserAttempted) return;
+        if (analyser) return;
         var mgr = window.__fireflyMusic;
         if (!mgr || typeof mgr.ensureAnalyser !== "function") return;
-        analyserAttempted = true;
         var a = mgr.ensureAnalyser();
         if (!a) return;
         analyser = a;
@@ -272,18 +270,21 @@ const strings = {
     function analyseEnergy() {
         analyser.getByteFrequencyData(freqData);
         var out = new Float32Array(NUM_KEYS);
+        var total = 0;
         for (var i = 0; i < NUM_KEYS; i++) {
             var r = freqRange[i];
             var max = 0;
             for (var b = r[0]; b <= r[1]; b++) {
                 if (freqData[b] > max) max = freqData[b];
             }
+            total += max;
             out[i] = Math.pow(max / 255, 1.4);
         }
-        return out;
+        // 跨域音频被 Web Audio 静音时，分析数据恒为 0 —— 标记为无效，交由兜底律动接管
+        return total === 0 ? null : out;
     }
 
-    // 无分析节点时的兜底律动，保证界面不会完全静止
+    // 无有效分析数据时的兜底律动，保证界面不会完全静止
     function synthEnergy() {
         var out = new Float32Array(NUM_KEYS);
         for (var j = 0; j < 2; j++) {
@@ -292,6 +293,14 @@ const strings = {
             }
         }
         return out;
+    }
+
+    // 播放中取一帧能量：优先真实分析数据，取不到（无节点 / 数据全零）则用兜底律动
+    function currentEnergy() {
+        if (!isPlaying) return null;
+        if (!analyser) attachAnalyser();
+        if (!analyser) return null;
+        return analyseEnergy();
     }
 
     // ── 合成器 ───────────────────────────────────────────────
@@ -654,7 +663,8 @@ const strings = {
     function render() {
         ctx.clearRect(0, 0, W, H);
         if (history) {
-            ctx.drawImage(history, 0, 0, history.width, history.height, 0, 0, W, WATERFALL_H);
+            // history 与目标尺寸一致（已被 setTransform 缩放），无需再次重采样
+            ctx.drawImage(history, 0, 0);
         }
         if (mode === "perform") {
             if (instrument === "piano") drawPiano();
@@ -684,21 +694,24 @@ const strings = {
         var energy, i;
         if (mode === "perform") {
             // 演奏模式下卷帘持续滚动，弹奏的音符直接落在卷帘上
-            var played = analyseIfPlaying();
+            var played = currentEnergy();
             energy = new Float32Array(NUM_KEYS);
             for (i = 0; i < NUM_KEYS; i++) {
-                energy[i] = played && played[i] > manualEnergy[i] ? played[i] : manualEnergy[i];
+                var pv = played ? played[i] : 0;
+                energy[i] = pv > manualEnergy[i] ? pv : manualEnergy[i];
+            }
+            if (!played && isPlaying) {
+                var fallback = synthEnergy();
+                for (i = 0; i < NUM_KEYS; i++) {
+                    if (fallback[i] > energy[i]) energy[i] = fallback[i];
+                }
             }
             pushRow(energy);
             liveEnergy = energy;
             decayManualEnergy();
         } else if (isPlaying) {
-            if (analyser) {
-                energy = analyseEnergy();
-            } else {
-                attachAnalyser();
-                energy = analyser ? analyseEnergy() : synthEnergy();
-            }
+            var analysed = currentEnergy();
+            energy = analysed || synthEnergy();
             liveEnergy = energy;
             pushRow(energy);
         } else {
@@ -706,12 +719,6 @@ const strings = {
         }
 
         render();
-    }
-
-    function analyseIfPlaying() {
-        if (!isPlaying) return null;
-        if (!analyser) attachAnalyser();
-        return analyser ? analyseEnergy() : null;
     }
 
     // ── 播放器状态同步 ───────────────────────────────────────

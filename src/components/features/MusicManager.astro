@@ -95,8 +95,10 @@ const managerConfigStr = JSON.stringify({
     }
 
     // ── Audio element (persistent, attached to body) ────────
+    // 注意：不要设置 crossOrigin。Meting 返回的第三方 CDN 直链不带 CORS 头，
+    // 一旦 audio 被 createMediaElementSource 接入 Web Audio 图，跨域且无 CORS 头
+    // 会导致输出被强制静音，分析数据恒为 0。
     var audio = document.createElement('audio');
-    audio.crossOrigin = 'anonymous';
     audio.style.display = 'none';
     document.body.appendChild(audio);
 
@@ -104,11 +106,14 @@ const managerConfigStr = JSON.stringify({
     var audioCtx = null;
     var analyser = null;
     var sourceNode = null;
+    var analyserFailed = false;
 
     function ensureAnalyser() {
+        // 已失败过就不再重试（AudioContext 次数/元素绑定都不可逆）
+        if (analyserFailed) return null;
         try {
             if (!analyser) {
-                var AC = window.AudioContext;
+                var AC = window.AudioContext || window.webkitAudioContext;
                 if (!AC) return null;
                 audioCtx = new AC();
                 sourceNode = audioCtx.createMediaElementSource(audio);
@@ -118,12 +123,16 @@ const managerConfigStr = JSON.stringify({
                 sourceNode.connect(analyser);
                 analyser.connect(audioCtx.destination);
             }
-            if (audioCtx && audioCtx.state === 'suspended') {
+            // 关键：MediaElementSource 会接管音频输出，必须保证 context 处于 running，
+            // 否则用户点播放也不会有声音。每次调用都尝试恢复。
+            if (audioCtx && audioCtx.state !== 'running') {
                 audioCtx.resume().catch(function () {});
             }
             return analyser;
         } catch (e) {
             console.warn('Audio analyser init failed:', e);
+            analyserFailed = true;
+            analyser = null;
             return null;
         }
     }
