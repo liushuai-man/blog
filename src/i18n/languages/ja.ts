@@ -52,6 +52,22 @@ export const ja: Translation = {
 	[Key.musicHarmonicaHint]:
 		"数字列 1-0 - = 吹く、文字列 Q-P [ ] 吸う；クリックでも演奏できます",
 
+	// 音楽ライブラリ
+	[Key.musicLibrary]: "音楽ライブラリ",
+	[Key.musicLibraryEmpty]: "音楽ライブラリはまだ空です",
+	[Key.musicLibraryEmptyHint]:
+		"public/music/ に音声ファイルを入れて再ビルドすると自動で追加されます",
+	[Key.musicLibraryViewList]: "リスト表示",
+	[Key.musicLibraryViewGrid]: "グリッド表示",
+	[Key.musicLibraryRemove]: "プレイリストから削除",
+	[Key.musicLibraryRestore]: "復元",
+	[Key.musicLibraryHidden]: "非表示",
+	[Key.musicLibraryEdit]: "情報を編集",
+	[Key.musicLibraryEditTitle]: "曲名",
+	[Key.musicLibraryEditCover]: "カバーURL",
+	[Key.musicLibrarySave]: "保存",
+	[Key.musicLibraryCancel]: "キャンセル",
+
 	// お知らせ
 	[Key.announcement]: "お知らせ",
 	[Key.announcementClose]: "閉じる",

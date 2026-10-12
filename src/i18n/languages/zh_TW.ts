@@ -52,6 +52,22 @@ export const zh_TW: Translation = {
 	[Key.musicHarmonicaHint]:
 		"數字列 1-0 - = 吹音，字母列 Q-P [ ] 吸音；也可用滑鼠點擊音孔",
 
+	// 音樂庫
+	[Key.musicLibrary]: "音樂庫",
+	[Key.musicLibraryEmpty]: "音樂庫還是空的",
+	[Key.musicLibraryEmptyHint]:
+		"把音訊檔案放進 public/music/ 目錄後重新建置，即可自動入庫",
+	[Key.musicLibraryViewList]: "清單檢視",
+	[Key.musicLibraryViewGrid]: "網格檢視",
+	[Key.musicLibraryRemove]: "從歌單移除",
+	[Key.musicLibraryRestore]: "還原",
+	[Key.musicLibraryHidden]: "已隱藏",
+	[Key.musicLibraryEdit]: "編輯資訊",
+	[Key.musicLibraryEditTitle]: "歌曲名稱",
+	[Key.musicLibraryEditCover]: "封面網址",
+	[Key.musicLibrarySave]: "儲存",
+	[Key.musicLibraryCancel]: "取消",
+
 	// 公告欄
 	[Key.announcement]: "公告",
 	[Key.announcementClose]: "關閉",

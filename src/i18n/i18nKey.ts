@@ -69,6 +69,21 @@ enum I18nKey {
 	musicPianoHint = "musicPianoHint",
 	musicHarmonicaHint = "musicHarmonicaHint",
 
+	// Music Library
+	musicLibrary = "musicLibrary",
+	musicLibraryEmpty = "musicLibraryEmpty",
+	musicLibraryEmptyHint = "musicLibraryEmptyHint",
+	musicLibraryViewList = "musicLibraryViewList",
+	musicLibraryViewGrid = "musicLibraryViewGrid",
+	musicLibraryRemove = "musicLibraryRemove",
+	musicLibraryRestore = "musicLibraryRestore",
+	musicLibraryHidden = "musicLibraryHidden",
+	musicLibraryEdit = "musicLibraryEdit",
+	musicLibraryEditTitle = "musicLibraryEditTitle",
+	musicLibraryEditCover = "musicLibraryEditCover",
+	musicLibrarySave = "musicLibrarySave",
+	musicLibraryCancel = "musicLibraryCancel",
+
 	themeColor = "themeColor",
 	themeMono = "themeMono",
 

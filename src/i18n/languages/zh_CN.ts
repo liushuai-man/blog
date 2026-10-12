@@ -52,6 +52,22 @@ export const zh_CN: Translation = {
 	[Key.musicHarmonicaHint]:
 		"数字行 1-0 - = 吹音，字母行 Q-P [ ] 吸音；也可用鼠标点击音孔",
 
+	// 音乐库
+	[Key.musicLibrary]: "音乐库",
+	[Key.musicLibraryEmpty]: "音乐库还是空的",
+	[Key.musicLibraryEmptyHint]:
+		"把音频文件放进 public/music/ 目录后重新构建，即可自动入库",
+	[Key.musicLibraryViewList]: "列表视图",
+	[Key.musicLibraryViewGrid]: "网格视图",
+	[Key.musicLibraryRemove]: "从歌单移除",
+	[Key.musicLibraryRestore]: "恢复",
+	[Key.musicLibraryHidden]: "已隐藏",
+	[Key.musicLibraryEdit]: "编辑信息",
+	[Key.musicLibraryEditTitle]: "歌曲名",
+	[Key.musicLibraryEditCover]: "封面地址",
+	[Key.musicLibrarySave]: "保存",
+	[Key.musicLibraryCancel]: "取消",
+
 	// 公告栏
 	[Key.announcement]: "公告",
 	[Key.announcementClose]: "关闭",

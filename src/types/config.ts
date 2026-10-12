@@ -589,8 +589,8 @@ export type FriendsPageConfig = {
 
 // 音乐播放器配置
 export type MusicPlayerConfig = {
-	// 使用方式：'meting' 或 'local'
-	mode?: "meting" | "local"; // "meting" 使用 Meting API，"local" 使用本地音乐列表
+	// 使用方式：音乐库来自 public/music/ 下的本地音频文件（构建期自动扫描）
+	mode?: "local";
 
 	// 默认音量 (0-1)
 	volume?: number;
@@ -604,29 +604,9 @@ export type MusicPlayerConfig = {
 	// 是否在导航栏显示音乐播放器
 	showInNavbar?: boolean;
 
-	// Meting API 配置
-	meting?: {
-		// Meting API 地址
-		api?: string;
-
-		// 音乐平台：netease=网易云音乐, tencent=QQ音乐, kugou=酷狗音乐, xiami=虾米音乐, baidu=百度音乐
-		server?: "netease" | "tencent" | "kugou" | "xiami" | "baidu";
-
-		// 类型：song=单曲, playlist=歌单, album=专辑, search=搜索, artist=艺术家
-		type?: "song" | "playlist" | "album" | "search" | "artist";
-
-		// 歌单/专辑/单曲 ID 或搜索关键词
-		id?: string;
-
-		// 认证 token（可选）
-		auth?: string;
-
-		// 备用 API 配置（当主 API 失败时使用）
-		fallbackApis?: string[];
-	};
-
-	// 本地音乐配置（当 mode 为 'local' 时使用）
+	// 本地音乐配置
 	local?: {
+		// 手动指定曲目：非空时优先于 public/music/ 的自动扫描结果
 		playlist?: Array<{
 			name: string; // 歌曲名称
 			artist: string; // 艺术家

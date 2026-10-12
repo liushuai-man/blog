@@ -52,6 +52,22 @@ export const en: Translation = {
 	[Key.musicHarmonicaHint]:
 		"Number row 1-0 - = blow, letter row Q-P [ ] draw; or click the holes",
 
+	// Music Library
+	[Key.musicLibrary]: "Music Library",
+	[Key.musicLibraryEmpty]: "The music library is empty",
+	[Key.musicLibraryEmptyHint]:
+		"Drop audio files into public/music/ and rebuild to add them automatically",
+	[Key.musicLibraryViewList]: "List view",
+	[Key.musicLibraryViewGrid]: "Grid view",
+	[Key.musicLibraryRemove]: "Remove from playlist",
+	[Key.musicLibraryRestore]: "Restore",
+	[Key.musicLibraryHidden]: "Hidden",
+	[Key.musicLibraryEdit]: "Edit info",
+	[Key.musicLibraryEditTitle]: "Title",
+	[Key.musicLibraryEditCover]: "Cover URL",
+	[Key.musicLibrarySave]: "Save",
+	[Key.musicLibraryCancel]: "Cancel",
+
 	// Announcement
 	[Key.announcement]: "Announcement",
 	[Key.announcementClose]: "Close",

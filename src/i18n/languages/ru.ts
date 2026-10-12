@@ -52,6 +52,22 @@ export const ru: Translation = {
 	[Key.musicHarmonicaHint]:
 		"Цифровой ряд 1-0 - = выдох, буквенный Q-P [ ] вдох; или кликайте по отверстиям",
 
+	// Музыкальная библиотека
+	[Key.musicLibrary]: "Музыкальная библиотека",
+	[Key.musicLibraryEmpty]: "Библиотека пока пуста",
+	[Key.musicLibraryEmptyHint]:
+		"Положите аудиофайлы в public/music/ и пересоберите сайт — они добавятся автоматически",
+	[Key.musicLibraryViewList]: "Список",
+	[Key.musicLibraryViewGrid]: "Сетка",
+	[Key.musicLibraryRemove]: "Убрать из плейлиста",
+	[Key.musicLibraryRestore]: "Восстановить",
+	[Key.musicLibraryHidden]: "Скрыто",
+	[Key.musicLibraryEdit]: "Редактировать",
+	[Key.musicLibraryEditTitle]: "Название",
+	[Key.musicLibraryEditCover]: "URL обложки",
+	[Key.musicLibrarySave]: "Сохранить",
+	[Key.musicLibraryCancel]: "Отмена",
+
 	// Объявление
 	[Key.announcement]: "Объявление",
 	[Key.announcementClose]: "Закрыть",

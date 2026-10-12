@@ -3,12 +3,17 @@ import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
 import MidiVisualizer from "@/components/features/MidiVisualizer.astro";
+import MusicLibrary from "@/components/features/MusicLibrary.svelte";
+import { scanMusicLibrary } from "@/utils/music-library";
 
 const title = i18n(I18nKey.music);
+// 构建期扫描 public/music/，生成音乐库列表
+const tracks = scanMusicLibrary();
 ---
 
 <MainGridLayout title={title} description={title}>
     <div class="flex w-full flex-col gap-4">
         <MidiVisualizer />
+        <MusicLibrary client:load tracks={tracks} />
     </div>
 </MainGridLayout>
