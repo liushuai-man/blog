@@ -327,70 +327,71 @@ const sakuraImage = url("/assets/images/sakura.png");
 			window.__sakuraManager = null;
 		}
 
-		// 读取用户偏好：localStorage 优先于配置默认值
-		function getSakuraEnabledPref() {
+		function clamp(value, min, max) {
+			return Math.min(max, Math.max(min, value));
+		}
+
+		// 数量与下落速度由用户在显示设置面板里调整，localStorage 优先于配置默认值
+		function readOverrides() {
+			let num = sakuraConfig.sakuraNum;
+			let speed = 1; // 1 表示沿用 sakuraConfig 中的速度
 			try {
-				const stored = localStorage.getItem('sakuraEnabled');
-				if (stored === null) return !!sakuraConfig.enable;
-				return stored === 'true';
+				const storedNum = localStorage.getItem('sakuraNum');
+				if (storedNum !== null) {
+					const parsedNum = parseInt(storedNum, 10);
+					if (!isNaN(parsedNum)) num = parsedNum;
+				}
+				const storedSpeed = localStorage.getItem('sakuraSpeed');
+				if (storedSpeed !== null) {
+					const parsedSpeed = parseFloat(storedSpeed);
+					if (!isNaN(parsedSpeed)) speed = parsedSpeed;
+				}
 			} catch (e) {
-				return !!sakuraConfig.enable;
+				// localStorage 不可用时退回配置默认值
 			}
+			return {
+				num: clamp(num, 1, 60),
+				speed: clamp(speed, 0.3, 3),
+			};
+		}
+
+		// 把用户偏好合并进配置：数量直接替换，下落速度作为垂直速度的倍数
+		function buildConfig() {
+			const overrides = readOverrides();
+			const merged = JSON.parse(JSON.stringify(sakuraConfig));
+			merged.sakuraNum = overrides.num;
+			merged.speed.vertical.min *= overrides.speed;
+			merged.speed.vertical.max *= overrides.speed;
+			return merged;
 		}
 
 		// 初始化樱花特效
-		function initSakura(config) {
+		function initSakura() {
+			const merged = buildConfig();
 			if (window.__sakuraManager) {
-				window.__sakuraManager.updateConfig(config);
+				window.__sakuraManager.updateConfig(merged);
 			} else {
-				window.__sakuraManager = new SakuraManager(config);
-				if (config.enable) {
+				window.__sakuraManager = new SakuraManager(merged);
+				if (merged.enable) {
 					window.__sakuraManager.init();
 				}
 			}
 		}
 
-		// 初始化 + 对外暴露开关（供显示设置面板调用）
-		(function () {
-			window.__sakuraEffect = {
-				setEnabled: function (enabled) {
-					if (enabled) {
-						if (!window.__sakuraManager) {
-							window.__sakuraManager = new SakuraManager(sakuraConfig);
-						}
-						if (!window.__sakuraManager.getIsRunning()) {
-							window.__sakuraManager.init();
-						}
-					} else if (window.__sakuraManager) {
-						window.__sakuraManager.stop();
-					}
-					window.sakuraInitialized = true;
-				},
-				isRunning: function () {
-					return !!(window.__sakuraManager && window.__sakuraManager.getIsRunning());
-				},
-			};
+		// 供显示设置面板调整数量 / 下落速度后即时重建
+		window.__sakuraEffect = {
+			apply: function () {
+				if (!window.__sakuraManager) return;
+				window.__sakuraManager.updateConfig(buildConfig());
+			},
+		};
 
-			// 全局标记，确保樱花特效只初始化一次
-			if (window.sakuraInitialized) {
-				return;
+		// 全局标记，确保樱花特效只初始化一次（swup 导航后复用同一实例）
+		if (!window.sakuraInitialized) {
+			window.sakuraInitialized = true;
+			if (sakuraConfig.enable) {
+				initSakura();
 			}
-
-			// 初始化樱花特效的函数
-			const setupSakura = () => {
-				if (window.sakuraInitialized) return;
-				if (sakuraConfig.enable && getSakuraEnabledPref()) {
-					initSakura(sakuraConfig);
-				}
-				window.sakuraInitialized = true;
-			};
-
-			// 页面加载完成后初始化樱花特效
-			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', setupSakura);
-			} else {
-				setupSakura();
-			}
-		})();
+		}
 	</script>
 )}

@@ -13,6 +13,8 @@ import {
 	getDefaultOverlayBlur,
 	getDefaultOverlayCardOpacity,
 	getDefaultOverlayOpacity,
+	getDefaultSakuraNum,
+	getDefaultSakuraSpeed,
 	getDefaultWavesEnabled,
 	getHue,
 	getMono,
@@ -21,8 +23,14 @@ import {
 	getStoredOverlayBlur,
 	getStoredOverlayCardOpacity,
 	getStoredOverlayOpacity,
+	getStoredSakuraNum,
+	getStoredSakuraSpeed,
 	getStoredWallpaperMode,
 	getStoredWavesEnabled,
+	SAKURA_NUM_MAX,
+	SAKURA_NUM_MIN,
+	SAKURA_SPEED_MAX,
+	SAKURA_SPEED_MIN,
 	setBannerCarouselEnabled,
 	setBannerTitleEnabled,
 	setHue,
@@ -30,12 +38,14 @@ import {
 	setOverlayBlur,
 	setOverlayCardOpacity,
 	setOverlayOpacity,
+	setSakuraNum,
+	setSakuraSpeed,
 	setWallpaperMode,
 	setWavesEnabled,
 } from "@utils/setting-utils";
 import { onMount } from "svelte";
 import Icon from "@/components/common/Icon.svelte";
-import { backgroundWallpaper, siteConfig } from "@/config";
+import { backgroundWallpaper, sakuraConfig, siteConfig } from "@/config";
 import type { WALLPAPER_MODE } from "@/types/config";
 
 let hue = $state(getHue());
@@ -64,6 +74,15 @@ let bannerTitleEnabled = $state(true);
 const defaultBannerTitleEnabled = getDefaultBannerTitleEnabled();
 let bannerCarouselEnabled = $state(true);
 const defaultBannerCarouselEnabled = getDefaultBannerCarouselEnabled();
+// 樱花特效：数量与下落速度（下落速度是 sakuraConfig 默认速度的倍数）
+const showSakuraSettings = sakuraConfig.enable;
+const defaultSakuraNum = getDefaultSakuraNum();
+const defaultSakuraSpeed = getDefaultSakuraSpeed();
+let sakuraNum = $state(defaultSakuraNum);
+let sakuraSpeed = $state(defaultSakuraSpeed);
+let sakuraSettingsIsDefault = $derived(
+	sakuraNum === defaultSakuraNum && sakuraSpeed === defaultSakuraSpeed,
+);
 let overlayOpacity = $state(getDefaultOverlayOpacity());
 const defaultOverlayOpacity = getDefaultOverlayOpacity();
 let overlayBlur = $state(getDefaultOverlayBlur());
@@ -133,7 +152,8 @@ const hasAnyContent =
 	isWallpaperSwitchable ||
 	allowLayoutSwitch ||
 	hasBannerSettings ||
-	hasOverlaySettings;
+	hasOverlaySettings ||
+	showSakuraSettings;
 
 function resetHue() {
 	hue = getDefaultHue();
@@ -206,6 +226,24 @@ function resetOverlaySettings() {
 function toggleWavesEnabled() {
 	wavesEnabled = !wavesEnabled;
 	setWavesEnabled(wavesEnabled);
+}
+
+function resetSakuraSettings() {
+	sakuraNum = defaultSakuraNum;
+	sakuraSpeed = defaultSakuraSpeed;
+	setSakuraNum(defaultSakuraNum);
+	setSakuraSpeed(defaultSakuraSpeed);
+	requestAnimationFrame(refreshAllRangeProgress);
+}
+
+function updateSakuraNum(value: number) {
+	sakuraNum = value;
+	setSakuraNum(value);
+}
+
+function updateSakuraSpeed(value: number) {
+	sakuraSpeed = value;
+	setSakuraSpeed(value);
 }
 
 function toggleBannerTitleEnabled() {
@@ -303,6 +341,10 @@ onMount(() => {
 	overlayOpacity = getStoredOverlayOpacity();
 	overlayBlur = getStoredOverlayBlur();
 	overlayCardOpacity = getStoredOverlayCardOpacity();
+
+	// 从localStorage读取樱花特效设置
+	sakuraNum = getStoredSakuraNum();
+	sakuraSpeed = getStoredSakuraSpeed();
 
 	// 从localStorage读取用户偏好布局
 	const savedLayout = localStorage.getItem("postListLayout");
@@ -606,6 +648,46 @@ $effect(() => {
                     </div>
                 </button>
                 {/if}
+            </div>
+        </div>
+    {/if}
+
+    <!-- Effects Section -->
+    {#if showSakuraSettings}
+        <div class="mt-2 mb-2">
+            <div class="flex gap-2 font-bold text-lg text-neutral-900 dark:text-neutral-100 transition relative ml-3 mb-2
+                before:w-1 before:h-4 before:rounded-md before:bg-(--primary)
+                before:absolute before:-left-3 before:top-1/2 before:-translate-y-1/2"
+            >
+                {i18n(I18nKey.effects)}
+                <button aria-label="Reset to Default" class="btn-regular w-7 h-7 rounded-md active:scale-90"
+                        class:opacity-0={sakuraSettingsIsDefault} class:pointer-events-none={sakuraSettingsIsDefault} onclick={resetSakuraSettings}>
+                    <div class="text-(--btn-content)">
+                        <Icon icon="fa7-solid:arrow-rotate-left" class="text-[0.875rem]"></Icon>
+                    </div>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <div class="rounded-md bg-(--btn-regular-bg) p-2">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-(--btn-content) opacity-80">{i18n(I18nKey.sakuraNum)}</span>
+                        <span class="text-xs text-(--btn-content)">{sakuraNum}</span>
+                    </div>
+                    <input aria-label={i18n(I18nKey.sakuraNum)} type="range" min={SAKURA_NUM_MIN} max={SAKURA_NUM_MAX} step="1"
+                           value={sakuraNum}
+                           oninput={(e) => updateSakuraNum(Number((e.currentTarget as HTMLInputElement).value))}
+                           class="slider w-full" />
+                </div>
+                <div class="rounded-md bg-(--btn-regular-bg) p-2">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-sm font-medium text-(--btn-content) opacity-80">{i18n(I18nKey.sakuraSpeed)}</span>
+                        <span class="text-xs text-(--btn-content)">{sakuraSpeed.toFixed(1)}x</span>
+                    </div>
+                    <input aria-label={i18n(I18nKey.sakuraSpeed)} type="range" min={SAKURA_SPEED_MIN} max={SAKURA_SPEED_MAX} step="0.1"
+                           value={sakuraSpeed}
+                           oninput={(e) => updateSakuraSpeed(Number((e.currentTarget as HTMLInputElement).value))}
+                           class="slider w-full" />
+                </div>
             </div>
         </div>
     {/if}

@@ -82,7 +82,8 @@ export const ja: Translation = {
 	[Key.themeColor]: "テーマカラー",
 	[Key.themeMono]: "モノクロ",
 	[Key.effects]: "エフェクト",
-	[Key.sakuraEffect]: "桜エフェクト",
+	[Key.sakuraNum]: "桜の数",
+	[Key.sakuraSpeed]: "落下速度",
 
 	[Key.lightMode]: "ライト",
 	[Key.darkMode]: "ダーク",

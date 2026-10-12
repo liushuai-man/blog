@@ -74,7 +74,8 @@ enum I18nKey {
 
 	// 页面特效
 	effects = "effects",
-	sakuraEffect = "sakuraEffect",
+	sakuraNum = "sakuraNum",
+	sakuraSpeed = "sakuraSpeed",
 
 	lightMode = "lightMode",
 	darkMode = "darkMode",
