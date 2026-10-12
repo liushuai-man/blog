@@ -95,10 +95,12 @@ const managerConfigStr = JSON.stringify({
     }
 
     // ── Audio element (persistent, attached to body) ────────
-    // 注意：不要设置 crossOrigin。Meting 返回的第三方 CDN 直链不带 CORS 头，
-    // 一旦 audio 被 createMediaElementSource 接入 Web Audio 图，跨域且无 CORS 头
-    // 会导致输出被强制静音，分析数据恒为 0。
+    // 必须显式声明 crossOrigin='anonymous'：音频直链（api.injahow.cn 302 → m*.music.126.net）
+    // 两跳都返回 Access-Control-Allow-Origin: *，以 CORS 模式加载后媒体才不是
+    // CORS-cross-origin；否则 createMediaElementSource 之后按 Web Audio 规范会输出静音，
+    // 频谱恒为 0 且可听输出也被静音。
     var audio = document.createElement('audio');
+    audio.crossOrigin = 'anonymous';
     audio.style.display = 'none';
     document.body.appendChild(audio);
 
