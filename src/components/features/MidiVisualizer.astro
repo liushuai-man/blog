@@ -522,11 +522,15 @@ const strings = {
 
     // ── 绘制 ─────────────────────────────────────────────────
     function pushRow(energy) {
-        // 整体向下位移 STEP 像素，新数据画在顶部
-        var shift = Math.round(STEP * dpr);
-        var sh = history.height - shift;
+        // 整体向下位移 STEP 逻辑像素，新数据画在顶部
+        // history 与主 canvas 一样按 dpr 缩放，hctx 也 setTransform(dpr)，
+        // 因此位移与目标矩形都用逻辑像素，源矩形才换算成设备像素，
+        // 保证是 1:1 的位块搬运而不是每帧放大一次。
+        var shiftDev = Math.round(STEP * dpr);
+        var shift = shiftDev / dpr;
+        var sh = WATERFALL_H - shift;
         if (sh > 0) {
-            hctx.drawImage(history, 0, 0, history.width, sh, 0, shift, history.width, sh);
+            hctx.drawImage(history, 0, 0, history.width, sh * dpr, 0, shift, W, sh);
         }
         hctx.clearRect(0, 0, W, STEP + 1);
         for (var i = 0; i < NUM_KEYS; i++) {
@@ -663,8 +667,9 @@ const strings = {
     function render() {
         ctx.clearRect(0, 0, W, H);
         if (history) {
-            // history 与目标尺寸一致（已被 setTransform 缩放），无需再次重采样
-            ctx.drawImage(history, 0, 0);
+            // history 位图是设备像素，目标矩形用逻辑像素 W×WATERFALL_H，
+            // 经 ctx 的 dpr 变换后正好与位图 1:1，不能省略目标尺寸。
+            ctx.drawImage(history, 0, 0, history.width, history.height, 0, 0, W, WATERFALL_H);
         }
         if (mode === "perform") {
             if (instrument === "piano") drawPiano();
@@ -700,7 +705,7 @@ const strings = {
                 var pv = played ? played[i] : 0;
                 energy[i] = pv > manualEnergy[i] ? pv : manualEnergy[i];
             }
-            if (!played && isPlaying) {
+            if (!played && isPlaying && !analyser) {
                 var fallback = synthEnergy();
                 for (i = 0; i < NUM_KEYS; i++) {
                     if (fallback[i] > energy[i]) energy[i] = fallback[i];
@@ -711,7 +716,9 @@ const strings = {
             decayManualEnergy();
         } else if (isPlaying) {
             var analysed = currentEnergy();
-            energy = analysed || synthEnergy();
+            // analyser 已挂上时数据为零就是真静音，不再补假律动；
+            // 只有完全拿不到 analyser 才用兜底律动，避免掩盖真实故障。
+            energy = analysed || (analyser ? new Float32Array(NUM_KEYS) : synthEnergy());
             liveEnergy = energy;
             pushRow(energy);
         } else {
