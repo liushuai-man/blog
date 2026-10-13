@@ -8,11 +8,7 @@ declare global {
 	interface Window {
 		// biome-ignore lint/suspicious/noExplicitAny: External library
 		swup: any;
-		live2dModelInitialized?: boolean;
-		spineModelInitialized?: boolean;
 		floatingTOCListenersInitialized?: boolean;
-		// biome-ignore lint/suspicious/noExplicitAny: External library
-		spinePlayerInstance?: any;
 		pagefind: {
 			search: (query: string) => Promise<{
 				results: Array<{
@@ -24,6 +20,7 @@ declare global {
 			init: () => Promise<void>;
 			getState: () => {
 				playlist: Array<{
+					id?: string;
 					name: string;
 					artist: string;
 					url: string;
@@ -63,6 +60,19 @@ declare global {
 			seekToTime: (time: number) => void;
 			playTrackByIndex: (index: number) => void;
 			loadTrack: (index: number, autoPlay: boolean) => void;
+			/** 用外部列表整体替换播放列表（音乐库页面使用） */
+			setPlaylist?: (
+				tracks: Array<{
+					id?: string;
+					name: string;
+					artist: string;
+					url: string;
+					pic?: string;
+					lrc?: string;
+				}>,
+			) => void;
+			/** 获取（惰性创建）播放器音频分析节点，供可视化组件使用 */
+			ensureAnalyser?: () => AnalyserNode | null;
 		};
 	}
 

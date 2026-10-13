@@ -40,6 +40,33 @@ export const zh_TW: Translation = {
 	[Key.musicCover]: "封面",
 	[Key.musicNoCover]: "暫無封面",
 	[Key.musicAudioPlayer]: "音頻播放器",
+	[Key.musicVisualizer]: "MIDI 視覺化",
+	[Key.musicModeVisualize]: "視覺化",
+	[Key.musicModePerform]: "演奏",
+	[Key.musicInstrPiano]: "鋼琴",
+	[Key.musicInstrHarmonica]: "口琴",
+	[Key.musicHarmonicaBlow]: "吹",
+	[Key.musicHarmonicaDraw]: "吸",
+	[Key.musicPianoHint]:
+		"鍵盤 Z X C V B N M / Q W E R T Y U 彈奏，黑鍵 S D G H J / 2 3 5 6 7；也可用滑鼠點擊琴鍵",
+	[Key.musicHarmonicaHint]:
+		"數字列 1-0 - = 吹音，字母列 Q-P [ ] 吸音；也可用滑鼠點擊音孔",
+
+	// 音樂庫
+	[Key.musicLibrary]: "音樂庫",
+	[Key.musicLibraryEmpty]: "音樂庫還是空的",
+	[Key.musicLibraryEmptyHint]:
+		"把音訊檔案放進 public/music/ 目錄後重新建置，即可自動入庫",
+	[Key.musicLibraryViewList]: "清單檢視",
+	[Key.musicLibraryViewGrid]: "網格檢視",
+	[Key.musicLibraryRemove]: "從歌單移除",
+	[Key.musicLibraryRestore]: "還原",
+	[Key.musicLibraryHidden]: "已隱藏",
+	[Key.musicLibraryEdit]: "編輯資訊",
+	[Key.musicLibraryEditTitle]: "歌曲名稱",
+	[Key.musicLibraryEditCover]: "封面網址",
+	[Key.musicLibrarySave]: "儲存",
+	[Key.musicLibraryCancel]: "取消",
 
 	// 公告欄
 	[Key.announcement]: "公告",
@@ -67,6 +94,10 @@ export const zh_TW: Translation = {
 	[Key.postsCount]: "篇文章",
 
 	[Key.themeColor]: "主題色相",
+	[Key.themeMono]: "黑白灰",
+	[Key.effects]: "特效",
+	[Key.sakuraNum]: "櫻花數量",
+	[Key.sakuraSpeed]: "下落速度",
 
 	[Key.lightMode]: "亮色",
 	[Key.darkMode]: "暗色",
@@ -79,68 +110,6 @@ export const zh_TW: Translation = {
 	[Key.updatedAt]: "更新於",
 	[Key.readTime]: "閱讀時長",
 	[Key.license]: "許可協議",
-	[Key.bangumi]: "番組計劃",
-
-	// 番組計劃
-	[Key.bangumiTitle]: "我的番組計劃",
-	[Key.bangumiSubtitle]: "記錄我的二次元之旅",
-
-	// 番組計劃篩選和狀態文本
-	[Key.bangumiFilterAll]: "全部",
-	[Key.bangumiFilterWatched]: "看過",
-	[Key.bangumiFilterWatching]: "在看",
-	[Key.bangumiFilterWish]: "想看",
-	[Key.bangumiFilterOnHold]: "擱置",
-	[Key.bangumiFilterDropped]: "拋棄",
-	[Key.bangumiFilterGamePlayed]: "玩過",
-	[Key.bangumiFilterGamePlaying]: "在玩",
-	[Key.bangumiFilterGameWish]: "想玩",
-	[Key.bangumiFilterBookRead]: "讀過",
-	[Key.bangumiFilterBookReading]: "在讀",
-	[Key.bangumiFilterBookWish]: "想讀",
-	[Key.bangumiFilterMusicListened]: "聽過",
-	[Key.bangumiFilterMusicListening]: "在聽",
-	[Key.bangumiFilterMusicWish]: "想聽",
-	[Key.bangumiStatusWish]: "想看",
-	[Key.bangumiStatusWatched]: "看過",
-	[Key.bangumiStatusWatching]: "在看",
-	[Key.bangumiStatusOnHold]: "擱置",
-	[Key.bangumiStatusDropped]: "拋棄",
-	[Key.bangumiStatusGameWish]: "想玩",
-	[Key.bangumiStatusGamePlayed]: "玩過",
-	[Key.bangumiStatusGamePlaying]: "在玩",
-	[Key.bangumiStatusBookWish]: "想讀",
-	[Key.bangumiStatusBookRead]: "讀過",
-	[Key.bangumiStatusBookReading]: "在讀",
-	[Key.bangumiStatusMusicWish]: "想聽",
-	[Key.bangumiStatusMusicListened]: "聽過",
-	[Key.bangumiStatusMusicListening]: "在聽",
-	[Key.bangumiStatusUnknown]: "未知",
-	[Key.bangumiNoData]: "暫無數據",
-	[Key.bangumiNoDataDescription]: "該分類下還沒有任何條目",
-	[Key.bangumiEmpty]: "暫無數據",
-	[Key.bangumiEmptyReason]: "可能的原因：用戶名不存在、網絡連接問題或API限制",
-	[Key.bangumiUsername]: "用戶名",
-	[Key.bangumiApi]: "API",
-	[Key.bangumiConfigTip]: "提示：請在頁面配置中設置正確的Bangumi用戶名",
-	[Key.bangumiPrevPage]: "上一頁",
-	[Key.bangumiNextPage]: "下一頁",
-	[Key.bangumiCurrentPage]: "第",
-	[Key.bangumiTotalPages]: "頁，共",
-	[Key.bangumiPage]: "頁",
-
-	// 番組分類
-	[Key.bangumiCategoryBook]: "書籍",
-	[Key.bangumiCategoryAnime]: "動畫",
-	[Key.bangumiCategoryMusic]: "音樂",
-	[Key.bangumiCategoryGame]: "遊戲",
-	[Key.bangumiCategoryReal]: "三次元",
-
-	// 番組數據更新
-	[Key.bangumiLastUpdated]: "數據更新於",
-	[Key.bangumiUpdatedAt]: "構建時間",
-	[Key.bangumiDataStatic]: "靜態數據",
-
 	// 分頁
 	[Key.paginationFirst]: "首頁",
 	[Key.paginationPrev]: "上一頁",
@@ -291,14 +260,6 @@ export const zh_TW: Translation = {
 	[Key.codeCollapsibleShowLess]: "收起",
 	[Key.codeCollapsibleExpanded]: "代碼區塊已展開",
 	[Key.codeCollapsibleCollapsed]: "代碼區塊已折疊",
-
-	// 相簿頁面
-	[Key.gallery]: "相簿",
-	[Key.galleryDescription]: "記錄生活中的美好瞬間",
-	[Key.galleryPhotos]: "張照片",
-	[Key.galleryAlbums]: "本相簿",
-	[Key.galleryNoAlbums]: "暫無相簿",
-	[Key.galleryBackToAlbums]: "返回相簿列表",
 
 	// 密碼保護
 	[Key.passwordProtected]: "密碼保護",

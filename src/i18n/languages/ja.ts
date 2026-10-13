@@ -40,6 +40,33 @@ export const ja: Translation = {
 	[Key.musicCover]: "カバー",
 	[Key.musicNoCover]: "カバーなし",
 	[Key.musicAudioPlayer]: "オーディオプレーヤー",
+	[Key.musicVisualizer]: "MIDI ビジュアライザー",
+	[Key.musicModeVisualize]: "ビジュアライズ",
+	[Key.musicModePerform]: "演奏",
+	[Key.musicInstrPiano]: "ピアノ",
+	[Key.musicInstrHarmonica]: "ハーモニカ",
+	[Key.musicHarmonicaBlow]: "吹く",
+	[Key.musicHarmonicaDraw]: "吸う",
+	[Key.musicPianoHint]:
+		"Z X C V B N M / Q W E R T Y U で演奏（黒鍵: S D G H J / 2 3 5 6 7）、クリックでも演奏できます",
+	[Key.musicHarmonicaHint]:
+		"数字列 1-0 - = 吹く、文字列 Q-P [ ] 吸う；クリックでも演奏できます",
+
+	// 音楽ライブラリ
+	[Key.musicLibrary]: "音楽ライブラリ",
+	[Key.musicLibraryEmpty]: "音楽ライブラリはまだ空です",
+	[Key.musicLibraryEmptyHint]:
+		"public/music/ に音声ファイルを入れて再ビルドすると自動で追加されます",
+	[Key.musicLibraryViewList]: "リスト表示",
+	[Key.musicLibraryViewGrid]: "グリッド表示",
+	[Key.musicLibraryRemove]: "プレイリストから削除",
+	[Key.musicLibraryRestore]: "復元",
+	[Key.musicLibraryHidden]: "非表示",
+	[Key.musicLibraryEdit]: "情報を編集",
+	[Key.musicLibraryEditTitle]: "曲名",
+	[Key.musicLibraryEditCover]: "カバーURL",
+	[Key.musicLibrarySave]: "保存",
+	[Key.musicLibraryCancel]: "キャンセル",
 
 	// お知らせ
 	[Key.announcement]: "お知らせ",
@@ -69,6 +96,10 @@ export const ja: Translation = {
 	[Key.postsCount]: "投稿",
 
 	[Key.themeColor]: "テーマカラー",
+	[Key.themeMono]: "モノクロ",
+	[Key.effects]: "エフェクト",
+	[Key.sakuraNum]: "桜の数",
+	[Key.sakuraSpeed]: "落下速度",
 
 	[Key.lightMode]: "ライト",
 	[Key.darkMode]: "ダーク",
@@ -81,68 +112,6 @@ export const ja: Translation = {
 	[Key.updatedAt]: "更新日",
 	[Key.readTime]: "読了時間",
 	[Key.license]: "ライセンス",
-	[Key.bangumi]: "バングミ",
-
-	// バングミフィルターと状態文本
-	[Key.bangumiTitle]: "私のバングミ",
-	[Key.bangumiSubtitle]: "私の二次元の旅を記録する",
-	[Key.bangumiFilterAll]: "すべて",
-	[Key.bangumiFilterWatched]: "見た",
-	[Key.bangumiFilterWatching]: "視聴中",
-	[Key.bangumiFilterWish]: "見たい",
-	[Key.bangumiFilterOnHold]: "保留",
-	[Key.bangumiFilterDropped]: "中断",
-	[Key.bangumiFilterGamePlayed]: "プレイ済み",
-	[Key.bangumiFilterGamePlaying]: "プレイ中",
-	[Key.bangumiFilterGameWish]: "プレイしたい",
-	[Key.bangumiFilterBookRead]: "読んだ",
-	[Key.bangumiFilterBookReading]: "読んでいる",
-	[Key.bangumiFilterBookWish]: "読みたい",
-	[Key.bangumiFilterMusicListened]: "聴いた",
-	[Key.bangumiFilterMusicListening]: "聴いている",
-	[Key.bangumiFilterMusicWish]: "聴きたい",
-	[Key.bangumiStatusWish]: "見たい",
-	[Key.bangumiStatusWatched]: "見た",
-	[Key.bangumiStatusWatching]: "視聴中",
-	[Key.bangumiStatusOnHold]: "保留",
-	[Key.bangumiStatusDropped]: "中断",
-	[Key.bangumiStatusGameWish]: "プレイしたい",
-	[Key.bangumiStatusGamePlayed]: "プレイ済み",
-	[Key.bangumiStatusGamePlaying]: "プレイ中",
-	[Key.bangumiStatusBookWish]: "読みたい",
-	[Key.bangumiStatusBookRead]: "読んだ",
-	[Key.bangumiStatusBookReading]: "読んでいる",
-	[Key.bangumiStatusMusicWish]: "聴きたい",
-	[Key.bangumiStatusMusicListened]: "聴いた",
-	[Key.bangumiStatusMusicListening]: "聴いている",
-	[Key.bangumiStatusUnknown]: "不明",
-	[Key.bangumiNoData]: "データなし",
-	[Key.bangumiNoDataDescription]: "このカテゴリに項目がありません",
-	[Key.bangumiEmpty]: "データなし",
-	[Key.bangumiEmptyReason]:
-		"考えられる理由：ユーザー名が存在しない、ネットワーク接続の問題、またはAPI制限",
-	[Key.bangumiUsername]: "ユーザー名",
-	[Key.bangumiApi]: "API",
-	[Key.bangumiConfigTip]:
-		"ヒント：ページ設定で正しいBangumiユーザー名を設定してください",
-	[Key.bangumiPrevPage]: "前へ",
-	[Key.bangumiNextPage]: "次へ",
-	[Key.bangumiCurrentPage]: "ページ",
-	[Key.bangumiTotalPages]: "の",
-	[Key.bangumiPage]: "ページ",
-
-	// バングミカテゴリ
-	[Key.bangumiCategoryBook]: "本",
-	[Key.bangumiCategoryAnime]: "アニメ",
-	[Key.bangumiCategoryMusic]: "音楽",
-	[Key.bangumiCategoryGame]: "ゲーム",
-	[Key.bangumiCategoryReal]: "実写",
-
-	// バングミデータ更新
-	[Key.bangumiLastUpdated]: "データ更新",
-	[Key.bangumiUpdatedAt]: "ビルド時間",
-	[Key.bangumiDataStatic]: "静的データ",
-
 	// ページネーション
 	[Key.paginationFirst]: "最初",
 	[Key.paginationPrev]: "前へ",
@@ -297,14 +266,6 @@ export const ja: Translation = {
 	[Key.codeCollapsibleShowLess]: "折りたたむ",
 	[Key.codeCollapsibleExpanded]: "コードブロックが展開されました",
 	[Key.codeCollapsibleCollapsed]: "コードブロックが折りたたまれました",
-
-	// ギャラリーページ
-	[Key.gallery]: "ギャラリー",
-	[Key.galleryDescription]: "人生の美しい瞬間を記録する",
-	[Key.galleryPhotos]: "枚の写真",
-	[Key.galleryAlbums]: "冊のアルバム",
-	[Key.galleryNoAlbums]: "アルバムがありません",
-	[Key.galleryBackToAlbums]: "アルバム一覧に戻る",
 
 	// パスワード保護
 	[Key.passwordProtected]: "パスワード保護",

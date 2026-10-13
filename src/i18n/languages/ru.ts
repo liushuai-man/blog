@@ -40,6 +40,33 @@ export const ru: Translation = {
 	[Key.musicCover]: "Обложка",
 	[Key.musicNoCover]: "Нет обложки",
 	[Key.musicAudioPlayer]: "Аудиоплеер",
+	[Key.musicVisualizer]: "MIDI-визуализатор",
+	[Key.musicModeVisualize]: "Визуализация",
+	[Key.musicModePerform]: "Игра",
+	[Key.musicInstrPiano]: "Пианино",
+	[Key.musicInstrHarmonica]: "Губная гармоника",
+	[Key.musicHarmonicaBlow]: "Выдох",
+	[Key.musicHarmonicaDraw]: "Вдох",
+	[Key.musicPianoHint]:
+		"Играйте на Z X C V B N M / Q W E R T Y U (чёрные: S D G H J / 2 3 5 6 7) или кликайте по клавишам",
+	[Key.musicHarmonicaHint]:
+		"Цифровой ряд 1-0 - = выдох, буквенный Q-P [ ] вдох; или кликайте по отверстиям",
+
+	// Музыкальная библиотека
+	[Key.musicLibrary]: "Музыкальная библиотека",
+	[Key.musicLibraryEmpty]: "Библиотека пока пуста",
+	[Key.musicLibraryEmptyHint]:
+		"Положите аудиофайлы в public/music/ и пересоберите сайт — они добавятся автоматически",
+	[Key.musicLibraryViewList]: "Список",
+	[Key.musicLibraryViewGrid]: "Сетка",
+	[Key.musicLibraryRemove]: "Убрать из плейлиста",
+	[Key.musicLibraryRestore]: "Восстановить",
+	[Key.musicLibraryHidden]: "Скрыто",
+	[Key.musicLibraryEdit]: "Редактировать",
+	[Key.musicLibraryEditTitle]: "Название",
+	[Key.musicLibraryEditCover]: "URL обложки",
+	[Key.musicLibrarySave]: "Сохранить",
+	[Key.musicLibraryCancel]: "Отмена",
 
 	// Объявление
 	[Key.announcement]: "Объявление",
@@ -69,6 +96,10 @@ export const ru: Translation = {
 	[Key.postsCount]: "постов",
 
 	[Key.themeColor]: "Цвет темы",
+	[Key.themeMono]: "Монохром",
+	[Key.effects]: "Эффекты",
+	[Key.sakuraNum]: "Количество сакуры",
+	[Key.sakuraSpeed]: "Скорость падения",
 
 	[Key.lightMode]: "Светлая",
 	[Key.darkMode]: "Тёмная",
@@ -81,68 +112,6 @@ export const ru: Translation = {
 	[Key.updatedAt]: "Обновлено",
 	[Key.readTime]: "Время чтения",
 	[Key.license]: "Лицензия",
-	[Key.bangumi]: "Бангуми",
-
-	// Фильтр и статус Бангуми текст
-	[Key.bangumiTitle]: "Мой план группы",
-	[Key.bangumiSubtitle]: "Запись моего аниме путешествия",
-	[Key.bangumiFilterAll]: "Все",
-	[Key.bangumiFilterWatched]: "Просмотрено",
-	[Key.bangumiFilterWatching]: "Смотрю",
-	[Key.bangumiFilterWish]: "Хочу",
-	[Key.bangumiFilterOnHold]: "Отложено",
-	[Key.bangumiFilterDropped]: "Брошено",
-	[Key.bangumiFilterGamePlayed]: "Пройдено",
-	[Key.bangumiFilterGamePlaying]: "Играю",
-	[Key.bangumiFilterGameWish]: "Хочу сыграть",
-	[Key.bangumiFilterBookRead]: "Прочитано",
-	[Key.bangumiFilterBookReading]: "Читаю",
-	[Key.bangumiFilterBookWish]: "Хочу прочитать",
-	[Key.bangumiFilterMusicListened]: "Прослушано",
-	[Key.bangumiFilterMusicListening]: "Слушаю",
-	[Key.bangumiFilterMusicWish]: "Хочу послушать",
-	[Key.bangumiStatusWish]: "Хочу",
-	[Key.bangumiStatusWatched]: "Просмотрено",
-	[Key.bangumiStatusWatching]: "Смотрю",
-	[Key.bangumiStatusOnHold]: "Отложено",
-	[Key.bangumiStatusDropped]: "Брошено",
-	[Key.bangumiStatusGameWish]: "Хочу сыграть",
-	[Key.bangumiStatusGamePlayed]: "Пройдено",
-	[Key.bangumiStatusGamePlaying]: "Играю",
-	[Key.bangumiStatusBookWish]: "Хочу прочитать",
-	[Key.bangumiStatusBookRead]: "Прочитано",
-	[Key.bangumiStatusBookReading]: "Читаю",
-	[Key.bangumiStatusMusicWish]: "Хочу послушать",
-	[Key.bangumiStatusMusicListened]: "Прослушано",
-	[Key.bangumiStatusMusicListening]: "Слушаю",
-	[Key.bangumiStatusUnknown]: "Неизвестно",
-	[Key.bangumiNoData]: "Нет данных",
-	[Key.bangumiNoDataDescription]: "В этой категории нет элементов",
-	[Key.bangumiEmpty]: "Нет данных",
-	[Key.bangumiEmptyReason]:
-		"Возможные причины: имя пользователя не существует, проблема с подключением к сети или ограничение API",
-	[Key.bangumiUsername]: "Имя пользователя",
-	[Key.bangumiApi]: "API",
-	[Key.bangumiConfigTip]:
-		"Подсказка: установите правильное имя пользователя Bangumi в конфигурации страницы",
-	[Key.bangumiPrevPage]: "Предыдущая",
-	[Key.bangumiNextPage]: "Следующая",
-	[Key.bangumiCurrentPage]: "Страница",
-	[Key.bangumiTotalPages]: "из",
-	[Key.bangumiPage]: "страница",
-
-	// Категории Бангуми
-	[Key.bangumiCategoryBook]: "Книга",
-	[Key.bangumiCategoryAnime]: "Аниме",
-	[Key.bangumiCategoryMusic]: "Музыка",
-	[Key.bangumiCategoryGame]: "Игра",
-	[Key.bangumiCategoryReal]: "Реальный",
-
-	// Обновление данных Бангуми
-	[Key.bangumiLastUpdated]: "Данные обновлены",
-	[Key.bangumiUpdatedAt]: "Время сборки",
-	[Key.bangumiDataStatic]: "Статические данные",
-
 	// Пагинация
 	[Key.paginationFirst]: "Первая",
 	[Key.paginationPrev]: "Предыдущая",
@@ -299,14 +268,6 @@ export const ru: Translation = {
 	[Key.codeCollapsibleShowLess]: "Свернуть",
 	[Key.codeCollapsibleExpanded]: "Блок кода развернут",
 	[Key.codeCollapsibleCollapsed]: "Блок кода свернут",
-
-	// Страница галереи
-	[Key.gallery]: "Галерея",
-	[Key.galleryDescription]: "Запечатлеть прекрасные моменты жизни",
-	[Key.galleryPhotos]: "фото",
-	[Key.galleryAlbums]: "альбомов",
-	[Key.galleryNoAlbums]: "Пока нет альбомов",
-	[Key.galleryBackToAlbums]: "Вернуться к альбомам",
 
 	// Защита паролем
 	[Key.passwordProtected]: "Защищено паролем",

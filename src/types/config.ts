@@ -47,12 +47,6 @@ export type SiteConfig = {
 		theme: "github" | "obsidian" | "vitepress";
 	};
 
-	// bangumi配置
-	bangumi?: {
-		userId?: string; // Bangumi用户ID
-		categoryOrder?: ("anime" | "game" | "book" | "music" | "real")[]; // 条目类型排序顺序
-	};
-
 	generateOgImages: boolean;
 	favicon: Array<{
 		src: string;
@@ -83,8 +77,6 @@ export type SiteConfig = {
 		friends: boolean; // 友链页面开关
 		sponsor: boolean; // 赞助页面开关
 		guestbook: boolean; // 留言板页面开关
-		bangumi: boolean;
-		gallery: boolean; // 相册页面开关
 	};
 
 	// 分类导航栏开关
@@ -166,8 +158,7 @@ export enum LinkPreset {
 	Friends = 3,
 	Sponsor = 4,
 	Guestbook = 5,
-	Bangumi = 6,
-	Gallery = 7,
+	Music = 6,
 }
 
 export type NavBarLink = {
@@ -447,67 +438,6 @@ export type SakuraConfig = {
 	zIndex: number; // 层级，确保樱花在合适的层级显示
 };
 
-// Spine 看板娘配置
-export type SpineModelConfig = {
-	enable: boolean; // 是否启用 Spine 看板娘
-	model: {
-		path: string; // 模型文件路径 (.json)
-		scale?: number; // 模型缩放比例，默认1.0
-		x?: number; // X轴偏移，默认0
-		y?: number; // Y轴偏移，默认0
-	};
-	position: {
-		corner: "bottom-left" | "bottom-right" | "top-left" | "top-right"; // 显示位置
-		offsetX?: number; // 水平偏移量，默认20px
-		offsetY?: number; // 垂直偏移量，默认20px
-	};
-	size: {
-		width?: number; // 容器宽度，默认280px
-		height?: number; // 容器高度，默认400px
-	};
-	interactive?: {
-		enabled?: boolean; // 是否启用交互功能，默认true
-		clickAnimations?: string[]; // 点击时随机播放的动画列表
-		clickMessages?: string[]; // 点击时随机显示的文字消息
-		messageDisplayTime?: number; // 文字显示时间（毫秒），默认3000
-		idleAnimations?: string[]; // 待机动画列表
-		idleInterval?: number; // 待机动画切换间隔（毫秒），默认10000
-	};
-	responsive?: {
-		hideOnMobile?: boolean; // 是否在移动端隐藏，默认false
-		mobileBreakpoint?: number; // 移动端断点，默认768px
-	};
-	zIndex?: number; // 层级，默认1000
-	opacity?: number; // 透明度，0-1，默认1.0
-};
-
-// Live2D 看板娘配置
-export type Live2DModelConfig = {
-	enable: boolean; // 是否启用 Live2D 看板娘
-	model: {
-		path: string; // 模型文件夹路径或model3.json文件路径
-	};
-	position?: {
-		corner?: "bottom-left" | "bottom-right" | "top-left" | "top-right"; // 显示位置，默认bottom-right
-		offsetX?: number; // 水平偏移量，默认20px
-		offsetY?: number; // 垂直偏移量，默认20px
-	};
-	size?: {
-		width?: number; // 容器宽度，默认280px
-		height?: number; // 容器高度，默认250px
-	};
-	interactive?: {
-		enabled?: boolean; // 是否启用交互功能，默认true
-		// motions 和 expressions 将从模型 JSON 文件中自动读取
-		clickMessages?: string[]; // 点击时随机显示的文字消息
-		messageDisplayTime?: number; // 文字显示时间（毫秒），默认3000
-	};
-	responsive?: {
-		hideOnMobile?: boolean; // 是否在移动端隐藏，默认false
-		mobileBreakpoint?: number; // 移动端断点，默认768px
-	};
-};
-
 export type BackgroundWallpaperConfig = {
 	mode: "banner" | "overlay" | "none"; // 壁纸模式：banner横幅模式、overlay全屏透明覆盖模式或none纯色背景
 	switchable?: boolean; // 是否允许用户通过导航栏切换壁纸模式，默认true
@@ -659,8 +589,8 @@ export type FriendsPageConfig = {
 
 // 音乐播放器配置
 export type MusicPlayerConfig = {
-	// 使用方式：'meting' 或 'local'
-	mode?: "meting" | "local"; // "meting" 使用 Meting API，"local" 使用本地音乐列表
+	// 使用方式：音乐库来自 public/music/ 下的本地音频文件（构建期自动扫描）
+	mode?: "local";
 
 	// 默认音量 (0-1)
 	volume?: number;
@@ -674,29 +604,9 @@ export type MusicPlayerConfig = {
 	// 是否在导航栏显示音乐播放器
 	showInNavbar?: boolean;
 
-	// Meting API 配置
-	meting?: {
-		// Meting API 地址
-		api?: string;
-
-		// 音乐平台：netease=网易云音乐, tencent=QQ音乐, kugou=酷狗音乐, xiami=虾米音乐, baidu=百度音乐
-		server?: "netease" | "tencent" | "kugou" | "xiami" | "baidu";
-
-		// 类型：song=单曲, playlist=歌单, album=专辑, search=搜索, artist=艺术家
-		type?: "song" | "playlist" | "album" | "search" | "artist";
-
-		// 歌单/专辑/单曲 ID 或搜索关键词
-		id?: string;
-
-		// 认证 token（可选）
-		auth?: string;
-
-		// 备用 API 配置（当主 API 失败时使用）
-		fallbackApis?: string[];
-	};
-
-	// 本地音乐配置（当 mode 为 'local' 时使用）
+	// 本地音乐配置
 	local?: {
+		// 手动指定曲目：非空时优先于 public/music/ 的自动扫描结果
 		playlist?: Array<{
 			name: string; // 歌曲名称
 			artist: string; // 艺术家
@@ -741,20 +651,3 @@ export type ResponsiveImageLayout = "constrained" | "full-width" | "none";
 
 // 图像格式类型
 export type ImageFormat = "avif" | "webp" | "png" | "jpg" | "jpeg" | "gif";
-
-// 相册元信息（用户在配置文件中填写）
-export type GalleryAlbum = {
-	id: string; // URL slug + 目录名，如 "japan-2025"
-	name: string; // 相册名称
-	description?: string; // 相册描述
-	date?: string; // 日期
-	location?: string; // 拍摄地点
-	tags?: string[]; // 标签（用于首页筛选）
-	cover?: string; // 手动指定封面（可选，省略则自动取 cover.* 或第一张）
-};
-
-// 相册配置
-export type GalleryConfig = {
-	albums: GalleryAlbum[];
-	columnWidth?: number; // 瀑布流最小列宽(px)，默认 240，浏览器根据容器宽度自动计算列数
-};

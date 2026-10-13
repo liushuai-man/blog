@@ -498,6 +498,13 @@ const widgetId =
         updatePlaylistActiveUI(d.index);
     });
 
+    // 播放列表被外部（音乐库页面）整体替换时，重渲染列表保持侧栏/导航栏一致
+    on('fm:playlist', function (e) {
+        var d = e.detail;
+        setLoading(false);
+        renderPlaylist(d.playlist, d.currentIndex || 0);
+    });
+
     on('fm:play-state', function (e) {
         updatePlayStateUI(e.detail.isPlaying);
     });

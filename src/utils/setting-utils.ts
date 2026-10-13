@@ -12,6 +12,7 @@ import type { LIGHT_DARK_MODE, WALLPAPER_MODE } from "@/types/config";
 import {
 	backgroundWallpaper,
 	expressiveCodeConfig,
+	sakuraConfig,
 	siteConfig,
 } from "../config";
 import { isHomePage as checkIsHomePage } from "./layout-utils";
@@ -21,6 +22,8 @@ declare global {
 	interface Window {
 		initSemifullScrollDetection?: () => void;
 		semifullScrollHandler?: () => void;
+		// 樱花管理器对外接口（由 SakuraEffect.astro 的内联脚本注入）
+		__sakuraEffect?: { apply: () => void };
 	}
 }
 
@@ -82,6 +85,36 @@ export function setHue(hue: number): void {
 		return;
 	}
 	r.style.setProperty("--hue", String(hue));
+}
+
+// 黑白灰（无彩色）主题：通过把彩度系数设为 0 让整套主题变为灰阶
+export function getMono(): boolean {
+	if (typeof window === "undefined" || !window.localStorage) {
+		return false;
+	}
+	return localStorage.getItem("themeMono") === "true";
+}
+
+export function setMono(mono: boolean): void {
+	if (
+		typeof window === "undefined" ||
+		!window.localStorage ||
+		typeof document === "undefined"
+	) {
+		return;
+	}
+	localStorage.setItem("themeMono", String(mono));
+	applyMonoToDocument(mono);
+}
+
+export function applyMonoToDocument(mono: boolean): void {
+	if (typeof document === "undefined") {
+		return;
+	}
+	document.documentElement.style.setProperty(
+		"--hue-chroma",
+		mono ? "0" : "1",
+	);
 }
 
 export function applyThemeToDocument(theme: LIGHT_DARK_MODE) {
@@ -873,6 +906,93 @@ export function applyWavesEnabledToDocument(enabled: boolean): void {
 			wavesElement.classList.add("waves-disabled");
 		}
 	}
+}
+
+// Sakura effect functions
+export const SAKURA_NUM_MIN = 1;
+export const SAKURA_NUM_MAX = 60;
+export const SAKURA_SPEED_MIN = 0.3;
+export const SAKURA_SPEED_MAX = 3;
+
+export function getDefaultSakuraNum(): number {
+	return sakuraConfig.sakuraNum;
+}
+
+export function getStoredSakuraNum(): number {
+	if (
+		typeof localStorage === "undefined" ||
+		typeof localStorage.getItem !== "function"
+	) {
+		return getDefaultSakuraNum();
+	}
+	const stored = localStorage.getItem("sakuraNum");
+	if (stored === null) {
+		return getDefaultSakuraNum();
+	}
+	const parsed = Number.parseInt(stored, 10);
+	if (Number.isNaN(parsed)) {
+		return getDefaultSakuraNum();
+	}
+	return clampNumber(parsed, SAKURA_NUM_MIN, SAKURA_NUM_MAX);
+}
+
+// 下落速度用倍数表示，1 为 sakuraConfig 中的默认速度
+export function getDefaultSakuraSpeed(): number {
+	return 1;
+}
+
+export function getStoredSakuraSpeed(): number {
+	if (
+		typeof localStorage === "undefined" ||
+		typeof localStorage.getItem !== "function"
+	) {
+		return getDefaultSakuraSpeed();
+	}
+	const stored = localStorage.getItem("sakuraSpeed");
+	if (stored === null) {
+		return getDefaultSakuraSpeed();
+	}
+	const parsed = Number.parseFloat(stored);
+	if (Number.isNaN(parsed)) {
+		return getDefaultSakuraSpeed();
+	}
+	return clampNumber(parsed, SAKURA_SPEED_MIN, SAKURA_SPEED_MAX);
+}
+
+export function setSakuraNum(num: number): void {
+	if (
+		typeof localStorage === "undefined" ||
+		typeof localStorage.setItem !== "function"
+	) {
+		return;
+	}
+	localStorage.setItem(
+		"sakuraNum",
+		String(clampNumber(num, SAKURA_NUM_MIN, SAKURA_NUM_MAX)),
+	);
+	applySakuraSettings();
+}
+
+export function setSakuraSpeed(speed: number): void {
+	if (
+		typeof localStorage === "undefined" ||
+		typeof localStorage.setItem !== "function"
+	) {
+		return;
+	}
+	localStorage.setItem(
+		"sakuraSpeed",
+		String(clampNumber(speed, SAKURA_SPEED_MIN, SAKURA_SPEED_MAX)),
+	);
+	applySakuraSettings();
+}
+
+// 让正在运行的樱花实例按最新的数量/速度重建
+export function applySakuraSettings(): void {
+	if (typeof window === "undefined") {
+		return;
+	}
+	window.__sakuraEffect?.apply();
 }
 
 // Banner title functions

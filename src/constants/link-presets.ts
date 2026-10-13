@@ -33,14 +33,9 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		url: "/guestbook/",
 		icon: "material-symbols:chat",
 	},
-	[LinkPreset.Bangumi]: {
-		name: i18n(I18nKey.bangumi),
-		url: "/bangumi/",
-		icon: "material-symbols:movie",
-	},
-	[LinkPreset.Gallery]: {
-		name: i18n(I18nKey.gallery),
-		url: "/gallery/",
-		icon: "material-symbols:photo-library",
+	[LinkPreset.Music]: {
+		name: i18n(I18nKey.music),
+		url: "/music/",
+		icon: "material-symbols:music-note",
 	},
 };

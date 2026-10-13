@@ -40,6 +40,33 @@ export const en: Translation = {
 	[Key.musicCover]: "Cover",
 	[Key.musicNoCover]: "No cover available",
 	[Key.musicAudioPlayer]: "Audio Player",
+	[Key.musicVisualizer]: "MIDI Visualizer",
+	[Key.musicModeVisualize]: "Visualize",
+	[Key.musicModePerform]: "Perform",
+	[Key.musicInstrPiano]: "Piano",
+	[Key.musicInstrHarmonica]: "Harmonica",
+	[Key.musicHarmonicaBlow]: "Blow",
+	[Key.musicHarmonicaDraw]: "Draw",
+	[Key.musicPianoHint]:
+		"Play with Z X C V B N M / Q W E R T Y U (black keys: S D G H J / 2 3 5 6 7), or click the keys",
+	[Key.musicHarmonicaHint]:
+		"Number row 1-0 - = blow, letter row Q-P [ ] draw; or click the holes",
+
+	// Music Library
+	[Key.musicLibrary]: "Music Library",
+	[Key.musicLibraryEmpty]: "The music library is empty",
+	[Key.musicLibraryEmptyHint]:
+		"Drop audio files into public/music/ and rebuild to add them automatically",
+	[Key.musicLibraryViewList]: "List view",
+	[Key.musicLibraryViewGrid]: "Grid view",
+	[Key.musicLibraryRemove]: "Remove from playlist",
+	[Key.musicLibraryRestore]: "Restore",
+	[Key.musicLibraryHidden]: "Hidden",
+	[Key.musicLibraryEdit]: "Edit info",
+	[Key.musicLibraryEditTitle]: "Title",
+	[Key.musicLibraryEditCover]: "Cover URL",
+	[Key.musicLibrarySave]: "Save",
+	[Key.musicLibraryCancel]: "Cancel",
 
 	// Announcement
 	[Key.announcement]: "Announcement",
@@ -69,6 +96,10 @@ export const en: Translation = {
 	[Key.postsCount]: "posts",
 
 	[Key.themeColor]: "Theme Color",
+	[Key.themeMono]: "Monochrome",
+	[Key.effects]: "Effects",
+	[Key.sakuraNum]: "Sakura Count",
+	[Key.sakuraSpeed]: "Fall Speed",
 
 	[Key.lightMode]: "Light",
 	[Key.darkMode]: "Dark",
@@ -81,68 +112,6 @@ export const en: Translation = {
 	[Key.updatedAt]: "Updated at",
 	[Key.readTime]: "Read time",
 	[Key.license]: "License",
-	[Key.bangumi]: "Bangumi",
-
-	// Bangumi Filter and Status Text
-	[Key.bangumiTitle]: "My Bangumi",
-	[Key.bangumiSubtitle]: "Record my ACG journey",
-	[Key.bangumiFilterAll]: "All",
-	[Key.bangumiFilterWatched]: "Watched",
-	[Key.bangumiFilterWatching]: "Watching",
-	[Key.bangumiFilterWish]: "Wish",
-	[Key.bangumiFilterOnHold]: "On Hold",
-	[Key.bangumiFilterDropped]: "Dropped",
-	[Key.bangumiFilterGamePlayed]: "Played",
-	[Key.bangumiFilterGamePlaying]: "Playing",
-	[Key.bangumiFilterGameWish]: "Wish to Play",
-	[Key.bangumiFilterBookRead]: "Read",
-	[Key.bangumiFilterBookReading]: "Reading",
-	[Key.bangumiFilterBookWish]: "Wish to Read",
-	[Key.bangumiFilterMusicListened]: "Listened",
-	[Key.bangumiFilterMusicListening]: "Listening",
-	[Key.bangumiFilterMusicWish]: "Wish to Listen",
-	[Key.bangumiStatusWish]: "Wish",
-	[Key.bangumiStatusWatched]: "Watched",
-	[Key.bangumiStatusWatching]: "Watching",
-	[Key.bangumiStatusOnHold]: "On Hold",
-	[Key.bangumiStatusDropped]: "Dropped",
-	[Key.bangumiStatusGameWish]: "Wish to Play",
-	[Key.bangumiStatusGamePlayed]: "Played",
-	[Key.bangumiStatusGamePlaying]: "Playing",
-	[Key.bangumiStatusBookWish]: "Wish to Read",
-	[Key.bangumiStatusBookRead]: "Read",
-	[Key.bangumiStatusBookReading]: "Reading",
-	[Key.bangumiStatusMusicWish]: "Wish to Listen",
-	[Key.bangumiStatusMusicListened]: "Listened",
-	[Key.bangumiStatusMusicListening]: "Listening",
-	[Key.bangumiStatusUnknown]: "Unknown",
-	[Key.bangumiNoData]: "No Data",
-	[Key.bangumiNoDataDescription]: "No items in this category",
-	[Key.bangumiEmpty]: "No Data",
-	[Key.bangumiEmptyReason]:
-		"Possible reasons: username does not exist, network connection issue, or API limit",
-	[Key.bangumiUsername]: "Username",
-	[Key.bangumiApi]: "API",
-	[Key.bangumiConfigTip]:
-		"Tip: Please set the correct Bangumi username in the page configuration",
-	[Key.bangumiPrevPage]: "Previous",
-	[Key.bangumiNextPage]: "Next",
-	[Key.bangumiCurrentPage]: "Page",
-	[Key.bangumiTotalPages]: "of",
-	[Key.bangumiPage]: "page",
-
-	// Bangumi Categories
-	[Key.bangumiCategoryBook]: "Book",
-	[Key.bangumiCategoryAnime]: "Anime",
-	[Key.bangumiCategoryMusic]: "Music",
-	[Key.bangumiCategoryGame]: "Game",
-	[Key.bangumiCategoryReal]: "Real",
-
-	// Bangumi Data Update
-	[Key.bangumiLastUpdated]: "Data updated at",
-	[Key.bangumiUpdatedAt]: "Build time",
-	[Key.bangumiDataStatic]: "Static data",
-
 	// Pagination
 	[Key.paginationFirst]: "First",
 	[Key.paginationPrev]: "Previous",
@@ -298,14 +267,6 @@ export const en: Translation = {
 	[Key.codeCollapsibleShowLess]: "Show less",
 	[Key.codeCollapsibleExpanded]: "Code block expanded",
 	[Key.codeCollapsibleCollapsed]: "Code block collapsed",
-
-	// Gallery Page
-	[Key.gallery]: "Gallery",
-	[Key.galleryDescription]: "Capturing beautiful moments in life",
-	[Key.galleryPhotos]: "photos",
-	[Key.galleryAlbums]: "albums",
-	[Key.galleryNoAlbums]: "No albums yet",
-	[Key.galleryBackToAlbums]: "Back to albums",
 
 	// Password Protection
 	[Key.passwordProtected]: "Password Protected",

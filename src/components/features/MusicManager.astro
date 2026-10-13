@@ -2,35 +2,44 @@
 import { musicPlayerConfig } from "@/config/musicConfig";
 import I18nKey from "@/i18n/i18nKey";
 import { i18n } from "@/i18n/translation";
+import { scanMusicLibrary } from "@/utils/music-library";
 import { url } from "@/utils/url-utils";
 
 const config = musicPlayerConfig;
 
-const localPlaylist =
-	config.mode === "local" && config.local?.playlist
-		? config.local.playlist.map((song) => {
-				const isFullUrl = (path: string) => /^https?:\/\//.test(path);
-				return {
-					name: song.name,
-					artist: song.artist,
-					url: isFullUrl(song.url) ? song.url : url(song.url),
-					pic: song.cover
-						? isFullUrl(song.cover)
-							? song.cover
-							: url(song.cover)
-						: undefined,
-					lrc: song.lrc
-						? isFullUrl(song.lrc)
-							? song.lrc
-							: url(song.lrc)
-						: undefined,
-				};
-			})
-		: [];
+const isFullUrl = (path: string) => /^https?:\/\//.test(path);
+// 歌词既可能是文件路径，也可能直接是 LRC 文本
+const resolveLrc = (lrc?: string) => {
+	if (!lrc) return undefined;
+	if (isFullUrl(lrc) || lrc.trimStart().startsWith("[")) return lrc;
+	return url(lrc);
+};
+
+// 本地音乐库：优先使用配置里手动填写的列表，否则扫描 public/music/
+const localSource =
+	config.local?.playlist && config.local.playlist.length > 0
+		? config.local.playlist.map((song) => ({
+				id: song.url,
+				name: song.name,
+				artist: song.artist,
+				url: song.url,
+				cover: song.cover,
+				lrc: song.lrc,
+			}))
+		: scanMusicLibrary();
+
+const localPlaylist = localSource.map((song) => ({
+	id: song.id,
+	name: song.name,
+	artist: song.artist,
+	url: isFullUrl(song.url) ? song.url : url(song.url),
+	pic:
+		song.cover && (isFullUrl(song.cover) ? song.cover : url(song.cover)),
+	lrc: resolveLrc(song.lrc),
+}));
 
 const managerConfigStr = JSON.stringify({
 	mode: config.mode,
-	meting: config.meting,
 	localPlaylist: localPlaylist,
 	volume: config.volume ?? 0.7,
 	playMode: config.playMode ?? "list",
@@ -95,10 +104,49 @@ const managerConfigStr = JSON.stringify({
     }
 
     // ── Audio element (persistent, attached to body) ────────
+    // 必须显式声明 crossOrigin='anonymous'：音频直链（api.injahow.cn 302 → m*.music.126.net）
+    // 两跳都返回 Access-Control-Allow-Origin: *，以 CORS 模式加载后媒体才不是
+    // CORS-cross-origin；否则 createMediaElementSource 之后按 Web Audio 规范会输出静音，
+    // 频谱恒为 0 且可听输出也被静音。
     var audio = document.createElement('audio');
     audio.crossOrigin = 'anonymous';
     audio.style.display = 'none';
     document.body.appendChild(audio);
+
+    // ── Web Audio analyser (供外部可视化组件使用) ─────────────
+    var audioCtx = null;
+    var analyser = null;
+    var sourceNode = null;
+    var analyserFailed = false;
+
+    function ensureAnalyser() {
+        // 已失败过就不再重试（AudioContext 次数/元素绑定都不可逆）
+        if (analyserFailed) return null;
+        try {
+            if (!analyser) {
+                var AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return null;
+                audioCtx = new AC();
+                sourceNode = audioCtx.createMediaElementSource(audio);
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.8;
+                sourceNode.connect(analyser);
+                analyser.connect(audioCtx.destination);
+            }
+            // 关键：MediaElementSource 会接管音频输出，必须保证 context 处于 running，
+            // 否则用户点播放也不会有声音。每次调用都尝试恢复。
+            if (audioCtx && audioCtx.state !== 'running') {
+                audioCtx.resume().catch(function () {});
+            }
+            return analyser;
+        } catch (e) {
+            console.warn('Audio analyser init failed:', e);
+            analyserFailed = true;
+            analyser = null;
+            return null;
+        }
+    }
 
     // ── State ────────────────────────────────────────────────
     var state = {
@@ -114,6 +162,7 @@ const managerConfigStr = JSON.stringify({
         currentLrcIndex: -1,
         initialized: false,
         initializing: false,
+        playlistApplied: false,
         error: null
     };
 
@@ -125,46 +174,6 @@ const managerConfigStr = JSON.stringify({
     // ── Event helpers ────────────────────────────────────────
     function emit(name, detail) {
         window.dispatchEvent(new CustomEvent(name, { detail: detail || {} }));
-    }
-
-    // ── Meting fetch ─────────────────────────────────────────
-    async function fetchMetingData() {
-        if (!config.meting) return;
-        var m = config.meting;
-        var apis = [m.api].concat(m.fallbackApis || []);
-
-        for (var i = 0; i < apis.length; i++) {
-            var baseApi = apis[i];
-            if (!baseApi) continue;
-            try {
-                var fetchUrl = baseApi
-                    .replace(':server', m.server)
-                    .replace(':type', m.type)
-                    .replace(':id', m.id)
-                    .replace(':r', Math.random());
-                if (m.auth) fetchUrl += '&auth=' + m.auth;
-
-                var res = await fetch(fetchUrl);
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                var data = await res.json();
-
-                if (Array.isArray(data) && data.length > 0) {
-                    state.playlist = data.map(function (item) {
-                        return {
-                            name: item.title || item.name || 'Unknown',
-                            artist: item.author || item.artist || 'Unknown',
-                            url: item.url,
-                            pic: item.pic || item.cover || '',
-                            lrc: item.lrc
-                        };
-                    });
-                    return;
-                }
-            } catch (e) {
-                console.warn('Meting API failed for ' + baseApi, e);
-            }
-        }
-        throw new Error('All Meting APIs failed');
     }
 
     // ── Lyrics ───────────────────────────────────────────────
@@ -306,6 +315,31 @@ const managerConfigStr = JSON.stringify({
         }
     }
 
+    // 用外部（音乐库页面）提供的列表替换当前播放列表，尽量保持正在播放的曲目不变
+    function setPlaylist(tracks) {
+        var prevTrack = state.playlist[state.currentIndex] || null;
+        var prevId = prevTrack ? prevTrack.id : null;
+
+        state.playlist = Array.isArray(tracks) ? tracks.slice() : [];
+        state.playlistApplied = true;
+
+        var nextIndex = prevId
+            ? state.playlist.findIndex(function (t) { return t.id === prevId; })
+            : -1;
+
+        if (nextIndex >= 0) {
+            state.currentIndex = nextIndex;
+        } else {
+            state.currentIndex = 0;
+            if (state.playlist.length > 0) loadTrack(0, false);
+        }
+
+        emit('fm:playlist', {
+            playlist: state.playlist,
+            currentIndex: state.currentIndex
+        });
+    }
+
     // ── Audio events → broadcast ─────────────────────────────
     audio.addEventListener('timeupdate', function () {
         if (isNaN(audio.duration)) return;
@@ -350,20 +384,13 @@ const managerConfigStr = JSON.stringify({
         state.initializing = true;
 
         try {
-            if (config.mode === 'meting' && config.meting) {
-                await fetchMetingData();
-            } else if (config.mode === 'local') {
+            if (config.mode === 'local' && !state.playlistApplied) {
                 state.playlist = config.localPlaylist || [];
             }
 
             if (state.playlist.length > 0) {
                 // Apply volume
                 audio.volume = state.volume;
-
-                var startIndex = 0;
-                if (state.playMode === 2) {
-                    startIndex = Math.floor(Math.random() * state.playlist.length);
-                }
 
                 state.initialized = true;
 
@@ -374,7 +401,14 @@ const managerConfigStr = JSON.stringify({
                     isMuted: state.isMuted
                 });
 
-                loadTrack(startIndex, false);
+                // 播放列表已由音乐库页面提供时，不要再重载曲目覆盖当前选择
+                if (!state.playlistApplied) {
+                    var startIndex = 0;
+                    if (state.playMode === 2) {
+                        startIndex = Math.floor(Math.random() * state.playlist.length);
+                    }
+                    loadTrack(startIndex, false);
+                }
             } else {
                 state.initialized = true;
                 emit('fm:init', {
@@ -434,7 +468,9 @@ const managerConfigStr = JSON.stringify({
         seek: seek,
         seekToTime: seekToTime,
         playTrackByIndex: playTrackByIndex,
-        loadTrack: loadTrack
+        loadTrack: loadTrack,
+        setPlaylist: setPlaylist,
+        ensureAnalyser: ensureAnalyser
     };
 })();
 </script>
