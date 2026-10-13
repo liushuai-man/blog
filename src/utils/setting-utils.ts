@@ -88,11 +88,13 @@ export function setHue(hue: number): void {
 }
 
 // 黑白灰（无彩色）主题：通过把彩度系数设为 0 让整套主题变为灰阶
+// 用户未设置过时默认即为黑白灰
 export function getMono(): boolean {
 	if (typeof window === "undefined" || !window.localStorage) {
-		return false;
+		return true;
 	}
-	return localStorage.getItem("themeMono") === "true";
+	const stored = localStorage.getItem("themeMono");
+	return stored === null ? true : stored === "true";
 }
 
 export function setMono(mono: boolean): void {
