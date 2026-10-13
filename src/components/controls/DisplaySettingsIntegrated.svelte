@@ -52,8 +52,8 @@ let hue = $state(getHue());
 const defaultHue = getDefaultHue();
 // 黑白灰（无彩色）主题开关
 let mono = $state(getMono());
-// 主题色区块是否为默认状态（色相默认且未开启黑白灰）
-let themeColorIsDefault = $derived(hue === defaultHue && !mono);
+// 主题色区块是否为默认状态（色相默认且为黑白灰）
+let themeColorIsDefault = $derived(hue === defaultHue && mono);
 let wallpaperMode: WALLPAPER_MODE = $state(backgroundWallpaper.mode);
 const defaultWallpaperMode = backgroundWallpaper.mode;
 let currentLayout: "list" | "grid" = $state("list");
@@ -157,7 +157,7 @@ const hasAnyContent =
 
 function resetHue() {
 	hue = getDefaultHue();
-	mono = false;
+	mono = true;
 	requestAnimationFrame(refreshAllRangeProgress);
 }
 

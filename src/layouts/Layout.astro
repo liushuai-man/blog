@@ -294,10 +294,10 @@ const siteLang = lang.replace("_", "-");
       const hue = localStorage.getItem("hue") || configHue;
       document.documentElement.style.setProperty("--hue", hue);
 
-      // 应用黑白灰（无彩色）主题偏好，避免首屏闪烁
+      // 应用黑白灰（无彩色）主题偏好，避免首屏闪烁（默认黑白灰）
       document.documentElement.style.setProperty(
         "--hue-chroma",
-        localStorage.getItem("themeMono") === "true" ? "0" : "1"
+        (localStorage.getItem("themeMono") ?? "true") === "true" ? "0" : "1"
       );
 
       // 设置卡片透明度（全屏透明模式下使用）
