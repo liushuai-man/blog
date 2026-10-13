@@ -17,8 +17,8 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
     // 归档
     LinkPreset.Archive,
 
-    // 音乐
-    LinkPreset.Music,
+    // 音乐（板块暂时封存，需要时取消注释即可恢复入口）
+    // LinkPreset.Music,
 
     // 关于
     {

@@ -7,8 +7,8 @@ export const musicPlayerConfig: MusicPlayerConfig = {
 	// 1. 侧边栏：在sidebarConfig.ts侧边栏配置把音乐组件enable设为false禁用即可
 	// 2. 导航栏：在本配置文件把showInNavbar设为false禁用即可
 
-	// 是否在导航栏显示音乐播放器入口
-	showInNavbar: true,
+	// 是否在导航栏显示音乐播放器入口（音乐板块暂时封存，设为 false）
+	showInNavbar: false,
 
 	// 音乐库来源：public/music/ 下的本地音频文件（构建期自动扫描）
 	mode: "local",
