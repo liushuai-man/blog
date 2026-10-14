@@ -9,7 +9,8 @@
 | `sakuraConfig.ts` | 当前樱花效果，后续由季节场景接管 |
 | `profileConfig.ts` | 姓名、头像、签名和 GitHub 链接 |
 | `aboutConfig.ts` | 关于页简介、邮箱、GitHub 用户、展示数量和精选仓库／个人解读 |
-| `navBarConfig.ts` | 首页、归档、关于及 Pagefind 搜索 |
+| `navBarConfig.ts` | 首页、归档、关于、妙妙屋及 Pagefind 搜索 |
+| `otherConfig.ts` | 妙妙屋与触笔电子琴开关；无启用工具时隐藏导航 |
 | `sidebarConfig.ts` | 阅读相关侧栏配置，目前总开关关闭 |
 | `announcementConfig.ts` | 站点公告 |
 | `coverImageConfig.ts` | 文章封面 |
@@ -23,4 +24,4 @@
 
 `featuredRepositories` 的 `name` 是仓库名，按列表顺序优先显示；可选 `note` 由作者填写，留空时只显示公开仓库简介。改名或删除后需更新配置；当前快照找不到的项目会提示并自动补位。语言分布使用完整快照，不受 `maxRepositories` 影响。
 
-季节场景和「妙妙屋」栏目尚未实施，对应配置在实施阶段添加；触笔电子琴拟使用 `otherConfig.ts`。详见 [三项执行计划](../../docs/plans/) 和 [触笔电子琴计划](../../docs/plans/03-other-stylophone.md)。
+季节场景尚未实施；「妙妙屋」及触笔电子琴基础版已接入 `otherConfig.ts`，注册表位于 `src/features/other/registry.ts`。电子琴只提供自由演奏。详见 [三项执行计划](../../docs/plans/) 和 [触笔电子琴计划](../../docs/plans/03-other-stylophone.md)。

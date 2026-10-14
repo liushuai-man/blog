@@ -17,7 +17,8 @@
     "icons": "node scripts/generate-icons.js",
     "sync-github": "node scripts/sync-github.mjs",
     "test:sync-github": "node --test tests/sync-github.test.mjs",
-    "test:about": "node --experimental-strip-types --test tests/about-data.test.mjs"
+    "test:about": "node --experimental-strip-types --test tests/about-data.test.mjs",
+    "test:stylophone": "node --experimental-strip-types --test tests/stylophone-input.test.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
@@ -67,6 +68,7 @@
     "sharp": "^0.34.5",
     "stylus": "^0.64.0",
     "svelte": "^5.53.11",
+    "tone": "15.1.22",
     "turndown": "^7.2.4",
     "typescript": "^5.9.2",
     "unist-util-visit": "^5.1.0"
