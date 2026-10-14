@@ -111,7 +111,7 @@ guide/                     上游文章写作语法参考（非生产内容）
 
 1. [四季微动画场景](docs/plans/01-seasonal-scenes.md)：优先 tsParticles，合适素材可采用 Lottie；待实施。
 2. [GitHub 与博客关于页](docs/plans/02-about-github.md)：基础版、精选配置和项目主语言分布已实现；贡献活动与自动同步仍为可选后续项。
-3. [「其他」栏目与触笔电子琴](docs/plans/03-other-stylophone.md)：Stylophone 风格金属音片、触笔点触与滑奏、单音电子音色、键盘替代和简谱跟弹；注册、输入、音频、简谱分层，待实施。
+3. [「妙妙屋」栏目与触笔电子琴](docs/plans/03-other-stylophone.md)：仅提供自由演奏，采用 Stylophone 风格金属音片、触笔点触与滑奏、单音电子音色和键盘替代；注册、输入、音频分层，待实施。
 
 计划中的库不等于已安装依赖。当前新接入的是 d3-cloud；场景、触笔电子琴及其依赖将在对应实施阶段接入。
 
