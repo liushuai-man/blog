@@ -4,4 +4,10 @@ export const aboutConfig = {
 	email: "2730132473@qq.com",
 	maxRepositories: 6,
 	maxTags: 32,
+	// Order is intentional. Notes are optional author-written interpretations.
+	featuredRepositories: [
+		{ name: "blog", note: "" },
+		{ name: "harmonicaflow", note: "" },
+		{ name: "AI-Canvas", note: "" },
+	],
 };

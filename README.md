@@ -46,6 +46,7 @@ pnpm preview
 | `pnpm new-post my-post` | 创建文章 Markdown 文件 |
 | `pnpm sync-github` | 更新关于页 GitHub 公开数据快照 |
 | `pnpm test:sync-github` | 验证 GitHub 同步失败保护与分页统计 |
+| `pnpm test:about` | 验证精选排序、缺失补位与主语言统计 |
 | `pnpm icons` | 重新生成图标数据 |
 | `pnpm format` / `pnpm lint` | 会写入 `src/`，使用前检查修改范围 |
 
@@ -82,6 +83,8 @@ draft: false
 
 默认展示非 Fork、未归档的项目，按 Star 和推送时间排序；公开仓库总数包含 Fork，所以与卡片数量不同。页面显示快照日期，不宣称实时更新。
 
+`aboutConfig.ts` 中的 `featuredRepositories` 按配置顺序优先展示，剩余位置按 Star 和推送时间补位。`name` 必须来自快照中的真实仓库；可选 `note` 用于作者填写个人解读，当前留空。精选仓库未出现在快照时显示提示并使用其他项目补位。主语言分布按全部非 Fork、未归档仓库数量统计，包含未标记语言的项目，不代表代码字节占比或技能熟练度；使用静态 HTML 与主题色条，无新增图表依赖。
+
 如果需要认证额度，仅给同步脚本设置环境变量 `GITHUB_TOKEN`。不要将 Token 写入配置、添加 PUBLIC 前缀、上传快照或提交 `.env`。修改 GitHub 用户时同时更新 `aboutConfig.ts` 和快照中的 username，再运行同步。
 
 词云采用 [d3-cloud](https://github.com/jasondavies/d3-cloud)（BSD-3-Clause），按公开文章的标签频次排布，提供可点击的归档入口与无 JavaScript 的文本列表。
@@ -107,7 +110,7 @@ guide/                     上游文章写作语法参考（非生产内容）
 ## 优化路线
 
 1. [四季微动画场景](docs/plans/01-seasonal-scenes.md)：优先 tsParticles，合适素材可采用 Lottie；待实施。
-2. [GitHub 与博客关于页](docs/plans/02-about-github.md)：基础版已重写；精选配置和更多数据展示可继续迭代。
+2. [GitHub 与博客关于页](docs/plans/02-about-github.md)：基础版、精选配置和项目主语言分布已实现；贡献活动与自动同步仍为可选后续项。
 3. [可扩展游乐角与口琴](docs/plans/03-playground-harmonica.md)：优先 Tone.js 与 Svelte 组件库，注册、输入、音频、简谱分层；待实施。
 
 计划中的库不等于已安装依赖。当前新接入的是 d3-cloud；场景、口琴及其依赖将在对应实施阶段接入。

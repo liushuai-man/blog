@@ -7,6 +7,7 @@ import { aboutConfig } from "@/config/aboutConfig";
 import { profileConfig } from "@/config/profileConfig";
 import githubData from "@/data/github-profile.json";
 import type { GitHubSnapshot } from "@/types/github";
+import { getLanguageDistribution, selectRepositories } from "@/utils/about-data";
 import { getPostUrlBySlug, url } from "@/utils/url-utils";
 
 const posts = (await getCollection("posts", ({ data }) => !data.draft))
@@ -24,7 +25,8 @@ const categories = new Set(posts.map((post) => post.data.category?.trim()).filte
 const github: GitHubSnapshot = githubData.username === aboutConfig.githubUsername
 	? githubData
 	: { username: aboutConfig.githubUsername, updatedAt: null, profile: null, repositories: [] };
-const repositories = github.repositories.slice(0, aboutConfig.maxRepositories);
+const { repositories, missing } = selectRepositories(github.repositories, aboutConfig.featuredRepositories, aboutConfig.maxRepositories);
+const languages = getLanguageDistribution(github.repositories);
 const githubUrl = `https://github.com/${aboutConfig.githubUsername}`;
 ---
 
@@ -41,6 +43,11 @@ const githubUrl = `https://github.com/${aboutConfig.githubUsername}`;
 						<a href={githubUrl} target="_blank" rel="noopener noreferrer" class="btn-regular rounded-lg px-4 py-2">访问 GitHub ↗</a>
 						<a href={`mailto:${aboutConfig.email}`} class="btn-regular rounded-lg px-4 py-2">联系我</a>
 					</div>
+					<nav aria-label="关于页内容" class="flex flex-wrap gap-x-5 gap-y-2 mt-5 text-sm text-75">
+						<a href="#github-title">开源项目 ↓</a>
+						<a href="#topics-title">写作主题 ↓</a>
+						<a href="#writing-title">最近文章 ↓</a>
+					</nav>
 				</div>
 			</div>
 		</section>
@@ -54,17 +61,28 @@ const githubUrl = `https://github.com/${aboutConfig.githubUsername}`;
 				<h2 id="github-title" class="text-2xl font-bold text-90">在 GitHub 上构建</h2>
 				<a href={`${githubUrl}?tab=repositories`} target="_blank" rel="noopener noreferrer" class="text-(--primary) underline underline-offset-4">全部仓库 ↗</a>
 			</div>
-			<p class="text-50 text-sm mb-6">{github.updatedAt ? `公开数据快照 · 更新于 ${github.updatedAt.slice(0, 10)} · 展示非 Fork、未归档项目` : "项目数据暂未同步，可以直接访问 GitHub 查看。"}</p>
-			{github.profile && <p class="text-75 mb-5">{github.profile.publicRepos} 个公开仓库 · {github.profile.followers} 位关注者</p>}
+			<p class="text-50 text-sm mb-5">{github.updatedAt ? `公开数据快照 · 更新于 ${github.updatedAt.slice(0, 10)} · 非实时数据` : "项目数据暂未同步，可以直接访问 GitHub 查看。"}</p>
+			{github.profile && <p class="text-75 mb-3">{github.profile.publicRepos} 个公开仓库（含 Fork） · {github.repositories.length} 个非 Fork、未归档项目</p>}
+			{repositories.length > 0 && <p class="text-50 text-sm mb-5">精选优先，其余按 Star 与最近推送时间补位；当前展示 {repositories.length} 个项目。</p>}
+			{missing.length > 0 && github.updatedAt && <p class="text-75 text-sm mb-5">精选项目 {missing.join("、")} 未出现在当前快照中，可能已改名、归档或移除；有其他公开项目时自动补位。</p>}
+			{repositories.length === 0 && <p class="text-75 py-4">{github.updatedAt ? "当前快照中没有可展示的非 Fork、未归档项目。" : "同步后这里会展示精选项目与仓库简介。"}</p>}
 			<div class="grid md:grid-cols-2 gap-4">
 				{repositories.map((repo) => (
-					<a class="p-5 rounded-xl border border-(--line-divider) hover:border-(--primary) transition-colors" href={`${githubUrl}/${encodeURIComponent(repo.name)}`} target="_blank" rel="noopener noreferrer">
-						<h3 class="font-bold text-90 break-words">{repo.name} ↗</h3>
+					<a class="project-card flex flex-col p-5 rounded-xl border border-(--line-divider) hover:border-(--primary) transition-colors" href={`${githubUrl}/${encodeURIComponent(repo.name)}`} target="_blank" rel="noopener noreferrer">
+						<div class="flex flex-wrap items-center gap-2"><h3 class="font-bold text-90 break-all">{repo.name} ↗</h3>{repo.featured && <span class="text-xs text-(--btn-content) bg-(--btn-regular-bg) rounded px-2 py-1">精选</span>}</div>
 						<p class="text-75 mt-3 text-sm leading-relaxed">{repo.description || "这个项目还没有填写简介，欢迎到仓库查看代码。"}</p>
-						<p class="text-50 text-sm mt-4">{repo.language ?? "未标记语言"} · Star {repo.stars} · Fork {repo.forks}</p>
+						{repo.note && <p class="text-75 text-sm mt-3 border-l-2 border-(--primary) pl-3">{repo.note}</p>}
+						<div class="mt-auto pt-4"><p class="text-50 text-sm">{repo.language ?? "未标记语言"} · Star {repo.stars} · Fork {repo.forks}</p><p class="text-50 text-xs mt-2">{repo.updatedAt ? `最近推送 ${repo.updatedAt.slice(0, 10)}` : "暂无推送日期"}</p></div>
 					</a>
 				))}
 			</div>
+		</section>
+		<section class="card-base p-6 md:p-8" aria-labelledby="languages-title">
+			<h2 id="languages-title" class="text-2xl font-bold text-90 mb-3">项目主语言分布</h2>
+			<p class="text-50 text-sm mb-6">按快照中全部 {github.repositories.length} 个非 Fork、未归档项目统计，每个仓库计一次，包含未标记语言的项目。不是代码字节占比或熟练度评分。</p>
+			{languages.length ? <ul class="grid sm:grid-cols-2 gap-x-8 gap-y-5" aria-label="主语言及仓库数量">
+				{languages.map((language) => <li><div class="flex justify-between gap-3 text-sm mb-2"><span class="text-90 font-medium">{language.name}</span><span class="text-50">{language.count} 个 · {Math.round(language.share * 100)}%</span></div><div class="h-2 rounded-full bg-(--btn-regular-bg) overflow-hidden" aria-hidden="true"><div class="h-full rounded-full bg-(--primary)" style={`width: ${language.share * 100}%`}></div></div></li>)}
+			</ul> : <p class="text-75">有可展示的项目后，这里会汇总它们的主语言。</p>}
 		</section>
 		<section class="card-base p-6 md:p-8" aria-labelledby="topics-title">
 			<h2 id="topics-title" class="text-2xl font-bold text-90 mb-3">我在写些什么</h2>
@@ -76,6 +94,7 @@ const githubUrl = `https://github.com/${aboutConfig.githubUsername}`;
 			<ul class="divide-y divide-(--line-divider)">
 				{posts.slice(0, 4).map((post) => <li class="py-4"><a href={getPostUrlBySlug(post.id)} class="text-90 font-medium hover:text-(--primary)">{post.data.title}</a><p class="text-50 text-sm mt-2">{post.data.published.toISOString().slice(0, 10)} · {post.data.description || "记录一次技术探索。"}</p></li>)}
 			</ul>
+			{posts.length === 0 && <p class="text-75">还没有公开文章，发布后这里会展示最近的学习记录。</p>}
 			<a href={url("/archive/")} class="inline-block text-(--primary) underline underline-offset-4 mt-5">查看所有文章</a>
 		</section>
 	</div>
@@ -83,4 +102,9 @@ const githubUrl = `https://github.com/${aboutConfig.githubUsername}`;
 
 <style>
   :global(body:has(#about-title) #mobile-bottom-sidebar) { display: none; }
+  h2[id] { scroll-margin-top: 6rem; }
+  a:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; border-radius: 0.25rem; }
+  nav a:hover { color: var(--primary); }
+  .project-card:hover { background: var(--btn-card-bg-hover); }
+  @media (prefers-reduced-motion: reduce) { .project-card { transition: none; } }
 </style>

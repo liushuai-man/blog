@@ -16,7 +16,8 @@
     "preinstall": "npx only-allow pnpm",
     "icons": "node scripts/generate-icons.js",
     "sync-github": "node scripts/sync-github.mjs",
-    "test:sync-github": "node --test tests/sync-github.test.mjs"
+    "test:sync-github": "node --test tests/sync-github.test.mjs",
+    "test:about": "node --experimental-strip-types --test tests/about-data.test.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",
