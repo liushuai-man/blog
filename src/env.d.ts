@@ -2,10 +2,6 @@
 /// <reference path="../.astro/types.d.ts" />
 
 declare global {
-	interface ImportMetaEnv {
-		readonly MEILI_MASTER_KEY: string;
-	}
-
 	interface ITOCManager {
 		init: () => void;
 		cleanup: () => void;
@@ -25,7 +21,6 @@ declare global {
 		tocInternalNavigation: boolean;
 		// swup is defined in global.d.ts
 		closeAnnouncement: () => void;
-		// __fireflyMusic type is defined in global.d.ts
 		semifullScrollHandler?: (() => void) | undefined;
 		initSemifullScrollDetection?: () => void;
 	}

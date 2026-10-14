@@ -1,51 +1,86 @@
 ---
-
-import { getEntry, render } from "astro:content";
-import Markdown from "@components/common/Markdown.astro";
-import I18nKey from "@/i18n/i18nKey";
-import { i18n } from "@/i18n/translation";
+import { getCollection } from "astro:content";
 import MainGridLayout from "@/layouts/MainGridLayout.astro";
-import Profile from "@/components/widget/Profile.astro";
-import SiteStats from "@/components/widget/SiteStats.astro";
-import Announcement from "@/components/widget/Announcement.astro";
+import ImageWrapper from "@/components/common/ImageWrapper.astro";
+import TopicCloud from "@/components/about/TopicCloud.svelte";
+import { aboutConfig } from "@/config/aboutConfig";
+import { profileConfig } from "@/config/profileConfig";
+import githubData from "@/data/github-profile.json";
+import type { GitHubSnapshot } from "@/types/github";
+import { getPostUrlBySlug, url } from "@/utils/url-utils";
 
-const aboutPost = await getEntry("spec", "about");
-
-if (!aboutPost) {
-	throw new Error("About page content not found");
+const posts = (await getCollection("posts", ({ data }) => !data.draft))
+	.sort((a, b) => b.data.published.getTime() - a.data.published.getTime());
+const counts = new Map<string, number>();
+for (const post of posts) {
+	for (const tag of new Set(post.data.tags.map((tag) => tag.trim()).filter(Boolean))) {
+		counts.set(tag, (counts.get(tag) ?? 0) + 1);
+	}
 }
-
-const { Content } = await render(aboutPost);
+const tags = [...counts].map(([name, count]) => ({ name, count }))
+	.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "zh-CN"))
+	.slice(0, aboutConfig.maxTags);
+const categories = new Set(posts.map((post) => post.data.category?.trim()).filter(Boolean));
+const github: GitHubSnapshot = githubData.username === aboutConfig.githubUsername
+	? githubData
+	: { username: aboutConfig.githubUsername, updatedAt: null, profile: null, repositories: [] };
+const repositories = github.repositories.slice(0, aboutConfig.maxRepositories);
+const githubUrl = `https://github.com/${aboutConfig.githubUsername}`;
 ---
-<style>
-    .about-profile-container {
-        max-width: 17.5rem; /* 与侧边栏宽度一致 */
-        margin: 0 auto;
-    }
-    
-    /* 移除之前的样式，让组件使用默认样式 */
-</style>
-<MainGridLayout title="关于" description="关于">
-    <div class="flex w-full rounded-(--radius-large) overflow-hidden relative min-h-32">
-        <div class="card-base z-10 px-9 py-6 relative w-full ">
-            <div class="flex flex-col gap-6">
-                <div class="flex flex-col md:flex-row gap-6 items-start w-full">
-                    <div class="about-profile-container flex-shrink-0">
-                        <Profile />
-                    </div>
-                    <div class="flex-grow flex flex-col md:flex-row gap-6 min-w-0">
-                        <div class="about-stats-container flex-grow min-w-0">
-                            <SiteStats />
-                        </div>
-                        <div class="about-announcement-container flex-shrink-0 md:w-64">
-                            <Announcement />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <Markdown class="mt-8">
-                <Content />
-            </Markdown>
-        </div>
-    </div>
+
+<MainGridLayout title="关于刘帅" description="刘帅的开源项目、技术写作与学习记录">
+	<div class="flex flex-col gap-6 w-full">
+		<section class="card-base p-6 md:p-10" aria-labelledby="about-title">
+			<div class="flex flex-col sm:flex-row gap-6 items-start">
+				{profileConfig.avatar && <ImageWrapper src={profileConfig.avatar} alt={`${profileConfig.name}的头像`} class="w-24 h-24 rounded-2xl shrink-0" widths={[96, 192]} sizes="96px" />}
+				<div class="min-w-0">
+					<p class="text-(--primary) font-medium mb-2">代码 · 开源 · 学习记录</p>
+					<h2 id="about-title" class="text-3xl md:text-4xl font-bold text-90 mb-4">你好，我是{profileConfig.name}。</h2>
+					<p class="text-75 leading-relaxed max-w-2xl">{aboutConfig.intro}</p>
+					<div class="flex flex-wrap gap-3 mt-6">
+						<a href={githubUrl} target="_blank" rel="noopener noreferrer" class="btn-regular rounded-lg px-4 py-2">访问 GitHub ↗</a>
+						<a href={`mailto:${aboutConfig.email}`} class="btn-regular rounded-lg px-4 py-2">联系我</a>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="grid grid-cols-2 md:grid-cols-4 gap-4" aria-label="博客概览">
+			{[{ label: "公开文章", value: posts.length }, { label: "技术标签", value: counts.size }, { label: "文章分类", value: categories.size }, { label: "最新发布", value: posts[0]?.data.published.toISOString().slice(0, 10) ?? "暂无" }].map((stat) => (
+				<div class="card-base p-5"><p class="text-xl font-bold text-(--primary) break-words">{stat.value}</p><p class="text-50 mt-2 text-sm">{stat.label}</p></div>
+			))}
+		</section>
+		<section class="card-base p-6 md:p-8" aria-labelledby="github-title">
+			<div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+				<h2 id="github-title" class="text-2xl font-bold text-90">在 GitHub 上构建</h2>
+				<a href={`${githubUrl}?tab=repositories`} target="_blank" rel="noopener noreferrer" class="text-(--primary) underline underline-offset-4">全部仓库 ↗</a>
+			</div>
+			<p class="text-50 text-sm mb-6">{github.updatedAt ? `公开数据快照 · 更新于 ${github.updatedAt.slice(0, 10)} · 展示非 Fork、未归档项目` : "项目数据暂未同步，可以直接访问 GitHub 查看。"}</p>
+			{github.profile && <p class="text-75 mb-5">{github.profile.publicRepos} 个公开仓库 · {github.profile.followers} 位关注者</p>}
+			<div class="grid md:grid-cols-2 gap-4">
+				{repositories.map((repo) => (
+					<a class="p-5 rounded-xl border border-(--line-divider) hover:border-(--primary) transition-colors" href={`${githubUrl}/${encodeURIComponent(repo.name)}`} target="_blank" rel="noopener noreferrer">
+						<h3 class="font-bold text-90 break-words">{repo.name} ↗</h3>
+						<p class="text-75 mt-3 text-sm leading-relaxed">{repo.description || "这个项目还没有填写简介，欢迎到仓库查看代码。"}</p>
+						<p class="text-50 text-sm mt-4">{repo.language ?? "未标记语言"} · Star {repo.stars} · Fork {repo.forks}</p>
+					</a>
+				))}
+			</div>
+		</section>
+		<section class="card-base p-6 md:p-8" aria-labelledby="topics-title">
+			<h2 id="topics-title" class="text-2xl font-bold text-90 mb-3">我在写些什么</h2>
+			<p class="text-50 text-sm mb-4">词云来自公开文章的标签，字号反映文章数量。点击标签继续阅读。</p>
+			{tags.length ? <TopicCloud tags={tags} client:visible /> : <p class="text-75">第一篇文章发布后，这里会展示技术主题。</p>}
+		</section>
+		<section class="card-base p-6 md:p-8" aria-labelledby="writing-title">
+			<h2 id="writing-title" class="text-2xl font-bold text-90 mb-5">最近的学习记录</h2>
+			<ul class="divide-y divide-(--line-divider)">
+				{posts.slice(0, 4).map((post) => <li class="py-4"><a href={getPostUrlBySlug(post.id)} class="text-90 font-medium hover:text-(--primary)">{post.data.title}</a><p class="text-50 text-sm mt-2">{post.data.published.toISOString().slice(0, 10)} · {post.data.description || "记录一次技术探索。"}</p></li>)}
+			</ul>
+			<a href={url("/archive/")} class="inline-block text-(--primary) underline underline-offset-4 mt-5">查看所有文章</a>
+		</section>
+	</div>
 </MainGridLayout>
+
+<style>
+  :global(body:has(#about-title) #mobile-bottom-sidebar) { display: none; }
+</style>

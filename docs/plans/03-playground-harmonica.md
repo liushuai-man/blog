@@ -21,6 +21,8 @@
 
 第三方优先不代表叠加多个音频库：统一 Tone.js；采样音色后续可更换 adapter，当前用合成音色，无歌曲音频下载接口。
 
+GitHub 公开快照还发现作者已有 [harmonicaflow](https://github.com/liushuai-man/harmonicaflow) 项目，简介为移动端口琴助手。实施前优先检查它的许可证、简谱模型及可复用组件；当前尚未检查其源代码，不预设可直接复制或与 Svelte 兼容。
+
 ## 文件组织与组件契约
 
 ```text

@@ -19,7 +19,6 @@ const postsCollection = defineCollection({
 		sourceLink: z.string().optional().default(""),
 		licenseName: z.string().optional().default(""),
 		licenseUrl: z.string().optional().default(""),
-		comment: z.boolean().optional().default(true),
 		password: z.string().optional().default(""),
 		passwordHint: z.string().optional().default(""),
 
@@ -31,12 +30,7 @@ const postsCollection = defineCollection({
 	}),
 });
 
-const specCollection = defineCollection({
-	loader: glob({ pattern: "**/*.{md,mdx}", base: "./src/content/spec" }),
-	schema: z.object({}),
-});
 
 export const collections = {
 	posts: postsCollection,
-	spec: specCollection,
 };

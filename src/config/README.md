@@ -16,7 +16,6 @@
 | `fontConfig.ts` | 字体 |
 | `expressiveCodeConfig.ts` | 代码高亮和折叠 |
 | `licenseConfig.ts` | 文章许可显示 |
-| `footerConfig.ts` | 页脚扩展开关 |
 
 音乐、友链、赞助、评论和广告配置已清理，不能继续导入旧配置。
 

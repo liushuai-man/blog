@@ -18,24 +18,4 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		url: "/archive/",
 		icon: "material-symbols:archive",
 	},
-	[LinkPreset.Friends]: {
-		name: i18n(I18nKey.friends),
-		url: "/friends/",
-		icon: "material-symbols:group",
-	},
-	[LinkPreset.Sponsor]: {
-		name: i18n(I18nKey.sponsor),
-		url: "/sponsor/",
-		icon: "material-symbols:favorite",
-	},
-	[LinkPreset.Guestbook]: {
-		name: i18n(I18nKey.guestbook),
-		url: "/guestbook/",
-		icon: "material-symbols:chat",
-	},
-	[LinkPreset.Music]: {
-		name: i18n(I18nKey.music),
-		url: "/music/",
-		icon: "material-symbols:music-note",
-	},
 };

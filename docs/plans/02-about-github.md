@@ -6,7 +6,7 @@
 
 关于页介绍作者的技术实践，不再堆叠侧栏资料、公告和站点统计。使用真实公开数据说明在构建什么、在写什么，并在网络不可用时保持可阅读。
 
-旧页面位于 `src/pages/about.astro`，原正文为 `src/content/spec/about.md`。基础版已改为直接由 aboutConfig、公开文章集合、GitHub 快照驱动；旧关于正文不再作为第二份数据源。
+旧页面位于 `src/pages/about.astro`，原正文为 `src/content/spec/about.md`。基础版已改为直接由 aboutConfig、公开文章集合、GitHub 快照驱动；旧关于正文与不再使用的 spec 内容集合已删除。
 
 ## 基础版已交付
 
@@ -70,3 +70,13 @@
 - [ ] 关闭 JS 仍能阅读；键盘可遍历所有主题链接。
 - [ ] Swup 进入／退出关于页不遗留 ResizeObserver、d3-cloud 定时任务。
 - [ ] `pnpm check`、`pnpm build` 通过；新增依赖及许可记录在 README。
+
+## 基础版验证记录（2026-10-14）
+
+- Astro check：0 errors、0 warnings；原有 SakuraEffect 内联变量产生 1 条 hint，随场景迁移处理。
+- 生产构建生成 43 页，Pagefind 索引 34 篇文章。
+- GitHub 同步的 2 项测试通过：故障保留旧快照，分页／过滤／排序及空推送日期处理。
+- 浏览器检查 375px、768px、1440px 无横向溢出，深浅主题文字可读。
+- 桌面词云实际排布 32 个标签；小屏容纳部分标签，全部 32 个主题仍保留在文本列表。
+- 点击 JavaScript 标签实际进入 `/blog/archive/?tag=JavaScript` 并展示 5 篇文章。
+- 关于页与归档往返 10 次，每次仅 1 个词云 SVG，浏览器无 error／warn。observer 和库布局在组件退出时释放；未进行长期内存性能分析。

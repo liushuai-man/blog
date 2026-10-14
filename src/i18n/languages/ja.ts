@@ -21,69 +21,8 @@ export const ja: Translation = {
 	[Key.postList]: "投稿リスト",
 	[Key.tableOfContents]: "目次",
 	[Key.tocEmpty]: "このページには目次がありません",
-	[Key.music]: "音楽",
-	[Key.musicNoPlaying]: "再生中なし",
-	[Key.musicLyrics]: "歌詞",
-	[Key.musicVolume]: "音量",
-	[Key.musicPlayMode]: "再生モードを切り替え",
-	[Key.musicPrev]: "前の曲",
-	[Key.musicNext]: "次の曲",
-	[Key.musicPlaylist]: "プレイリスト",
-	[Key.musicNoLyrics]: "歌詞なし",
-	[Key.musicLoadingLyrics]: "歌詞を読み込み中...",
-	[Key.musicFailedLyrics]: "歌詞の読み込みに失敗しました",
-	[Key.musicNoSongs]: "曲なし",
-	[Key.musicError]: "プレーヤーエラー",
-	[Key.musicPlay]: "再生",
-	[Key.musicPause]: "一時停止",
-	[Key.musicProgress]: "再生の進捗",
-	[Key.musicCover]: "カバー",
-	[Key.musicNoCover]: "カバーなし",
-	[Key.musicAudioPlayer]: "オーディオプレーヤー",
-	[Key.musicVisualizer]: "MIDI ビジュアライザー",
-	[Key.musicModeVisualize]: "ビジュアライズ",
-	[Key.musicModePerform]: "演奏",
-	[Key.musicInstrPiano]: "ピアノ",
-	[Key.musicInstrHarmonica]: "ハーモニカ",
-	[Key.musicHarmonicaBlow]: "吹く",
-	[Key.musicHarmonicaDraw]: "吸う",
-	[Key.musicPianoHint]:
-		"Z X C V B N M / Q W E R T Y U で演奏（黒鍵: S D G H J / 2 3 5 6 7）、クリックでも演奏できます",
-	[Key.musicHarmonicaHint]:
-		"数字列 1-0 - = 吹く、文字列 Q-P [ ] 吸う；クリックでも演奏できます",
-
-	// 音楽ライブラリ
-	[Key.musicLibrary]: "音楽ライブラリ",
-	[Key.musicLibraryEmpty]: "音楽ライブラリはまだ空です",
-	[Key.musicLibraryEmptyHint]:
-		"public/music/ に音声ファイルを入れて再ビルドすると自動で追加されます",
-	[Key.musicLibraryViewList]: "リスト表示",
-	[Key.musicLibraryViewGrid]: "グリッド表示",
-	[Key.musicLibraryRemove]: "プレイリストから削除",
-	[Key.musicLibraryRestore]: "復元",
-	[Key.musicLibraryHidden]: "非表示",
-	[Key.musicLibraryEdit]: "情報を編集",
-	[Key.musicLibraryEditTitle]: "曲名",
-	[Key.musicLibraryEditCover]: "カバーURL",
-	[Key.musicLibrarySave]: "保存",
-	[Key.musicLibraryCancel]: "キャンセル",
-
-	// お知らせ
 	[Key.announcement]: "お知らせ",
 	[Key.announcementClose]: "閉じる",
-
-	[Key.comments]: "コメント",
-	[Key.commentSection]: "コメント欄",
-	[Key.commentSubtitle]: "あなたの考えを共有し、みんなと議論しましょう",
-	[Key.commentNotConfigured]: "コメントシステムが設定されていません",
-	[Key.guestbookCommentHint]:
-		"設定ファイルでコメントシステムをまだ有効にしていません。有効にすると、訪問者がここにメッセージを残せるようになります",
-	[Key.friends]: "友達",
-	[Key.friendsDescription]:
-		"ここは私の友達です、お互いに訪問して交流することを歓迎します",
-	[Key.guestbook]: "ゲストブック",
-	[Key.guestbookDescription]:
-		"ここに足跡を残して、あなたの考えや提案を共有してください",
 	[Key.untitled]: "無題",
 	[Key.uncategorized]: "未分類",
 	[Key.noTags]: "タグなし",
@@ -200,22 +139,7 @@ export const ja: Translation = {
 	[Key.postListLayoutGrid]: "グリッド",
 
 	// スポンサーページ
-	[Key.sponsor]: "スポンサー",
-	[Key.sponsorTitle]: "サポート",
-	[Key.sponsorDescription]:
-		"私のコンテンツがあなたの役に立ったなら、以下の方法で私をスポンサーしてください。あなたのサポートは私の継続的な創作の原動力です！",
-	[Key.sponsorMethods]: "支払い方法",
-	[Key.sponsorList]: "スポンサーリスト",
-	[Key.sponsorEmpty]: "スポンサー記録なし",
-	[Key.sponsorAmount]: "金額",
-	[Key.sponsorDate]: "日付",
-	[Key.sponsorMessage]: "メッセージ",
-	[Key.sponsorAnonymous]: "匿名",
 	[Key.scanToSponsor]: "スキャンしてスポンサー",
-	[Key.sponsorGoTo]: "スポンサーへ",
-	[Key.sponsorButton]: "サポートと共有",
-	[Key.sponsorButtonText]:
-		"この記事が役に立ったなら、共有またはサポートをお願いします！",
 
 	[Key.shareOnSocial]: "記事を共有",
 	[Key.shareOnSocialDescription]:
