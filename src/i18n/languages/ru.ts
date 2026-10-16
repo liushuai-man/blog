@@ -21,69 +21,8 @@ export const ru: Translation = {
 	[Key.postList]: "Список постов",
 	[Key.tableOfContents]: "Содержание",
 	[Key.tocEmpty]: "На этой странице нет оглавления",
-	[Key.music]: "Музыка",
-	[Key.musicNoPlaying]: "Ничего не воспроизводится",
-	[Key.musicLyrics]: "Текст песни",
-	[Key.musicVolume]: "Громкость",
-	[Key.musicPlayMode]: "Переключить режим воспроизведения",
-	[Key.musicPrev]: "Предыдущий трек",
-	[Key.musicNext]: "Следующий трек",
-	[Key.musicPlaylist]: "Плейлист",
-	[Key.musicNoLyrics]: "Текст песни отсутствует",
-	[Key.musicLoadingLyrics]: "Загрузка текста песни...",
-	[Key.musicFailedLyrics]: "Ошибка загрузки текста песни",
-	[Key.musicNoSongs]: "Нет песен",
-	[Key.musicError]: "Ошибка плеера",
-	[Key.musicPlay]: "Воспроизвести",
-	[Key.musicPause]: "Пауза",
-	[Key.musicProgress]: "Прогресс воспроизведения",
-	[Key.musicCover]: "Обложка",
-	[Key.musicNoCover]: "Нет обложки",
-	[Key.musicAudioPlayer]: "Аудиоплеер",
-	[Key.musicVisualizer]: "MIDI-визуализатор",
-	[Key.musicModeVisualize]: "Визуализация",
-	[Key.musicModePerform]: "Игра",
-	[Key.musicInstrPiano]: "Пианино",
-	[Key.musicInstrHarmonica]: "Губная гармоника",
-	[Key.musicHarmonicaBlow]: "Выдох",
-	[Key.musicHarmonicaDraw]: "Вдох",
-	[Key.musicPianoHint]:
-		"Играйте на Z X C V B N M / Q W E R T Y U (чёрные: S D G H J / 2 3 5 6 7) или кликайте по клавишам",
-	[Key.musicHarmonicaHint]:
-		"Цифровой ряд 1-0 - = выдох, буквенный Q-P [ ] вдох; или кликайте по отверстиям",
-
-	// Музыкальная библиотека
-	[Key.musicLibrary]: "Музыкальная библиотека",
-	[Key.musicLibraryEmpty]: "Библиотека пока пуста",
-	[Key.musicLibraryEmptyHint]:
-		"Положите аудиофайлы в public/music/ и пересоберите сайт — они добавятся автоматически",
-	[Key.musicLibraryViewList]: "Список",
-	[Key.musicLibraryViewGrid]: "Сетка",
-	[Key.musicLibraryRemove]: "Убрать из плейлиста",
-	[Key.musicLibraryRestore]: "Восстановить",
-	[Key.musicLibraryHidden]: "Скрыто",
-	[Key.musicLibraryEdit]: "Редактировать",
-	[Key.musicLibraryEditTitle]: "Название",
-	[Key.musicLibraryEditCover]: "URL обложки",
-	[Key.musicLibrarySave]: "Сохранить",
-	[Key.musicLibraryCancel]: "Отмена",
-
-	// Объявление
 	[Key.announcement]: "Объявление",
 	[Key.announcementClose]: "Закрыть",
-
-	[Key.comments]: "Комментарии",
-	[Key.commentSection]: "Комментарии",
-	[Key.commentSubtitle]: "Поделитесь своими мыслями и обсудите с остальными",
-	[Key.commentNotConfigured]: "Система комментариев не настроена",
-	[Key.guestbookCommentHint]:
-		"Вы еще не включили систему комментариев в файле конфигурации. После включения посетители смогут оставлять сообщения здесь",
-	[Key.friends]: "Ссылки",
-	[Key.friendsDescription]:
-		"Вот мои друзья, добро пожаловать посетить и общаться друг с другом",
-	[Key.guestbook]: "Гостевая книга",
-	[Key.guestbookDescription]:
-		"Добро пожаловать, оставьте свой след здесь, поделитесь своими мыслями и предложениями",
 	[Key.untitled]: "Без названия",
 	[Key.uncategorized]: "Без категории",
 	[Key.noTags]: "Нет тегов",
@@ -202,22 +141,7 @@ export const ru: Translation = {
 	[Key.postListLayoutGrid]: "Сетка",
 
 	// Страница спонсоров
-	[Key.sponsor]: "Спонсор",
-	[Key.sponsorTitle]: "Поддержать меня",
-	[Key.sponsorDescription]:
-		"Если мой контент был полезен для вас, добро пожаловать поддержать меня следующими способами. Ваша поддержка - это движущая сила моего постоянного творчества!",
-	[Key.sponsorMethods]: "Способы оплаты",
-	[Key.sponsorList]: "Спонсоры",
-	[Key.sponsorEmpty]: "Пока нет спонсоров",
-	[Key.sponsorAmount]: "Сумма",
-	[Key.sponsorDate]: "Дата",
-	[Key.sponsorMessage]: "Сообщение",
-	[Key.sponsorAnonymous]: "Анонимно",
 	[Key.scanToSponsor]: "Сканировать для поддержки",
-	[Key.sponsorGoTo]: "Перейти к спонсору",
-	[Key.sponsorButton]: "Поддержка и Поделиться",
-	[Key.sponsorButtonText]:
-		"Если эта статья помогла вам, пожалуйста, поделитесь или поддержите!",
 
 	[Key.shareOnSocial]: "Поделиться статьей",
 	[Key.shareOnSocialDescription]:

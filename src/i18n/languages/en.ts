@@ -21,69 +21,8 @@ export const en: Translation = {
 	[Key.postList]: "Post List",
 	[Key.tableOfContents]: "Table of Contents",
 	[Key.tocEmpty]: "No table of contents on this page",
-	[Key.music]: "Music",
-	[Key.musicNoPlaying]: "No playing",
-	[Key.musicLyrics]: "Lyrics",
-	[Key.musicVolume]: "Volume",
-	[Key.musicPlayMode]: "Switch Play Mode",
-	[Key.musicPrev]: "Previous",
-	[Key.musicNext]: "Next",
-	[Key.musicPlaylist]: "Playlist",
-	[Key.musicNoLyrics]: "No lyrics available",
-	[Key.musicLoadingLyrics]: "Loading lyrics...",
-	[Key.musicFailedLyrics]: "Failed to load lyrics",
-	[Key.musicNoSongs]: "No songs",
-	[Key.musicError]: "Player Error",
-	[Key.musicPlay]: "Play",
-	[Key.musicPause]: "Pause",
-	[Key.musicProgress]: "Playback Progress",
-	[Key.musicCover]: "Cover",
-	[Key.musicNoCover]: "No cover available",
-	[Key.musicAudioPlayer]: "Audio Player",
-	[Key.musicVisualizer]: "MIDI Visualizer",
-	[Key.musicModeVisualize]: "Visualize",
-	[Key.musicModePerform]: "Perform",
-	[Key.musicInstrPiano]: "Piano",
-	[Key.musicInstrHarmonica]: "Harmonica",
-	[Key.musicHarmonicaBlow]: "Blow",
-	[Key.musicHarmonicaDraw]: "Draw",
-	[Key.musicPianoHint]:
-		"Play with Z X C V B N M / Q W E R T Y U (black keys: S D G H J / 2 3 5 6 7), or click the keys",
-	[Key.musicHarmonicaHint]:
-		"Number row 1-0 - = blow, letter row Q-P [ ] draw; or click the holes",
-
-	// Music Library
-	[Key.musicLibrary]: "Music Library",
-	[Key.musicLibraryEmpty]: "The music library is empty",
-	[Key.musicLibraryEmptyHint]:
-		"Drop audio files into public/music/ and rebuild to add them automatically",
-	[Key.musicLibraryViewList]: "List view",
-	[Key.musicLibraryViewGrid]: "Grid view",
-	[Key.musicLibraryRemove]: "Remove from playlist",
-	[Key.musicLibraryRestore]: "Restore",
-	[Key.musicLibraryHidden]: "Hidden",
-	[Key.musicLibraryEdit]: "Edit info",
-	[Key.musicLibraryEditTitle]: "Title",
-	[Key.musicLibraryEditCover]: "Cover URL",
-	[Key.musicLibrarySave]: "Save",
-	[Key.musicLibraryCancel]: "Cancel",
-
-	// Announcement
 	[Key.announcement]: "Announcement",
 	[Key.announcementClose]: "Close",
-
-	[Key.comments]: "Comments",
-	[Key.commentSection]: "Comments",
-	[Key.commentSubtitle]: "Share your thoughts and discuss with everyone",
-	[Key.commentNotConfigured]: "Comment system not configured",
-	[Key.guestbookCommentHint]:
-		"You have not enabled the comment system in the configuration file yet. After enabling it, visitors will be able to leave messages here",
-	[Key.friends]: "Friends",
-	[Key.friendsDescription]:
-		"Here are my friends, welcome to visit and communicate with each other",
-	[Key.guestbook]: "Guestbook",
-	[Key.guestbookDescription]:
-		"Welcome to leave your mark here, share your thoughts and suggestions",
 	[Key.untitled]: "Untitled",
 	[Key.uncategorized]: "Uncategorized",
 	[Key.noTags]: "No Tags",
@@ -201,22 +140,7 @@ export const en: Translation = {
 	[Key.postListLayoutGrid]: "Grid",
 
 	// Sponsor Page
-	[Key.sponsor]: "Sponsor",
-	[Key.sponsorTitle]: "Support Me",
-	[Key.sponsorDescription]:
-		"If my content has been helpful to you, welcome to sponsor me through the following methods. Your support is the driving force for my continued creation!",
-	[Key.sponsorMethods]: "Payment Methods",
-	[Key.sponsorList]: "Sponsors",
-	[Key.sponsorEmpty]: "No sponsors yet",
-	[Key.sponsorAmount]: "Amount",
-	[Key.sponsorDate]: "Date",
-	[Key.sponsorMessage]: "Message",
-	[Key.sponsorAnonymous]: "Anonymous",
 	[Key.scanToSponsor]: "Scan to Sponsor",
-	[Key.sponsorGoTo]: "Go to Sponsor",
-	[Key.sponsorButton]: "Support & Share",
-	[Key.sponsorButtonText]:
-		"If this article helped you, please share or support!",
 
 	[Key.shareOnSocial]: "Share Article",
 	[Key.shareOnSocialDescription]:

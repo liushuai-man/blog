@@ -1,10 +1,7 @@
 ---
 import type { MarkdownHeading } from "astro";
-import Advertisement from "@/components/widget/Advertisement.astro";
 import Announcement from "@/components/widget/Announcement.astro";
-import Calendar from "@/components/widget/Calendar.astro";
 import Categories from "@/components/widget/Categories.astro";
-import Music from "@/components/widget/Music.astro";
 import Profile from "@/components/widget/Profile.astro";
 import SidebarTOC from "@/components/widget/SidebarTOC.astro";
 import SiteStats from "@/components/widget/SiteStats.astro";
@@ -45,10 +42,7 @@ const componentMap = {
 	categories: Categories,
 	tags: Tags,
 	sidebarToc: SidebarTOC,
-	advertisement: Advertisement,
 	stats: SiteStats,
-	calendar: Calendar,
-	music: Music,
 } satisfies Record<WidgetComponentType, typeof Profile>;
 
 // 获取侧边栏位置
@@ -150,15 +144,6 @@ const getComponentProps = (
 	// 特殊处理 SidebarTOC 组件
 	if (config.type === "sidebarToc") {
 		return { ...baseProps, headings: Astro.props.headings || [] };
-	}
-
-	// 特殊处理 Advertisement 组件
-	if (
-		config.type === "advertisement" &&
-		"configId" in config &&
-		config.configId
-	) {
-		return { ...baseProps, configId: config.configId };
 	}
 
 	return baseProps;

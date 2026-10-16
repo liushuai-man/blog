@@ -1,0 +1,14 @@
+{
+  "sceneId": "corner-shop",
+  "specVersion": "2.0",
+  "assetId": "desktop-spring-day-preview-01",
+  "file": "desktop-spring-day-preview-01.png",
+  "source": "built-in-imagegen-edit",
+  "referenceFile": "../v1/desktop-spring-day-preview-01.png",
+  "promptFile": "preview-edit-prompt.txt",
+  "actualWidth": 1916,
+  "actualHeight": 821,
+  "reviewStatus": "pending-user-review",
+  "isLockedMaster": false,
+  "notes": "v1 retained only as edit history; its single-story scene is superseded."
+}

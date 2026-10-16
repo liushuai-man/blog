@@ -119,16 +119,6 @@ export const siteConfig: SiteConfig = {
   // OpenGraph图片功能,注意开启后要渲染很长时间，不建议本地调试的时候开启
   generateOgImages: false,
 
-  // 页面开关配置 - 控制特定页面的访问权限，设为false会返回404
-  pages: {
-    // 友链页面开关
-    friends: false,
-    // 赞助页面开关
-    sponsor: false,
-    // 留言板页面开关，需要配置评论系统
-    guestbook: false,
-  },
-
   // 分类导航栏开关，在首页和归档页顶部显示分类快捷导航
   categoryBar: true,
 
@@ -157,36 +147,6 @@ export const siteConfig: SiteConfig = {
   pagination: {
     // 每页显示的文章数量
     postsPerPage: 10,
-  },
-
-  // 统计分析
-  analytics: {
-    // Google Analytics ID
-    googleAnalyticsId: '',
-    // Microsoft Clarity ID
-    microsoftClarityId: '',
-    // Umami 统计配置
-    umamiAnalytics: {
-      // Umami Website ID
-      websiteId: '',
-      // Umami JS地址，支持使用自建
-      scriptUrl: 'https://cloud.umami.is/script.js',
-    },
-    // 51la 统计配置
-    la51Analytics: {
-      // 51la 统计 ID
-      Id: '',
-      // 自定义 SDK JS 地址，防止 DNS 污染，留空使用默认地址
-      sdkUrl: '',
-      // 多个统计 ID 的数据分离标识，留空则使用 Id
-      ck: '',
-      // 是否开启事件分析功能
-      autoTrack: false,
-      //  Hash路由模式, 项目使用History API路由, 所以不必开启默认false
-      hashMode: false,
-      // 是否开启网站录屏功能
-      screenRecord: false,
-    },
   },
 
   // 图像优化及响应式配置

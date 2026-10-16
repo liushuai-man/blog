@@ -1,0 +1,131 @@
+{
+  "username": "liushuai-man",
+  "updatedAt": "2026-10-14T02:17:01.404Z",
+  "profile": {
+    "publicRepos": 16,
+    "followers": 1,
+    "following": 0
+  },
+  "repositories": [
+    {
+      "name": "SkillForge",
+      "description": null,
+      "language": "Python",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-10-14T01:36:18Z"
+    },
+    {
+      "name": "project-agent-init",
+      "description": null,
+      "language": "JavaScript",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-10-13T04:31:59Z"
+    },
+    {
+      "name": "blog",
+      "description": "个人博客网站",
+      "language": "Astro",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-10-13T02:32:32Z"
+    },
+    {
+      "name": "harmonicaflow",
+      "description": "移动端口琴助手，可以自己导入乐谱，看着动态瀑布吹奏",
+      "language": "TypeScript",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-10-10T03:52:37Z"
+    },
+    {
+      "name": "resume-pilot",
+      "description": null,
+      "language": "TypeScript",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-08-29T03:31:02Z"
+    },
+    {
+      "name": "FilterAssistant",
+      "description": null,
+      "language": null,
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-08-26T06:48:31Z"
+    },
+    {
+      "name": "Java-Python-Matbab",
+      "description": "在前端输入矩阵，通过java输入到python中用matlab进行计算，最后通过链路返回后端",
+      "language": "Java",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-08-17T12:40:23Z"
+    },
+    {
+      "name": "Namviek-python",
+      "description": "开源代码namviek，使用python重构后端部分。其中部分模块会按照个人意愿改动。",
+      "language": "TypeScript",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-08-13T11:39:47Z"
+    },
+    {
+      "name": "AI-Canvas",
+      "description": "一个可以爬取AI会话内容，进行编辑、导出、保存到notion的浏览器插件",
+      "language": "TypeScript",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-07-30T01:23:31Z"
+    },
+    {
+      "name": "UPIDS",
+      "description": "  水下管线检测与缺陷识别系统， 大三下的java web结课作业，根据作业要求完成各个功能模块。",
+      "language": "Java",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-07-10T09:34:33Z"
+    },
+    {
+      "name": "WPD-QA",
+      "description": null,
+      "language": "TypeScript",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-06-26T11:41:29Z"
+    },
+    {
+      "name": "green-daily",
+      "description": "一个对打卡日常进行记录统计的web",
+      "language": "Vue",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-04-13T06:59:16Z"
+    },
+    {
+      "name": "multi-step-form",
+      "description": "这是一个多步骤表单项目，主要功能是引导用户进行服务套餐的订阅",
+      "language": "SCSS",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-03-27T12:45:20Z"
+    },
+    {
+      "name": "quiz-part",
+      "description": "一个使用Vue的demo，可以进行答题，显示得分、排名",
+      "language": "Vue",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-03-18T06:16:54Z"
+    },
+    {
+      "name": "react-redux-clock",
+      "description": "在学习react阶段，对redux进行练习的demo",
+      "language": "TypeScript",
+      "stars": 0,
+      "forks": 0,
+      "updatedAt": "2026-03-14T13:02:23Z"
+    }
+  ]
+}

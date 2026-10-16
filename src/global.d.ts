@@ -16,64 +16,7 @@ declare global {
 				}>;
 			}>;
 		};
-		__fireflyMusic?: {
-			init: () => Promise<void>;
-			getState: () => {
-				playlist: Array<{
-					id?: string;
-					name: string;
-					artist: string;
-					url: string;
-					pic: string;
-					lrc?: string;
-				}>;
-				currentIndex: number;
-				track: {
-					name: string;
-					artist: string;
-					url: string;
-					pic: string;
-					lrc?: string;
-				} | null;
-				isPlaying: boolean;
-				playMode: number;
-				volume: number;
-				isMuted: boolean;
-				currentTime: number;
-				duration: number;
-				progress: number;
-				currentTimeStr: string;
-				durationStr: string;
-				lyrics: Array<{ time: number; text: string }>;
-				currentLrcIndex: number;
-				initialized: boolean;
-				error: string | null;
-				config: Record<string, unknown>;
-			};
-			togglePlay: () => void;
-			playNext: () => void;
-			playPrev: () => void;
-			cyclePlayMode: () => void;
-			setVolume: (val: number) => void;
-			toggleMute: () => void;
-			seek: (percent: number) => void;
-			seekToTime: (time: number) => void;
-			playTrackByIndex: (index: number) => void;
-			loadTrack: (index: number, autoPlay: boolean) => void;
-			/** 用外部列表整体替换播放列表（音乐库页面使用） */
-			setPlaylist?: (
-				tracks: Array<{
-					id?: string;
-					name: string;
-					artist: string;
-					url: string;
-					pic?: string;
-					lrc?: string;
-				}>,
-			) => void;
-			/** 获取（惰性创建）播放器音频分析节点，供可视化组件使用 */
-			ensureAnalyser?: () => AnalyserNode | null;
-		};
+
 	}
 
 	interface MediaQueryList {

@@ -72,13 +72,6 @@ export type SiteConfig = {
 	outdatedThreshold?: number; // 文章过期阈值（天数），超过此天数才显示"上次编辑"卡片
 	sharePoster?: boolean; // 是否显示分享海报按钮
 
-	// 页面开关配置
-	pages: {
-		friends: boolean; // 友链页面开关
-		sponsor: boolean; // 赞助页面开关
-		guestbook: boolean; // 留言板页面开关
-	};
-
 	// 分类导航栏开关
 	categoryBar?: boolean;
 
@@ -101,24 +94,6 @@ export type SiteConfig = {
 	// 分页配置
 	pagination: {
 		postsPerPage: number; // 每页显示的文章数量
-	};
-
-	// 统计分析
-	analytics?: {
-		googleAnalyticsId?: string; // Google Analytics ID
-		microsoftClarityId?: string; // Microsoft Clarity ID
-		umamiAnalytics?: {
-			websiteId?: string; // Umami Website ID
-			scriptUrl?: string; // Umami JS地址，支持使用自建
-		};
-		la51Analytics?: {
-			Id?: string; // 51la 统计 ID
-			sdkUrl?: string; // 自定义 SDK 地址，防止 DNS 污染，默认为 "//sdk.51.la/js-sdk-pro.min.js"
-			ck?: string; // 多个统计 ID 的数据分离标识，默认与 id 相同
-			autoTrack?: boolean; // 开启事件分析功能，默认 true
-			hashMode?: boolean; // 单页面应用统计（Vue/React 等），默认 false
-			screenRecord?: boolean; // 开启网站录屏功能，默认 true
-		};
 	};
 
 	// 图片优化配置
@@ -155,10 +130,6 @@ export enum LinkPreset {
 	Home = 0,
 	Archive = 1,
 	About = 2,
-	Friends = 3,
-	Sponsor = 4,
-	Guestbook = 5,
-	Music = 6,
 }
 
 export type NavBarLink = {
@@ -199,60 +170,6 @@ export type LicenseConfig = {
 	url: string;
 };
 // 评论配置
-
-export type CommentConfig = {
-	/**
-	 * 当前启用的评论系统类型
-	 * "none" | "twikoo" | "waline" | "giscus" | "disqus" | 'artalk'
-	 */
-	type: "none" | "twikoo" | "waline" | "giscus" | "disqus" | "artalk";
-	twikoo?: {
-		envId: string;
-		region?: string;
-		lang?: string;
-		visitorCount?: boolean;
-	};
-	waline?: {
-		serverURL: string;
-		lang?: string;
-		emoji: string[];
-		login?: "enable" | "force" | "disable";
-		visitorCount?: boolean; // 是否统计访问量，true 启用访问量，false 关闭
-	};
-	artalk?: {
-		// 后端程序 API 地址
-		server: string;
-		/**
-		 * 语言，支持语言如下：
-		 * - "en" (English)
-		 * - "zh-CN" (简体中文)
-		 * - "zh-TW" (繁体中文)
-		 * - "ja" (日本語)
-		 * - "ko" (한국어)
-		 * - "fr" (Français)
-		 * - "ru" (Русский)
-		 * */
-		locale: string | "auto";
-		// 是否统计访问量，true 启用访问量，false 关闭
-		visitorCount?: boolean;
-	};
-	giscus?: {
-		repo: string;
-		repoId: string;
-		category: string;
-		categoryId: string;
-		mapping: string;
-		strict: string;
-		reactionsEnabled: string;
-		emitMetadata: string;
-		inputPosition: string;
-		lang: string;
-		loading: string;
-	};
-	disqus?: {
-		shortname: string;
-	};
-};
 
 export type LIGHT_DARK_MODE =
 	| typeof LIGHT_MODE
@@ -347,10 +264,6 @@ export type FontConfig = {
 	preload?: boolean; // 是否预加载字体文件以提高性能
 };
 
-export type FooterConfig = {
-	enable: boolean; // 是否启用Footer HTML注入功能
-	customHtml?: string; // 自定义HTML内容，用于添加备案号等信息
-};
 
 export type CoverImageConfig = {
 	enableInPost: boolean; // 是否在文章详情页显示封面图
@@ -369,16 +282,12 @@ export type WidgetComponentType =
 	| "categories"
 	| "tags"
 	| "sidebarToc"
-	| "advertisement"
-	| "stats"
-	| "calendar"
-	| "music";
+	| "stats";
 
 export type WidgetComponentConfig = {
 	type: WidgetComponentType; // 组件类型
 	enable: boolean; // 是否启用该组件
 	position: "top" | "sticky"; // 组件位置：top=固定在顶部，sticky=粘性定位（可滚动）
-	configId?: string; // 配置ID，用于广告组件指定使用哪个配置
 	showOnPostPage?: boolean; // 是否在文章详情页显示
 	showOnNonPostPage?: boolean; // 是否在非文章详情页显示
 	responsive?: {
@@ -391,7 +300,6 @@ export type WidgetComponentConfig = {
 export type MobileBottomComponentConfig = {
 	type: WidgetComponentType; // 组件类型
 	enable: boolean; // 是否启用该组件
-	configId?: string; // 配置ID，用于广告组件指定使用哪个配置
 	showOnPostPage?: boolean; // 是否在文章详情页显示
 	showOnNonPostPage?: boolean; // 是否在非文章详情页显示
 	responsive?: {
@@ -541,112 +449,7 @@ export type BackgroundWallpaperConfig = {
 	};
 };
 
-// 广告栏配置
-export type AdConfig = {
-	title?: string; // 广告栏标题
-	content?: string; // 广告栏文本内容
-	image?: {
-		src: string; // 图片地址
-		alt?: string; // 图片描述
-		link?: string; // 图片点击链接
-		external?: boolean; // 是否外部链接
-	};
-	link?: {
-		text: string; // 链接文本
-		url: string; // 链接地址
-		external?: boolean; // 是否外部链接
-	};
-	padding?: {
-		top?: string; // 上边距，如 "0", "1rem", "16px"
-		right?: string; // 右边距
-		bottom?: string; // 下边距
-		left?: string; // 左边距
-		all?: string; // 统一边距，会覆盖单独设置
-	};
-	closable?: boolean; // 是否可关闭
-	displayCount?: number; // 显示次数限制，-1为无限制
-	expireDate?: string; // 过期时间 (ISO 8601 格式)
-};
-
-// 友链配置
-export type FriendLink = {
-	title: string; // 友链标题
-	imgurl: string; // 头像图片URL
-	desc: string; // 友链描述
-	siteurl: string; // 友链地址
-	tags?: string[]; // 标签数组
-	weight: number; // 权重，数字越大排序越靠前
-	enabled: boolean; // 是否启用
-};
-
-export type FriendsPageConfig = {
-	title?: string; // 页面标题，留空则使用 i18n 中的翻译
-	description?: string; // 页面描述，留空则使用 i18n 中的翻译
-	showCustomContent?: boolean; // 是否显示自定义内容（friends.mdx）
-	showComment?: boolean; // 是否显示评论区，默认 true
-	randomizeSort?: boolean; // 是否打乱排序，如果为 true，将忽略 weight，随机排序
-};
-
-// 音乐播放器配置
-export type MusicPlayerConfig = {
-	// 使用方式：音乐库来自 public/music/ 下的本地音频文件（构建期自动扫描）
-	mode?: "local";
-
-	// 默认音量 (0-1)
-	volume?: number;
-
-	// 播放模式：'list'=列表循环, 'one'=单曲循环, 'random'=随机播放
-	playMode?: "list" | "one" | "random";
-
-	// 是否显示歌词
-	showLyrics?: boolean;
-
-	// 是否在导航栏显示音乐播放器
-	showInNavbar?: boolean;
-
-	// 本地音乐配置
-	local?: {
-		// 手动指定曲目：非空时优先于 public/music/ 的自动扫描结果
-		playlist?: Array<{
-			name: string; // 歌曲名称
-			artist: string; // 艺术家
-			url: string; // 音乐文件路径（相对于 public 目录）
-			cover?: string; // 封面图片路径（相对于 public 目录）
-			lrc?: string; // 歌词内容，支持 LRC 格式
-		}>;
-	};
-};
-
-// 赞助方式类型
-export type SponsorMethod = {
-	name: string; // 赞助方式名称，如 "支付宝"、"微信"、"PayPal"
-	icon?: string; // 图标名称（Iconify 格式），如 "fa7-brands:alipay"
-	qrCode?: string; // 收款码图片路径（相对于 public 目录），可选
-	link?: string; // 赞助链接 URL，可选。如果提供，会显示跳转按钮
-	description?: string; // 描述文本
-	enabled: boolean; // 是否启用
-};
-
-// 赞助者列表项
-export type SponsorItem = {
-	name: string; // 赞助者名称，如果想显示匿名，可以直接设置为"匿名"或使用 i18n
-	amount?: string; // 赞助金额（可选）
-	date?: string; // 赞助日期（可选，ISO 格式）
-};
-
-// 赞助配置
-export type SponsorConfig = {
-	title?: string; // 页面标题，默认使用 i18n
-	description?: string; // 页面描述文本
-	usage?: string; // 赞助用途说明
-	methods: SponsorMethod[]; // 赞助方式列表
-	sponsors?: SponsorItem[]; // 赞助者列表（可选）
-	showSponsorsList?: boolean; // 是否显示赞助者列表，默认 true
-	showComment?: boolean; // 是否显示评论区，默认 false
-	showButtonInPost?: boolean; // 是否在文章详情页底部显示赞助按钮，默认 true
-};
-
-// 响应式图像布局类型
+// 响应式图片布局
 export type ResponsiveImageLayout = "constrained" | "full-width" | "none";
 
 // 图像格式类型
