@@ -72,7 +72,7 @@ draft: false
 主要配置：
 
 - `src/config/siteConfig.ts`：站点信息、主题、布局、分页、图片优化。
-- `src/config/backgroundWallpaper.ts` / `sakuraConfig.ts`：当前背景与樱花；季节场景接入前继续使用。
+- `src/config/backgroundWallpaper.ts` / `sakuraConfig.ts`：当前 wallpaper 背景与樱花；动态壁纸镶嵌方案待实施。
 - `src/config/profileConfig.ts` / `aboutConfig.ts`：姓名、头像、介绍、联系入口和展示数量。
 - `src/config/navBarConfig.ts`：首页、归档、关于、妙妙屋导航。
 - `src/config/otherConfig.ts`：妙妙屋及触笔电子琴入口开关。
@@ -131,19 +131,19 @@ guide/                     上游文章写作语法参考（非生产内容）
 
 ## 优化路线
 
-1. [四季微动画场景](docs/plans/01-seasonal-scenes.md)：优先 tsParticles，合适素材可采用 Lottie；待实施。
+1. [wallpaper 壁纸镶嵌](docs/plans/01-wallpaper.md)：以动态壁纸为主，按素材格式尽可能兼容并提供静态兜底；待实施。
 2. [GitHub 与博客关于页](docs/plans/02-about-github.md)：基础版、精选配置和项目主语言分布已实现；贡献活动与自动同步仍为可选后续项。
 3. [「妙妙屋」栏目与触笔电子琴](docs/plans/03-other-stylophone.md)：基础版已实现，仅提供自由演奏；金属音片点触与滑奏、单音电子音色、键盘替代、三个音区、音量、静音和颤音；真机触屏与音色听感仍需验收。
 
-当前已接入 d3-cloud 和 Tone.js；场景依赖尚未安装。触笔电子琴位于 `/blog/other/stylophone/`，从妙妙屋进入；关闭 `otherConfig.ts` 的入口可停用。乐器组件按需加载，Tone.js 仅在用户开启演奏后加载，不影响首页和文章首屏。不含简谱或曲库。
+当前已接入 d3-cloud 和 Tone.js；wallpaper 新方案尚未接入。触笔电子琴位于 `/blog/other/stylophone/`，从妙妙屋进入；关闭 `otherConfig.ts` 的入口可停用。乐器组件按需加载，Tone.js 仅在用户开启演奏后加载，不影响首页和文章首屏。不含简谱或曲库。
 
-场景固定为小省城居民区两层小卖部、一楼开放售货窗口与门、二楼住宅、相邻住宅、白墙内嵌铁栏与少量藤蔓、直立茂盛树木与步道砖地；画风简约，素材生成统一使用 [场景规范与提示词](docs/design/seasonal-scene-prompts.md)。母版、季节与昼夜变体、透明霜层和粒子纹理都有生成顺序、命名与验收约束；已有预览候选图，尚未锁定母版或接入运行时。
+原四季微动画场景计划已取消，改为 wallpaper 壁纸镶嵌。优先验证动态视频、Web 壁纸及其他素材在普通浏览器和静态部署下的兼容性，具体支持范围以实际样例验证为准。已有[场景提示词与素材记录](docs/design/seasonal-scene-prompts.md)仅作历史资料保留，不再要求生成固定场景或季节变体。
 
 ## 清理与维护
 
 已移除不再沿用的音乐播放器／音乐库／频谱组件、友链、赞助、留言板、广告、日历、评论服务、访客分析和自定义页脚 HTML 注入，以及旧音乐 API 方案和过时的模板多语言 README。相关入口、类型、翻译与引用同步清理；已被集成设置面板替代的旧控件和未使用的直接依赖也已删除。
 
-博客阅读、搜索、归档、RSS、图片、目录和分享保留。正在使用的背景、樱花与显示设置在新场景替换成功后再迁移。写作语法参考保留在 `guide/`；根 README 是本项目实际功能的说明入口。
+博客阅读、搜索、归档、RSS、图片、目录和分享保留。正在使用的背景、樱花与显示设置继续保留；wallpaper 接入时仅迁移实际被替换的部分。写作语法参考保留在 `guide/`；根 README 是本项目实际功能的说明入口。
 
 现有 GitHub Actions 在 `main` 分支推送时构建并发布 `dist/` 到 `gh-pages`。本地提交不会自动发布，只有推送触发工作流；检查仓库 Pages 设置使用正确发布分支。
 
