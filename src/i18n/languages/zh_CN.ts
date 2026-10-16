@@ -38,6 +38,7 @@ export const zh_CN: Translation = {
 	[Key.themeMono]: "黑白灰",
 	[Key.effects]: "特效",
 	[Key.sakuraNum]: "樱花数量",
+	[Key.sakuraContinuous]: "持续飘落",
 	[Key.sakuraSpeed]: "下落速度",
 
 	[Key.lightMode]: "亮色",

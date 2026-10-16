@@ -916,6 +916,23 @@ export const SAKURA_NUM_MAX = 60;
 export const SAKURA_SPEED_MIN = 0.3;
 export const SAKURA_SPEED_MAX = 3;
 
+export function getStoredSakuraContinuous(): boolean {
+	try {
+		return localStorage.getItem("sakuraContinuous") === "true";
+	} catch {
+		return false;
+	}
+}
+
+export function setSakuraContinuous(enabled: boolean): void {
+	try {
+		localStorage.setItem("sakuraContinuous", String(enabled));
+	} catch {
+		return;
+	}
+	applySakuraSettings();
+}
+
 export function getDefaultSakuraNum(): number {
 	return sakuraConfig.sakuraNum;
 }

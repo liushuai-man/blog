@@ -7,8 +7,8 @@ export const sakuraConfig: SakuraConfig = {
 	// 樱花数量
 	sakuraNum: 30,
 
-	// 樱花越界限制次数，-1为无限循环
-	limitTimes: -1,
+	// 只在打开页面时飘落一轮，花瓣离开后不再补充（-1 为无限循环）
+	limitTimes: 0,
 
 	// 樱花尺寸
 	size: {

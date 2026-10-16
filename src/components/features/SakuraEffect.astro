@@ -25,6 +25,7 @@ const sakuraImage = url("/assets/images/sakura.png");
 				this.img = img;
 				this.limitArray = limitArray;
 				this.config = config;
+				this.active = true;
 			}
 
 			draw(cxt) {
@@ -41,12 +42,13 @@ const sakuraImage = url("/assets/images/sakura.png");
 				this.y = this.fn.y(this.y, this.y);
 				this.r = this.fn.r(this.r);
 				this.a = this.fn.a(this.a);
-				// 如果樱花越界，重新调整位置
+				// 整片花瓣离开画布后再回收，避免在边缘突然消失。
+				const margin = 40 * this.s * Math.SQRT2;
 				if (
-					this.x > windowWidth ||
-					this.x < 0 ||
-					this.y > windowHeight ||
-					this.y < 0 ||
+					this.x > windowWidth + margin ||
+					this.x < -margin ||
+					this.y > windowHeight + margin ||
+					this.y < -margin ||
 					this.a <= 0
 				) {
 					// 如果樱花不做限制
@@ -58,6 +60,8 @@ const sakuraImage = url("/assets/images/sakura.png");
 						if (this.limitArray[this.idx] > 0) {
 							this.resetPosition();
 							this.limitArray[this.idx]--;
+						} else {
+							this.active = false;
 						}
 					}
 				}
@@ -95,6 +99,7 @@ const sakuraImage = url("/assets/images/sakura.png");
 				for (let i = 0, len = this.list.length; i < len; i++) {
 					this.list[i].update();
 				}
+				this.list = this.list.filter((sakura) => sakura.active);
 			}
 
 			draw(cxt) {
@@ -170,6 +175,7 @@ const sakuraImage = url("/assets/images/sakura.png");
 				this.img = null;
 				this.isRunning = false;
 				this.handleResizeBound = null;
+				this.initVersion = 0;
 			}
 
 			// 初始化樱花特效
@@ -179,6 +185,7 @@ const sakuraImage = url("/assets/images/sakura.png");
 				}
 
 				// 创建图片对象
+				const initVersion = ++this.initVersion;
 				this.img = new Image();
 
 				// 等待图片加载完成（先绑定回调再设置 src，避免命中缓存时错过 onload）
@@ -187,6 +194,7 @@ const sakuraImage = url("/assets/images/sakura.png");
 					this.img.onerror = () => reject(new Error('Failed to load sakura image'));
 					this.img.src = sakuraImage; // 使用樱花图片
 				});
+				if (initVersion !== this.initVersion) return;
 
 				this.createCanvas();
 				this.createSakuraList();
@@ -260,6 +268,10 @@ const sakuraImage = url("/assets/images/sakura.png");
 					this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					this.sakuraList.update();
 					this.sakuraList.draw(this.ctx);
+					if (this.sakuraList.size() === 0) {
+						this.stop();
+						return;
+					}
 					this.animationId = requestAnimationFrame(animate);
 				};
 
@@ -278,6 +290,7 @@ const sakuraImage = url("/assets/images/sakura.png");
 
 			// 停止樱花特效
 			stop() {
+				this.initVersion++;
 				if (this.animationId) {
 					cancelAnimationFrame(this.animationId);
 					this.animationId = null;
@@ -293,6 +306,8 @@ const sakuraImage = url("/assets/images/sakura.png");
 					this.handleResizeBound = null;
 				}
 				this.isRunning = false;
+				this.ctx = null;
+				this.sakuraList = null;
 			}
 
 			// 切换樱花特效
@@ -306,12 +321,24 @@ const sakuraImage = url("/assets/images/sakura.png");
 
 			// 更新配置
 			updateConfig(newConfig) {
-				const wasRunning = this.isRunning;
-				if (wasRunning) {
-					this.stop();
+				const sameParticles = this.config.sakuraNum === newConfig.sakuraNum &&
+					this.config.speed.vertical.min === newConfig.speed.vertical.min &&
+					this.config.speed.vertical.max === newConfig.speed.vertical.max;
+				const startsLoop = this.config.limitTimes !== -1 && newConfig.limitTimes === -1;
+				// 开启时补齐设置的数量；关闭时保留现有花瓣，让它们自然落完。
+				if (sameParticles && !startsLoop && newConfig.enable) {
+					this.config = newConfig;
+					if (this.isRunning && this.sakuraList) {
+						for (const sakura of this.sakuraList.list) {
+							sakura.limitArray[sakura.idx] = newConfig.limitTimes;
+						}
+						return;
+					}
+					if (newConfig.limitTimes === 0) return;
 				}
+				this.stop();
 				this.config = newConfig;
-				if (wasRunning && newConfig.enable) {
+				if (newConfig.enable) {
 					this.init();
 				}
 			}
@@ -360,6 +387,11 @@ const sakuraImage = url("/assets/images/sakura.png");
 			const overrides = readOverrides();
 			const merged = JSON.parse(JSON.stringify(sakuraConfig));
 			merged.sakuraNum = overrides.num;
+			try {
+				merged.limitTimes = localStorage.getItem('sakuraContinuous') === 'true' ? -1 : sakuraConfig.limitTimes;
+			} catch (e) {
+				// 无法读取偏好时使用默认的一轮效果。
+			}
 			merged.speed.vertical.min *= overrides.speed;
 			merged.speed.vertical.max *= overrides.speed;
 			return merged;
