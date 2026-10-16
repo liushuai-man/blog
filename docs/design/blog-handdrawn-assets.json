@@ -1,0 +1,247 @@
+{
+  "version": 1,
+  "date": "2026-10-16",
+  "mode": "built-in image_gen",
+  "style": "blog-illustration-style.md",
+  "sourcePolicy": "Existing article images and text are content references; Orca illustrations are style references. Original assets are retained. Generated outputs are conceptual illustrations, not screenshots or measurement evidence.",
+  "assets": [
+    {
+      "key": "agent",
+      "article": "agent-start",
+      "source": "src/content/posts/agent-start/images/Image_01.png",
+      "target": "src/content/posts/agent-start/images/Image_01-handdrawn.png",
+      "alt": "AI Agent 的推理、规划、记忆、工具与环境反馈关系示意",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'AI Agent 怎样完成任务'. Center LLM box labeled '理解 / 推理 / 决策'. Below planning box '规划：拆任务、排步骤', then tools '工具：搜索 / 文件 / API', then environment '环境与结果'. Down arrows LLM→planning→tools→environment, return arrow from environment to LLM labeled '反馈与修正'. Side box '记忆：上下文 / 知识 / 任务进度' bidirectional linked with LLM. Footer '达到目标或触发终止条件'. Keep architecture conceptual rather than claiming every agent must implement all modules. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-714025fb-3d54-4c03-9690-4dda5c5f24e1.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "tree-cover",
+      "article": "binary-tree-bfs-dfs",
+      "source": "src/content/posts/binary-tree-bfs-dfs/images/cover.png",
+      "target": "src/content/posts/binary-tree-bfs-dfs/images/cover-handdrawn.png",
+      "alt": "二叉树 BFS 队列与 DFS 栈的手绘封面",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Wide landscape blog cover. Title 'BFS 与 DFS', subtitle '下一步，该访问谁？'. Center binary tree A as root, B left C right; B children D E, C children F G. Left small queue labeled '队列 FIFO', visited order 'A B C D E F G'; right small stack labeled '栈 LIFO', preorder 'A B D E C F G'. Small person holding pen and pondering near tree. Sparse diagram, no extra nodes. White black pen only. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "repairPrompt": "Edit this blog cover, preserve the central exact 7-node tree, title, subtitle, person doodle, pure white black pen style and all correctly written visitation orders. IMPORTANT remove the entire queue container and every 入队/出队 label on the left, replace with just a small notebook labeled 'BFS：队列 FIFO' and text '访问顺序：A B C D E F G'. Remove the ENTIRE vertical stack container and all arrows and 入栈/出栈 labels on right, replace with a small notebook labeled 'DFS：栈 LIFO' and text '访问顺序：A B D E C F G'. This cover only compares traversal orders, do NOT portray those orders as current queue or stack contents. Do not add any insertion/removal arrows. Keep sparse, wide safe margins, handwritten black on white.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-8d530dae-a4b0-4982-82ca-bfd8dcf139f8.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "bridge-main",
+      "article": "extension-desktop-bridge-research",
+      "source": "src/content/posts/extension-desktop-bridge-research/images/1.png",
+      "target": "src/content/posts/extension-desktop-bridge-research/images/1-handdrawn.png",
+      "alt": "插件采集、解析、脱敏预览、传输、桌面确认与批量写入的主干流程",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '插件到桌面端：批量导入'. Landscape or tall balanced readable flowchart. Top 3 inputs '粘贴 / CSV / JSON','用户触发读取页面','授权接口读取'. Small note for page '页面须可见完整 Key'; for API '逐项授权'. All converge into '统一解析与校验' then '脱敏预览与选择'. Split two alternatives 'Native Messaging（优先验证）' and 'Loopback HTTP（备选）'. Merge into '桌面端比对与确认：新增 / 覆盖 / 跳过', then '批量写入与回执'. Small note '一键按钮可以触发读取，不绕过授权'. Clear alternatives not serial channels. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-cb3cc17d-e501-4d71-b3aa-b142214ed5da.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "bridge-native",
+      "article": "extension-desktop-bridge-research",
+      "source": "src/content/posts/extension-desktop-bridge-research/images/2.png",
+      "target": "src/content/posts/extension-desktop-bridge-research/images/2-handdrawn.png",
+      "alt": "Native Messaging 经浏览器、Native Host 与桌面客户端传递消息和返回结果",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'Native Messaging'. Four main boxes left to right '浏览器插件'→'浏览器 Native Messaging'→'Native Host'→'桌面客户端'. Above browser small '校验扩展 ID 与 allowed_origins'; below Host 'host manifest / 系统注册'. Arrow browser to Host labeled 'stdin：长度前缀 + JSON'; reverse arrow Host to browser 'stdout：长度前缀 + JSON'. Host to desktop arrow labeled '本地 IPC（自行实现）', reverse '处理回执'. Last small desktop checklist '确认 → 写入'. Footer 'Host 是桥接层，不等于桌面应用本体'. No fake screenshot. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-a5a62433-589d-468e-a7e9-da2cd53abecb.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "bridge-http",
+      "article": "extension-desktop-bridge-research",
+      "source": "src/content/posts/extension-desktop-bridge-research/images/3.png",
+      "target": "src/content/posts/extension-desktop-bridge-research/images/3-handdrawn.png",
+      "alt": "Loopback HTTP 的回环请求、配对鉴权、来源校验与响应流程",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'Loopback HTTP'. Left browser extension box '插件：预览后发送', right desktop local service box '桌面端：本地接口'. Upper request arrow left→right label 'POST http://127.0.0.1:port'; under it small 'JSON + 短时配对 Token'. Right validation checklist '仅监听回环地址','校验 Token 与请求来源','桌面确认后写入'. Lower reverse arrow '返回逐项结果'. Footer '本地接口也需要鉴权；CORS 不等于身份认证'. Only configuration data, do not include images PDF as if actual business payload. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-16d3c60f-9705-4211-b349-71334d39bbac.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "bridge-link",
+      "article": "extension-desktop-bridge-research",
+      "source": "src/content/posts/extension-desktop-bridge-research/images/4.png",
+      "target": "src/content/posts/extension-desktop-bridge-research/images/4-handdrawn.png",
+      "alt": "Deeplink 负责唤起并传递短参数，完整数据通过额外通道传输",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'Deeplink：唤起与交接'. Main flow three boxes '插件打开链接'→'系统唤起桌面端'→'桌面端读取短参数'. Link handwritten 'myclient://import?taskId=xx'. Under separate dashed flow '插件暂存完整数据'→'额外通道校验后读取'→'桌面确认并导入'. Dashed arrow from short parameter box to extra channel labeled 'taskId'. Clear footer 'Deeplink 只负责唤起和短参数；不要把 API Key 放进链接'. Additional channel is not part of deep link itself. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-fff0d460-ed48-4970-96cd-546c1d409e4b.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "mvvm",
+      "article": "mvvm-data-binding",
+      "source": "src/content/posts/mvvm-data-binding/images/img-0.png",
+      "target": "src/content/posts/mvvm-data-binding/images/img-0-handdrawn.png",
+      "alt": "Model、ViewModel 与 View 的数据更新和用户输入双向链路",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'MVVM：数据怎样变成界面'. Three horizontal large boxes 'Model 数据' on left, 'ViewModel 响应式与绑定' center, 'View DOM 界面' right. Upper left→center '数据变化'; center→right '更新视图'. Lower right→center '用户输入'; center→left '更新数据'. Icons simple database, bridge, browser. Tiny example under Model 'name = Alice', under View small input 'Alice'. No direct Model→View bypass. Correct spelling ViewModel, not garbled existing labels. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-2e050d00-d3a0-4910-aa79-2b474806cac5.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "proto-output",
+      "article": "prototype-constructor-basics",
+      "source": "src/content/posts/prototype-constructor-basics/images/img-0.png",
+      "target": "src/content/posts/prototype-constructor-basics/images/img-0-handdrawn.png",
+      "alt": "输出示意（非真实控制台截图）：Person.prototype 与 person1.__proto__ 指向同一原型对象",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '两个访问路径，同一个原型'. Handdrawn explanatory output illustration explicitly label '输出示意，非真实截图'. Two short code labels on left 'Person.prototype' and 'person1.__proto__', both arrows pointing to ONE object on right with rows 'sayHello: function','constructor: Person','[[Prototype]]: Object.prototype'. Footer 'Person.prototype === person1.__proto__  →  true'. Preserve exact underscores in __proto__. No fake browser chrome or real console reproduction. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-5334ac7c-f54c-4de6-b719-f7a72a2a4aeb.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "proto-map",
+      "article": "prototype-constructor-basics",
+      "source": "src/content/posts/prototype-constructor-basics/images/img-1.png",
+      "target": "src/content/posts/prototype-constructor-basics/images/img-1-handdrawn.png",
+      "alt": "Person 的 prototype、原型对象的 constructor 与实例原型指向关系",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '构造函数、原型与实例'. Top left box 'Person 构造函数'; top right box 'Person.prototype 原型对象' with 'sayHello()'; bottom center 'person1 实例' with 'name: Alice'. Distinct directional arrows: Person→prototype labeled '.prototype'; prototype→Person labeled '.constructor'; Person→person1 dashed arrow 'new Person()'; person1→prototype arrow '[[Prototype]] / __proto__'. All arrows distinct, correct directions. Footer '实例共享原型上的方法'. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "repairPrompt": "Make exactly one text correction to this image. On the diagonal arrow going from person1 to Person.prototype, replace the entire label '[[Prototype]] / __proto__' with ONLY '[[Prototype]]'. Use correct double opening and double closing square brackets, and no __proto__ label anywhere. All other words, arrows, boxes, and black handwritten white-background style stay unchanged.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-bee11c23-e704-4df1-99e5-0d4b6fa5a63e.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "skill-cover",
+      "article": "skill-mcp-function-calling",
+      "source": "src/content/posts/skill-mcp-function-calling/images/cover.png",
+      "target": "src/content/posts/skill-mcp-function-calling/images/cover-handdrawn.png",
+      "alt": "Skill 提供方法、MCP 连接能力、Function Calling 发起调用的手绘封面",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Wide landscape blog cover title 'Skill、MCP 与 Function Calling'. Three simple playful pen doodles in row: notebook labeled 'Skill：怎么做', plug labeled 'MCP：怎么接', hand pressing a button labeled 'Function Calling：调用请求'. Small person at desk reading notebook, no complex flow. Subtitle '方法、连接与调用'. Emphasize separate concerns, do not draw mandatory containment. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-8286bf2d-8a07-479e-b9f6-f7435701f338.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "vue",
+      "article": "vue2-reactivity-principle",
+      "source": "src/content/posts/vue2-reactivity-principle/images/img-0.png",
+      "target": "src/content/posts/vue2-reactivity-principle/images/img-0-handdrawn.png",
+      "alt": "Vue 2 的 getter 依赖收集与 setter 通知更新流程",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'Vue 2 响应式更新'. Two clearly numbered rows. Row 1 '首次渲染 / 收集依赖': '渲染 Watcher'→'render 读取数据'→'getter'→'Dep.depend()'. A final loop arrow '记录 Watcher 依赖' returning to Watcher. Above data note 'Observer：Object.defineProperty'. Row 2 '修改数据 / 更新视图': 'setter'→'Dep.notify()'→'Watcher 入队去重'→'异步刷新队列'→'render → VNode → patch'. Last '更新真实 DOM'. Keep collection path and notification path distinct, do not depict watcher notifying getter. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "repairPrompt": "Make exactly one local correction to this image: in the upper left box labeled '渲染 Watcher', REMOVE the small inner rectangle and the text 'update()' entirely. Leave clean white space there, retain the outer box and heading. Do not replace with another method name. All other text, arrows, layout, pure white black pen style unchanged. The upper row is dependency collection, so it must not show update().",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-5d475e33-c37a-4193-b2fa-268f57eedc8d.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "url-cache",
+      "article": "url-navigation-process",
+      "source": "src/content/posts/url-navigation-process/images/img-0.png",
+      "target": "src/content/posts/url-navigation-process/images/img-0-handdrawn.png",
+      "alt": "缓存新鲜时直接使用，需验证时请求服务器并按 304 或新响应更新的示意流程",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '先看看缓存能不能用'. Decision flow '检查 HTTP 缓存'→diamond '存在可用缓存？'. No→'发起网络请求'. Yes→diamond '仍然新鲜？'. Yes→'使用缓存'. No→'按缓存策略验证'→'服务器响应' with two branches '304：复用缓存' and '新响应：更新缓存'. Both reach '继续加载 / 渲染'. Small footer '简化示意；具体受缓存指令影响'. Clear arrow yes/no labels no overlapping. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-9a986e0e-71e0-4acf-a22c-22a724b321c8.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "url-dns-cache",
+      "article": "url-navigation-process",
+      "source": "src/content/posts/url-navigation-process/images/img-1.png",
+      "target": "src/content/posts/url-navigation-process/images/img-1-handdrawn.png",
+      "alt": "域名解析先查可用缓存，再由递归解析器查询域名服务器并返回 IP 的简化示意",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'DNS：先查缓存，再问解析器'. Readable landscape diagram. '需要解析域名'→'浏览器 / 系统可用缓存'→decision '命中？'. Yes→'获得 IP'. No→'配置的递归 DNS 解析器'→decision '缓存命中？'. Yes→'获得 IP'. No→'向域名服务器查询'→'缓存结果并返回 IP'. Final '建立后续连接'. Small footnote '示意：实际查询路径取决于系统、浏览器与解析器配置'. Avoid claim every resolver or router is mandatory. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "repairPrompt": "Make exactly one correction to this image. In the box headed '向域名服务器查询', REMOVE the parenthetical smaller text line mentioning .com and 根服务器 and 权威 DNS. Retain the box heading and server icon, leave rest of that box clean white. Do not add replacement examples or any new text. Preserve every other label, arrow, flow, and black pen white-background style unchanged.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-47344a0a-3cff-4123-9185-22509dfd7eb8.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "url-dns",
+      "article": "url-navigation-process",
+      "source": "src/content/posts/url-navigation-process/images/img-2.png",
+      "target": "src/content/posts/url-navigation-process/images/img-2-handdrawn.png",
+      "alt": "客户端向递归解析器请求解析，解析器依次向根、顶级域和权威服务器迭代查询",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'DNS：递归请求与迭代查询'. Left client, center recursive resolver, right 3 vertically stacked boxes '根 DNS','顶级域 DNS','权威 DNS'. Numbered arrow pairs: 1 client→resolver '查询 www.example.com'; 2 resolver→root '查询', return '顶级域线索'; 3 resolver→TLD '查询', return '权威线索'; 4 resolver→authoritative '查询', return 'IP 地址'; 5 resolver→client '返回结果'. Footer '缓存未命中的简化示例'. Client does not directly query root. Few clean arrows, labels readable. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-c1d9ff09-348c-4d06-9037-eaaaf5c91638.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "url-syn",
+      "article": "url-navigation-process",
+      "source": "src/content/posts/url-navigation-process/images/img-3.png",
+      "target": "src/content/posts/url-navigation-process/images/img-3-handdrawn.png",
+      "alt": "TCP 三次握手的 SYN、SYN+ACK 和 ACK 方向与序列号",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'TCP 三次握手'. Two lifelines labeled '客户端' left, '服务端' right, time flows down. Exactly 3 horizontal message arrows: 1 left→right 'SYN, seq=x'; 2 right→left 'SYN + ACK, seq=y, ack=x+1'; 3 left→right 'ACK, seq=x+1, ack=y+1'. State annotations left 'SYN_SENT' after first and 'ESTABLISHED' after third, right 'SYN_RCVD' after second and 'ESTABLISHED' on third received. Keep final ack y+1 correct. Pen laptop/server icons. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-20d046a3-e5e5-45e9-97bb-48f6cef9c742.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "url-render",
+      "article": "url-navigation-process",
+      "source": "src/content/posts/url-navigation-process/images/img-4.png",
+      "target": "src/content/posts/url-navigation-process/images/img-4-handdrawn.png",
+      "alt": "HTML 与 CSS 分别形成 DOM、CSSOM，经渲染树、布局、绘制与合成显示页面的简化流程",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '浏览器怎样画出页面'. Two starting boxes 'HTML'→'解析 → DOM', 'CSS'→'解析 → CSSOM'. These converge to '样式计算 / 渲染树' then '布局：位置与尺寸' then '绘制：像素内容' then '分层与栅格化' then '合成 → 显示页面'. Arrange two rows if needed for readable text. Small lower note '简化主线：实际解析、下载与渲染可交错进行'. No claim entire pipeline always serial or all DOM nodes visible. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-57803888-ab93-413a-aa4b-360fa1df9196.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "url-fin",
+      "article": "url-navigation-process",
+      "source": "src/content/posts/url-navigation-process/images/img-5.png",
+      "target": "src/content/posts/url-navigation-process/images/img-5-handdrawn.png",
+      "alt": "TCP 四次挥手以及客户端 FIN_WAIT、TIME_WAIT 和服务端 CLOSE_WAIT、LAST_ACK 的状态",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title 'TCP 四次挥手'. Two vertical lifelines '客户端（主动关闭）' left and '服务端' right, time down. Four arrows in strict order: 1 client→server 'FIN, seq=u'; 2 server→client 'ACK, ack=u+1'; 3 server→client 'FIN, seq=v, ACK, ack=u+1'; 4 client→server 'ACK, seq=u+1, ack=v+1'. Left states after 1 FIN_WAIT_1, after receive2 FIN_WAIT_2, after send4 TIME_WAIT then '等待 2MSL → CLOSED'. Right after receive1/send2 CLOSE_WAIT, after send3 LAST_ACK, after receive4 CLOSED. Note between 2 and 3 '服务端可继续发送剩余数据'. Footer '典型流程；控制报文可合并'. No incorrect seq on final ack. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-78cc46be-25d7-4d55-8ba1-377302f1dc2b.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "url-cover",
+      "article": "url-navigation-process",
+      "source": "src/content/posts/url-navigation-process/images/img-6.png",
+      "target": "src/content/posts/url-navigation-process/images/img-6-handdrawn.png",
+      "alt": "从 URL、缓存、DNS、TCP/TLS 到 HTTP 响应与页面渲染的手绘总览",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Wide landscape cover and overview title '输入 URL 之后'. Eight numbered handdrawn small stages across two rows connected clearly: 1 'URL 解析', 2 '缓存检查', 3 'DNS 解析', 4 'TCP 连接', 5 'TLS（HTTPS）', 6 'HTTP 请求', 7 '服务器响应', 8 '浏览器渲染'. Tiny browser/laptop/server doodles. Bottom note '常见 HTTPS over TCP 新连接示意；可复用连接，缓存命中可跳过网络；HTTP/3 使用 QUIC'. Separate dashed lower branch after request cycle '需要关闭时：TCP 挥手'. Do not imply closing mandatory after render. Clear no repeated numbers. Image 1 is the original content reference; Image 2 is STYLE ONLY. Recompose clearly using the specified correct labels, do not reproduce garbled source text or watermarks. This is a newly redrawn conceptual diagram.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-3955aedd-4544-4f4f-8c88-85c6235b04cb.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "tree-steps",
+      "article": "binary-tree-bfs-dfs",
+      "source": "src/content/posts/binary-tree-bfs-dfs/images/traversal-steps.svg",
+      "target": "src/content/posts/binary-tree-bfs-dfs/images/traversal-steps-handdrawn.png",
+      "alt": "同一棵二叉树的 BFS 队列和 DFS 栈状态逐步对比",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Portrait or 3:2 large educational diagram title '下一步该访问谁？'. Top exact tree A root B,C children; B→D,E C→F,G. Below two columns. Left header 'BFS：队首在左'. Rows '访问 A 后：[B, C]','访问 B 后：[C, D, E]','访问 C 后：[D, E, F, G]'; bottom '顺序：A B C D E F G'. Right header 'DFS：栈顶在右'. Rows '访问 A 后：[C, B]','访问 B 后：[C, E, D]','访问 D 后：[C, E]','访问 E 后：[C]'; bottom '顺序：A B D E C F G'. Note 'DFS 先压右，再压左'. All data exact, no extra nodes. Handdrawn black on white.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-053c33ba-2775-46b8-9dc2-013a137c52e1.png",
+      "status": "integrated-and-visually-reviewed"
+    },
+    {
+      "key": "skill-layers",
+      "article": "skill-mcp-function-calling",
+      "mermaidIndex": 0,
+      "target": "src/content/posts/skill-mcp-function-calling/images/layers-handdrawn.png",
+      "alt": "用户目标经 Skill 指导 Agent，工具调用可直连本地函数或经 MCP 接入外部服务",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '方法、调用、连接'. Top '用户目标：更新博客'→'Skill：步骤与质量规则'→'Agent：判断下一步'→'Function Calling：发起调用请求'. Split at bottom: left '应用内函数'; right 'MCP：标准连接' with three child boxes 'CMS','素材库','分析平台'. Note 'Skill 可不调用工具；工具调用也可不经 MCP'. Arrows clearly show two possible tool routes, no mandatory MCP for local functions.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-2da146a9-46a9-4dba-9cc3-014d715d45c1.png",
+      "status": "integrated-and-visually-reviewed",
+      "originalMermaid": "```mermaid\r\nflowchart TB\r\n    U[\"用户目标：更新并发布一篇博客\"]\r\n    S[\"Skill：任务方法层\"]\r\n    A[\"Agent / 模型：判断下一步\"]\r\n    FC[\"Function Calling：调用机制\"]\r\n    MCP[\"MCP：标准连接层\"]\r\n    L[\"应用内函数\"]\r\n    CMS[\"CMS MCP Server\"]\r\n    DAM[\"素材库 MCP Server\"]\r\n    ANA[\"分析平台 MCP Server\"]\r\n\r\n    U --> S\r\n    S --> A\r\n    A --> FC\r\n    FC --> L\r\n    FC --> MCP\r\n    MCP --> CMS\r\n    MCP --> DAM\r\n    MCP --> ANA\r\n```"
+    },
+    {
+      "key": "skill-sequence",
+      "article": "skill-mcp-function-calling",
+      "mermaidIndex": 1,
+      "target": "src/content/posts/skill-mcp-function-calling/images/blog-update-handdrawn.png",
+      "alt": "博客更新从加载 Skill、经 MCP 读取文章，到改写、保存草稿并复查的交互示意",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '一次博客更新，怎样交接？'. Readable vertical step diagram, not dense full sequence. 1 '用户 → Agent：更新文章，保存草稿'. 2 'Agent 加载 Skill：读取 / 核查 / 改写 / 配图 / 复查'. 3 'Agent → CMS MCP Server → CMS：get_post'; reverse return '原文'. 4 'Agent：按规则完成改写'. 5 'Agent → CMS MCP Server → CMS：update_post(status=draft)'; reverse return '草稿地址 / 版本'. 6 'Agent 复查并向用户报告'. Footer '调用请求由执行环境真正执行；不自动发布'. Keep MCP server and CMS distinct.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-85b212cb-a1b5-4ac9-a37e-517cd7da47d1.png",
+      "status": "integrated-and-visually-reviewed",
+      "originalMermaid": "```mermaid\r\nsequenceDiagram\r\n    actor User as 用户\r\n    participant Agent as Agent\r\n    participant Skill as 博客更新 Skill\r\n    participant MCP as CMS MCP Server\r\n    participant CMS as 内容管理系统\r\n\r\n    User->>Agent: 更新文章并保存为草稿\r\n    Agent->>Skill: 加载更新流程和质量规则\r\n    Skill-->>Agent: 读取→核查→改写→配图→复查\r\n    Agent->>MCP: get_post(post_id)\r\n    MCP->>CMS: 获取文章\r\n    CMS-->>MCP: 原始内容\r\n    MCP-->>Agent: 工具调用结果\r\n    Agent->>Agent: 按 Skill 规则完成改写\r\n    Agent->>MCP: update_post(content, status=\"draft\")\r\n    MCP->>CMS: 保存草稿\r\n    CMS-->>MCP: 保存成功\r\n    MCP-->>Agent: 草稿地址与版本号\r\n    Agent-->>User: 已更新并保存为草稿\r\n```"
+    },
+    {
+      "key": "skill-choice",
+      "article": "skill-mcp-function-calling",
+      "mermaidIndex": 2,
+      "target": "src/content/posts/skill-mcp-function-calling/images/choose-handdrawn.png",
+      "alt": "根据调用机制、工具接入和重复工作流程三个独立需求选择 Function Calling、MCP 与 Skill",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '先看缺什么，再选工具'. Three independent horizontal question rows, NOT exclusive decision tree: '需要模型请求执行函数？'→'Function Calling'; '需要统一接入、复用外部能力？'→'MCP'; '需要复用步骤、边界和质量标准？'→'Skill'. Bottom all three connect with light dashed lines into '可以按需求组合使用'. Footer '少量本地函数，也可以配合 Skill'. Simple notebook plug button doodles, no false mandatory hierarchy.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-8cde0a92-7e04-455f-ae1d-eea3a918e30b.png",
+      "status": "integrated-and-visually-reviewed",
+      "originalMermaid": "```mermaid\r\nflowchart TD\r\n    Q1{\"是否只需调用应用内的少量函数？\"}\r\n    Q2{\"能力是否需要被多个 Agent 或客户端复用？\"}\r\n    Q3{\"任务是否有稳定、重复的步骤和质量规则？\"}\r\n\r\n    F[\"Function Calling\"]\r\n    M[\"MCP + 工具调用\"]\r\n    S[\"Skill\"]\r\n    ALL[\"Skill + MCP + Function Calling\"]\r\n\r\n    Q1 -- 是 --> F\r\n    Q1 -- 否 --> Q2\r\n    Q2 -- 是 --> Q3\r\n    Q2 -- 否 --> S\r\n    Q3 -- 否 --> M\r\n    Q3 -- 是 --> ALL\r\n\r\n\r\n```"
+    },
+    {
+      "key": "constraints",
+      "article": "agent-constraints-guide",
+      "mermaidIndex": 0,
+      "target": "src/content/posts/agent-constraints-guide/images/engineering-gates-handdrawn.png",
+      "alt": "从成功标准、适用指令、最小修改到验证反馈、提交检查与 CI 评审的工程门禁流程",
+      "prompt": "Use case: infographic-diagram. Final blog illustration in the exact aesthetic of the Orca style reference: PURE WHITE background, BLACK fineliner only, sparse simple handwritten hand-drawn sketch. Slight natural line wobble, clear handwritten Chinese and Latin labels, generous whitespace, no color, grey background, gradients, shadows, 3D, paper texture, watermarks, tiny filler text or fake UI. Prioritize technical correctness and readable labels. Title '让约束落到可验证的结果'. Vertical or two rows flow: '明确需求与成功标准'→'读取适用指令与 Skill'→'实施最小改动'→'运行检查与测试'→diamond '证据满足标准？'. No arrow loops back to implementation labeled '否：修正'; Yes→'提交前快速检查'→'CI 必需检查'→'评审与合并策略'. Footer '建议流程；不代表所有项目均已实现'. Clear scope note and readable labels.",
+      "generatedSource": "C:\\Users\\ls\\.codex\\generated_images\\01a142b1-48bc-7c91-a76a-595b4d5df068\\exec-a38271f5-aa0e-4c26-82ff-0124b8877dbc.png",
+      "status": "integrated-and-visually-reviewed",
+      "originalMermaid": "```mermaid\nflowchart TD\n    A[明确需求与成功标准] --> B[读取适用指令和技能]\n    B --> C[实施最小改动]\n    C --> D[运行相关检查与测试]\n    D --> E{证据是否满足成功标准}\n    E -->|否| C\n    E -->|是| F[提交前快速检查]\n    F --> G[CI 必需检查]\n    G --> H[评审与合并策略]\n```"
+    }
+  ]
+}

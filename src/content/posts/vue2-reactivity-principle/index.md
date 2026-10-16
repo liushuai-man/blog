@@ -71,7 +71,7 @@ draft: false
 
 #### 流程图
 
-![](./images/img-0.png)
+![Vue 2 的 getter 依赖收集与 setter 通知更新流程](./images/img-0-handdrawn.png)
 
 Vue 初始化过程中：
 

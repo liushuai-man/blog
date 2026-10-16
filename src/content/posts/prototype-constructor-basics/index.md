@@ -45,7 +45,9 @@ console.log(person1.__proto__);
 
 结果为：
 
-![](./images/img-0.png)
+![输出示意（非真实控制台截图）：Person.prototype 与 person1.__proto__ 指向同一原型对象](./images/img-0-handdrawn.png)
+
+*手绘输出示意，非真实控制台截图；原始截图保留在文章素材目录中。*
 
 #### 1\. prototype
 
@@ -63,4 +65,4 @@ console.log(person1.__proto__);
 
 综合上述，我们能够看出
 
-![](./images/img-1.png)
+![Person 的 prototype、原型对象的 constructor 与实例原型指向关系](./images/img-1-handdrawn.png)

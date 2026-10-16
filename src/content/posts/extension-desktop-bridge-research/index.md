@@ -24,7 +24,7 @@ draft: false
 
 四条路径最终使用同一数据结构、预览页和桌面写入流程；新增站点只实现“来源适配器”，不重写导入链路。
 
-![共同主干流程](./images/1.png)
+![插件采集、解析、脱敏预览、传输、桌面确认与批量写入的主干流程](./images/1-handdrawn.png)
 
 ## 二、通信层：插件 → 客户端的三种路径
 
@@ -34,7 +34,7 @@ draft: false
 
 浏览器原生提供的与本地程序通信能力。浏览器通过进程管道直接与一个 Native Host 可执行程序双向收发 JSON。
 
-![Native Messaging 流程](./images/2.png)
+![Native Messaging 经浏览器、Native Host 与桌面客户端传递消息和返回结果](./images/2-handdrawn.png)
 
 **核心特点**：双向直接传完整 JSON；浏览器侧做插件白名单鉴权；不需要端口；Host 进程按需拉起。
 
@@ -42,7 +42,7 @@ draft: false
 
 桌面客户端在本机 `127.0.0.1` 开启 HTTP 服务，插件以普通 HTTP 请求与其通信。
 
-![Loopback HTTP 流程](./images/3.png)
+![Loopback HTTP 的回环请求、配对鉴权、来源校验与响应流程](./images/3-handdrawn.png)
 
 **核心特点**：客户端常驻后台，服务持续监听，不随单次请求关闭；结果通过 `taskId` 轮询获取。
 
@@ -50,7 +50,7 @@ draft: false
 
 Deeplink 只负责“唤起程序 + 传递短 ID”，不承担主数据通道。大量网页数据需通过反向请求拉取。
 
-![Deeplink 流程](./images/4.png)
+![Deeplink 负责唤起并传递短参数，完整数据通过额外通道传输](./images/4-handdrawn.png)
 
 **核心特点**：只能传短 ID，传不了大量网页数据；客户端拿到 `taskId` 后反向去和插件通信（一般用本地 `127.0.0.1` 简易接口）取回完整数据；这一步正是 CCSwitch 的核心逻辑。
 

@@ -2,7 +2,7 @@
 title: 别再混淆 Skill、MCP 和 Function Calling 了
 published: 2026-08-15
 description: '用“更新并发布一篇博客”看懂 Skill、MCP 与 Function Calling 如何分工、组合，以及什么时候该用谁。'
-image: './images/cover.png'
+image: './images/cover-handdrawn.png'
 tags: ['AI Agent', 'Skill', 'MCP', 'Function Calling', '工具调用']
 category: Agent
 draft: false
@@ -32,27 +32,7 @@ draft: false
 
 下面这张图比“三个重叠的圆”更准确：三者不是互斥方案，而是经常一起出现的三层结构。
 
-```mermaid
-flowchart TB
-    U["用户目标：更新并发布一篇博客"]
-    S["Skill：任务方法层"]
-    A["Agent / 模型：判断下一步"]
-    FC["Function Calling：调用机制"]
-    MCP["MCP：标准连接层"]
-    L["应用内函数"]
-    CMS["CMS MCP Server"]
-    DAM["素材库 MCP Server"]
-    ANA["分析平台 MCP Server"]
-
-    U --> S
-    S --> A
-    A --> FC
-    FC --> L
-    FC --> MCP
-    MCP --> CMS
-    MCP --> DAM
-    MCP --> ANA
-```
+![用户目标经 Skill 指导 Agent，工具调用可直连本地函数或经 MCP 接入外部服务](./images/layers-handdrawn.png)
 
 *Skill 位于任务编排层；Function Calling 位于单次调用层；MCP 位于外部能力的标准连接层。*
 
@@ -164,28 +144,7 @@ Agent 的完整工作过程可能是：
 8. Skill 要求继续执行链接与格式复查；
 9. Agent 报告结果，但不自动发布。
 
-```mermaid
-sequenceDiagram
-    actor User as 用户
-    participant Agent as Agent
-    participant Skill as 博客更新 Skill
-    participant MCP as CMS MCP Server
-    participant CMS as 内容管理系统
-
-    User->>Agent: 更新文章并保存为草稿
-    Agent->>Skill: 加载更新流程和质量规则
-    Skill-->>Agent: 读取→核查→改写→配图→复查
-    Agent->>MCP: get_post(post_id)
-    MCP->>CMS: 获取文章
-    CMS-->>MCP: 原始内容
-    MCP-->>Agent: 工具调用结果
-    Agent->>Agent: 按 Skill 规则完成改写
-    Agent->>MCP: update_post(content, status="draft")
-    MCP->>CMS: 保存草稿
-    CMS-->>MCP: 保存成功
-    MCP-->>Agent: 草稿地址与版本号
-    Agent-->>User: 已更新并保存为草稿
-```
+![博客更新从加载 Skill、经 MCP 读取文章，到改写、保存草稿并复查的交互示意](./images/blog-update-handdrawn.png)
 
 这段流程展示了三者真正的关系：
 
@@ -221,26 +180,7 @@ sequenceDiagram
 
 ## 七、到底应该怎么选？
 
-```mermaid
-flowchart TD
-    Q1{"是否只需调用应用内的少量函数？"}
-    Q2{"能力是否需要被多个 Agent 或客户端复用？"}
-    Q3{"任务是否有稳定、重复的步骤和质量规则？"}
-
-    F["Function Calling"]
-    M["MCP + 工具调用"]
-    S["Skill"]
-    ALL["Skill + MCP + Function Calling"]
-
-    Q1 -- 是 --> F
-    Q1 -- 否 --> Q2
-    Q2 -- 是 --> Q3
-    Q2 -- 否 --> S
-    Q3 -- 否 --> M
-    Q3 -- 是 --> ALL
-
-
-```
+![根据调用机制、工具接入和重复工作流程三个独立需求选择 Function Calling、MCP 与 Skill](./images/choose-handdrawn.png)
 
 也可以直接按下面四条判断：
 

@@ -3,7 +3,7 @@ title: 输入URL之后，都发生了什么？
 published: 2026-04-10
 description: '在浏览器中输入 URL 后，发生了哪些步骤？'
 tags: ['HTTP', 'URL', 'TCP']
-image: './images/img-6.png'
+image: './images/img-6-handdrawn.png'
 category: 计算机网络
 draft: false
 ---
@@ -33,7 +33,7 @@ draft: false
 
 URL 解析完成后，浏览器不会直接发起网络请求，而是会优先检查本地缓存，目的是避免重复请求、提升页面加载速度、节省网络资源。
 
-![](./images/img-0.png)
+![缓存新鲜时直接使用，需验证时请求服务器并按 304 或新响应更新的示意流程](./images/img-0-handdrawn.png)
 
 ## 三、DNS域名解析
 
@@ -43,13 +43,13 @@ DNS（Domain Name System，域名系统）
 
 所谓DNS域名查询解析就是 域名——>IP地址
 
-![](./images/img-1.png)
+![域名解析先查可用缓存，再由递归解析器查询域名服务器并返回 IP 的简化示意](./images/img-1-handdrawn.png)
 
 先查自己（浏览器）→ 再查电脑 → 再查家里 / 公司路由器 → 再查运营商 → 最后才去问互联网的 “根服务器”，是一套「尽量少跨网、优先用缓存」的优化策略，目的是让 DNS 解析尽可能快，同时减轻根服务器的压力。
 
 （这张图后半段很详细）
 
-![](./images/img-2.png)
+![客户端向递归解析器请求解析，解析器依次向根、顶级域和权威服务器迭代查询](./images/img-2-handdrawn.png)
 
 ## 四、建立TCP连接
 
@@ -71,7 +71,7 @@ TCP 是可靠的面向连接的传输协议，必须通过「三次握手」确�
 
 - 服务端：被动监听、接受连接的一方（谁在等别人来连，谁就是服务端）
 
-![](./images/img-3.png)
+![TCP 三次握手的 SYN、SYN+ACK 和 ACK 方向与序列号](./images/img-3-handdrawn.png)
 
 - 第一次握手：客户端发送 `SYN`（同步序列编号），告知服务器「我要发起连接，我的数据流起点是 X（初始序列号）」，进入 `SYN_SENT` 状态。
 
@@ -371,7 +371,7 @@ text/html; charset=utf-8 Content-Length: 290 Cache-Control: no-cache # 3.
 
 完整流程图如下：
 
-![](./images/img-4.png)
+![HTML 与 CSS 分别形成 DOM、CSSOM，经渲染树、布局、绘制与合成显示页面的简化流程](./images/img-4-handdrawn.png)
 
 **问答：图层的分层、合并是什么？为什么有这一步**
 
@@ -416,7 +416,7 @@ TCP 建立（三次握手）+ 断开（四次挥手）很消耗性能
 
 ### TCP四次挥手
 
-![](./images/img-5.png)
+![TCP 四次挥手以及客户端 FIN_WAIT、TIME_WAIT 和服务端 CLOSE_WAIT、LAST_ACK 的状态](./images/img-5-handdrawn.png)
 
 步骤说明
 
@@ -447,7 +447,7 @@ TCP 建立（三次握手）+ 断开（四次挥手）很消耗性能
 
 URL解析 --> 检查本地缓存 --> DNS域名解析 --> TCP连接 --> 浏览器发出请求 --> 服务器返回响应 --> 浏览器渲染页面 --> 满足条件后TCP断开连接
 
-![](./images/img-6.png)
+![从 URL、缓存、DNS、TCP/TLS 到 HTTP 响应与页面渲染的手绘总览](./images/img-6-handdrawn.png)
 
 需要掌握的：
 
