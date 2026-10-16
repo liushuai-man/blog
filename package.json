@@ -18,6 +18,7 @@
     "sync-github": "node scripts/sync-github.mjs",
     "test:sync-github": "node --test tests/sync-github.test.mjs",
     "test:about": "node --experimental-strip-types --test tests/about-data.test.mjs",
+    "test:sakura": "node --experimental-strip-types --test tests/sakura-effect.test.mjs",
     "test:stylophone": "node --experimental-strip-types --test tests/stylophone-input.test.mjs"
   },
   "dependencies": {

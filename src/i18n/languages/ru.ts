@@ -38,6 +38,7 @@ export const ru: Translation = {
 	[Key.themeMono]: "Монохром",
 	[Key.effects]: "Эффекты",
 	[Key.sakuraNum]: "Количество сакуры",
+	[Key.sakuraContinuous]: "Непрерывное падение лепестков",
 	[Key.sakuraSpeed]: "Скорость падения",
 
 	[Key.lightMode]: "Светлая",

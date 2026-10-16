@@ -38,6 +38,7 @@ export const en: Translation = {
 	[Key.themeMono]: "Monochrome",
 	[Key.effects]: "Effects",
 	[Key.sakuraNum]: "Sakura Count",
+	[Key.sakuraContinuous]: "Continuous petals",
 	[Key.sakuraSpeed]: "Fall Speed",
 
 	[Key.lightMode]: "Light",

@@ -47,6 +47,7 @@ pnpm preview
 | `pnpm sync-github` | 更新关于页 GitHub 公开数据快照 |
 | `pnpm test:sync-github` | 验证 GitHub 同步失败保护与分页统计 |
 | `pnpm test:about` | 验证精选排序、缺失补位与主语言统计 |
+| `pnpm test:sakura` | 验证樱花自然结束、持续开关和资源释放 |
 | `pnpm test:stylophone` | 验证音符映射、音片命中与输入释放 |
 | `pnpm icons` | 重新生成图标数据 |
 | `pnpm format` / `pnpm lint` | 会写入 `src/`，使用前检查修改范围 |
@@ -78,6 +79,8 @@ draft: false
 - `src/config/sidebarConfig.ts`：阅读相关布局组件，当前关闭侧栏。
 
 [配置说明](src/config/README.md) · [组件说明](src/components/README.md)
+
+樱花默认只在打开页面时飘落一轮，花瓣自然离开后停止，Swup 站内切页不重播。显示设置保留数量和速度，并提供“持续飘落”开关；开启后循环飘落并记住偏好，关闭后已有花瓣自然落完。
 
 ## GitHub 关于页
 

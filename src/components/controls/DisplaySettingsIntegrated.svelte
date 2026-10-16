@@ -24,6 +24,7 @@ import {
 	getStoredOverlayCardOpacity,
 	getStoredOverlayOpacity,
 	getStoredSakuraNum,
+	getStoredSakuraContinuous,
 	getStoredSakuraSpeed,
 	getStoredWallpaperMode,
 	getStoredWavesEnabled,
@@ -39,6 +40,7 @@ import {
 	setOverlayCardOpacity,
 	setOverlayOpacity,
 	setSakuraNum,
+	setSakuraContinuous,
 	setSakuraSpeed,
 	setWallpaperMode,
 	setWavesEnabled,
@@ -80,8 +82,9 @@ const defaultSakuraNum = getDefaultSakuraNum();
 const defaultSakuraSpeed = getDefaultSakuraSpeed();
 let sakuraNum = $state(defaultSakuraNum);
 let sakuraSpeed = $state(defaultSakuraSpeed);
+let sakuraContinuous = $state(false);
 let sakuraSettingsIsDefault = $derived(
-	sakuraNum === defaultSakuraNum && sakuraSpeed === defaultSakuraSpeed,
+	sakuraNum === defaultSakuraNum && sakuraSpeed === defaultSakuraSpeed && !sakuraContinuous,
 );
 let overlayOpacity = $state(getDefaultOverlayOpacity());
 const defaultOverlayOpacity = getDefaultOverlayOpacity();
@@ -229,6 +232,8 @@ function toggleWavesEnabled() {
 }
 
 function resetSakuraSettings() {
+	sakuraContinuous = false;
+	setSakuraContinuous(false);
 	sakuraNum = defaultSakuraNum;
 	sakuraSpeed = defaultSakuraSpeed;
 	setSakuraNum(defaultSakuraNum);
@@ -345,6 +350,7 @@ onMount(() => {
 	// 从localStorage读取樱花特效设置
 	sakuraNum = getStoredSakuraNum();
 	sakuraSpeed = getStoredSakuraSpeed();
+	sakuraContinuous = getStoredSakuraContinuous();
 
 	// 从localStorage读取用户偏好布局
 	const savedLayout = localStorage.getItem("postListLayout");
@@ -668,6 +674,16 @@ $effect(() => {
                 </button>
             </div>
             <div class="space-y-2">
+                <button type="button" role="switch" aria-checked={sakuraContinuous}
+                    class="w-full btn-regular rounded-md py-2 px-3 flex items-center gap-3 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--primary)"
+                    onclick={() => { sakuraContinuous = !sakuraContinuous; setSakuraContinuous(sakuraContinuous); }}>
+                    <span class="text-sm flex-1">{i18n(I18nKey.sakuraContinuous)}</span>
+                    <span aria-hidden="true" class="w-10 h-5 rounded-full transition-colors relative motion-reduce:transition-none"
+                        class:bg-(--primary)={sakuraContinuous} class:bg-(--btn-regular-bg-active)={!sakuraContinuous}>
+                        <span class="absolute top-0.5 w-4 h-4 bg-white rounded-full shadow"
+                            class:left-0.5={!sakuraContinuous} class:left-5={sakuraContinuous}></span>
+                    </span>
+                </button>
                 <div class="rounded-md bg-(--btn-regular-bg) p-2">
                     <div class="flex items-center justify-between mb-1">
                         <span class="text-sm font-medium text-(--btn-content) opacity-80">{i18n(I18nKey.sakuraNum)}</span>
