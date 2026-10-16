@@ -100,6 +100,7 @@ draft: false
 src/pages/                 页面与静态输出接口
 src/layouts/               全站布局与 Swup 接入
 src/components/            通用、阅读、关于页和设置组件
+src/features/other/        玩具注册表、懒加载工具、音频与输入模块
 src/config/                模块化配置
 src/content/posts/         博客文章与配图
 src/data/                  可提交的公开数据快照
@@ -107,10 +108,26 @@ src/styles/                主题与内容样式
 src/utils/                 内容、路径、布局工具
 src/plugins/               Markdown 渲染插件
 scripts/                   文章、图标与 GitHub 数据脚本
+tests/                     GitHub、关于页、樱花与电子琴的针对性测试
 public/                    静态素材
 docs/plans/                三项优化执行计划
 guide/                     上游文章写作语法参考（非生产内容）
 ```
+
+## Agent 协作与规则维护
+
+[AGENTS.md](AGENTS.md) 是项目共同协作约束的维护入口，包含命令、目录职责、内容保护、生命周期与验证要求。实现新功能前按需阅读 [执行计划](docs/plans/)，涉及文章配图或场景素材时继续阅读其中引用的设计规范。
+
+可使用 [`project-agent-init`](https://github.com/liushuai-man/project-agent-init) Skill 按项目现状维护规则。它是独立安装的开发辅助工具，不属于博客运行依赖，也不会随克隆本博客自动安装；安装方式见上游 README。安装后在本项目中输入：
+
+```text
+使用 $project-agent-init 完善当前项目的 AGENTS.md 和 README。
+保留已有中文约定，按实际配置核实命令、目录职责与验证要求。
+```
+
+规则更新应合并进已有章节，保留博客专属边界，不直接覆盖为通用模板。文档改动检查链接、脚本名称和事实；代码改动执行 `pnpm check`、`pnpm build`，并按影响运行上表中的测试。当前没有统一的 `pnpm test`。涉及交互时，还需按 AGENTS.md 完成浏览器验收；单元测试不覆盖真实音色、完整视觉效果或性能。
+
+当前 [部署工作流](.github/workflows/deploy.yml) 只安装依赖、构建和发布，未自动运行类型检查或上述测试；这些检查仍需在提交前按改动执行。规则文档用于指导协作，不能代替工具验证。
 
 ## 优化路线
 
