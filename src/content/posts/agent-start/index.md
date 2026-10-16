@@ -46,7 +46,7 @@ AI Agent（人工智能智能体）：以大模型 LLM（Large Language Model，
 - **记忆层（Memory）**：短期上下文记忆、长期知识库、任务进度缓存
 - **工具层（Tools）**：外部能力扩展，突破大模型固有局限
 
-![](./images/Image_01.png)
+![AI Agent 的推理、规划、记忆、工具与环境反馈关系示意](./images/Image_01-handdrawn.png)
 
 ### 6.关键区分：AI Agent vs 普通大模型
 

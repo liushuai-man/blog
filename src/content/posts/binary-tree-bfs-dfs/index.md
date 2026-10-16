@@ -2,7 +2,7 @@
 title: 二叉树遍历：为什么广度优先用队列，深度优先用栈？
 published: 2026-08-25
 description: '从“下一步该访问谁”出发，用图解和 JavaScript 代码理解二叉树 BFS 为什么使用队列、DFS 为什么使用栈。'
-image: './images/cover.png'
+image: './images/cover-handdrawn.png'
 tags: ['数据结构', '二叉树', 'BFS', 'DFS', 'JavaScript']
 category: 算法
 draft: false
@@ -67,7 +67,7 @@ A → B → D → E → C ...
 
 这已经不是“逐层访问”，而变成了深度优先。因此，BFS 选择队列不是习惯写法，而是由“同一层必须在下一层之前完成”这个目标决定的。
 
-![BFS 与 DFS 的逐步状态对比](./images/traversal-steps.svg)
+![同一棵二叉树的 BFS 队列和 DFS 栈状态逐步对比](./images/traversal-steps-handdrawn.png)
 
 把队列想成排队买票：新来的节点站到队尾，下一次总是从队首取节点。于是，同一层较早发现的节点会先访问，下一层节点则自然排在当前层后面。
 

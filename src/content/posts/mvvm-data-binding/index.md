@@ -23,7 +23,7 @@ MVVM 把前端应用拆分为 3 个核心部分，本质是**解耦数据、视�
 | View      | 视图层：用户看到的 DOM 界面（纯展示，无业务逻辑）                                 | 如 `<div>{{name}}</div>`、按钮等    |
 | ViewModel | 桥梁层：连接 Model 和 View，核心是「数据劫持 / 响应式」+「模板编译」+「更新视图」 | Vue 实例本身（`new Vue({})`）       |
 
-![](./images/img-0.png)
+![Model、ViewModel 与 View 的数据更新和用户输入双向链路](./images/img-0-handdrawn.png)
 
 核心逻辑：
 
