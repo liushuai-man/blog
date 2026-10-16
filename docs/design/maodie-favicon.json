@@ -1,21 +1,26 @@
 {
   "date": "2026-10-16",
   "selection": "User selected the reference-based round-headed hissing Maodie illustration.",
-  "method": "Built-in image_gen; exported with Pillow to PNG and multiresolution ICO without creative changes.",
-  "master": "docs/design/favicon/maodie-source.png",
+  "method": "Built-in image_gen removed outer circular border; RGBA-preserving PNG and ICO exports using Pillow.",
+  "master": "docs/design/favicon/maodie-borderless-source.png",
   "outputs": [
-    "public/favicon/maodie.ico",
-    "public/favicon/favicon.ico",
     "public/favicon/favicon-16x16.png",
     "public/favicon/favicon-32x32.png",
     "public/favicon/apple-touch-icon.png",
     "public/favicon/android-chrome-192x192.png",
-    "public/favicon/android-chrome-512x512.png"
+    "public/favicon/android-chrome-512x512.png",
+    "public/favicon/maodie-borderless.ico",
+    "public/favicon/maodie-round.ico",
+    "public/favicon/maodie.ico",
+    "public/favicon/favicon.ico"
   ],
   "references": [
     "https://www.111cn.net/new/440924.htm",
     "https://img.111cn.net/uploads/20250625/img_685b70c9dc9a631.png",
     "https://img.111cn.net/uploads/20250625/img_685b70ca0f85b33.png"
   ],
-  "prompt": "Create a SINGLE colored square favicon portrait, a recognizable chibi redraw of the SPECIFIC viral Chinese Douyin cat 圆头耄耋 / Maodie shown in these two identity reference photos. These photos define the identity, face proportions and markings. This is not a generic orange kitten. Head only, front facing. Most important: almost perfectly circular head because the ears are pinned completely BACK behind the skull, nearly INVISIBLE from front; absolutely no big triangular ears sticking out sideways. Muted sandy ginger tabby forehead, broad pale cream-white muzzle/cheek region, small pinkish-brown nose, two symmetrical small ginger patches at the sides of the muzzle like the real cat. Eyes should be relatively SMALL feline almond-round eyes, close to real cat proportions, with tight slanted upper eyelids and dark pupils staring directly at viewer. No huge kawaii circular eyes, no sparkle eyes, no raised eyebrows, no human cartoon eyebrows, no smiling cheeks. Now show an unmistakably FIERCE HISS: pulled-back lips, wrinkled bridge of nose, tight tense muzzle, very WIDE angular-open mouth exposing upper and lower small fangs and teeth, dark wine-brown oral cavity, small low tongue not a huge cute protruding tongue. Flat ears, angry compressed gaze and bared teeth together communicate aggression, not surprise or joy. Chibi means compact round simplified proportions, NOT baby-like cuteness. Use flat clean colored sticker/cartoon shapes with restrained warm brown outlines, a few broad subtle tabby stripes, no fur photorealism. Light desaturated mint background. Compact head occupies 85% of canvas, no body, no words, no captions, no logos, no speech bubbles, no hearts, no blush, no gradients, no watermark. It should look like a simplified recognizable portrait of the actual meme cat mid-HAAA, fiercely confronting the viewer, suitable for a 32px favicon. Discard all features of the earlier generic orange cartoon designs; follow these original cat photos."
+  "prompt": "Create a SINGLE colored square favicon portrait, a recognizable chibi redraw of the SPECIFIC viral Chinese Douyin cat 圆头耄耋 / Maodie shown in these two identity reference photos. These photos define the identity, face proportions and markings. This is not a generic orange kitten. Head only, front facing. Most important: almost perfectly circular head because the ears are pinned completely BACK behind the skull, nearly INVISIBLE from front; absolutely no big triangular ears sticking out sideways. Muted sandy ginger tabby forehead, broad pale cream-white muzzle/cheek region, small pinkish-brown nose, two symmetrical small ginger patches at the sides of the muzzle like the real cat. Eyes should be relatively SMALL feline almond-round eyes, close to real cat proportions, with tight slanted upper eyelids and dark pupils staring directly at viewer. No huge kawaii circular eyes, no sparkle eyes, no raised eyebrows, no human cartoon eyebrows, no smiling cheeks. Now show an unmistakably FIERCE HISS: pulled-back lips, wrinkled bridge of nose, tight tense muzzle, very WIDE angular-open mouth exposing upper and lower small fangs and teeth, dark wine-brown oral cavity, small low tongue not a huge cute protruding tongue. Flat ears, angry compressed gaze and bared teeth together communicate aggression, not surprise or joy. Chibi means compact round simplified proportions, NOT baby-like cuteness. Use flat clean colored sticker/cartoon shapes with restrained warm brown outlines, a few broad subtle tabby stripes, no fur photorealism. Light desaturated mint background. Compact head occupies 85% of canvas, no body, no words, no captions, no logos, no speech bubbles, no hearts, no blush, no gradients, no watermark. It should look like a simplified recognizable portrait of the actual meme cat mid-HAAA, fiercely confronting the viewer, suitable for a 32px favicon. Discard all features of the earlier generic orange cartoon designs; follow these original cat photos.",
+  "originalMaster": "docs/design/favicon/maodie-source.png",
+  "editPromptFile": "docs/design/favicon/maodie-borderless-prompt.txt",
+  "transparencyValidation": "All PNG and ICO variants preserve alpha-zero corners."
 }
