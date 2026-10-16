@@ -6,7 +6,39 @@
 
 开始修改前阅读 `README.md` 和本文件，并查看 `git status`。新工作遵循 `docs/plans/` 中对应计划；计划是方向与验收依据，用户最新明确指示优先。
 
-保留核心博客阅读、归档、搜索、RSS、代码高亮、主题设置和文章分享。后续重点是季节场景、GitHub 关于页和可扩展的「妙妙屋」栏目（首项为 Stylophone 风格触笔电子琴，金属音片点触与滑奏）。已移除音乐、友链、赞助、留言板、广告、日历、评论服务和访客分析；未经新需求不恢复这些模板功能。
+保留核心博客阅读、归档、搜索、RSS、代码高亮、主题设置和文章分享。后续重点是 wallpaper 壁纸镶嵌、GitHub 关于页和可扩展的「妙妙屋」栏目（首项为 Stylophone 风格触笔电子琴，金属音片点触与滑奏）。已移除音乐、友链、赞助、留言板、广告、日历、评论服务和访客分析；未经新需求不恢复这些模板功能。
+
+## 工作方式与命令
+
+- 开始时说明本次修改范围、关键假设和可验证的完成条件；只修改实现需求所需的文件。收尾报告实际检查结果与未验证项。
+- 这是单包项目，包管理器以 `package.json` 的 `packageManager` 为准，使用 pnpm 和 `pnpm-lock.yaml`；不要引入其他锁文件或无需求拆成 monorepo。Node.js 要求见 README。
+- 编辑子目录前检查是否存在适用的嵌套 `AGENTS.md`。共同约束维护在本文件；README 面向使用者，计划记录演进与验收，不复制多套相同规则。
+- 保留现有中文规则和文档语言。沿用相邻代码的命名、import 与类型约定；路径别名以 `tsconfig.json` 为准，格式规则以 `biome.json` 为准，避免顺手统一历史格式。
+
+从仓库根目录执行；命令以 `package.json` 为事实来源：
+
+| 命令 | 用途与副作用 |
+| --- | --- |
+| `pnpm install --frozen-lockfile` | 按锁文件安装依赖，不用于无关升级 |
+| `pnpm dev` / `pnpm preview` | 开发服务／预览已有生产构建；访问 `/blog/` |
+| `pnpm check` | Astro、Svelte 与 TypeScript 诊断 |
+| `pnpm build` | 生成 `src/constants/icons.ts`，再构建 `dist/` 与 Pagefind 索引 |
+| `pnpm test:sync-github` | GitHub 同步失败保护、分页和数据统计 |
+| `pnpm test:about` | 精选排序、缺失补位与主语言统计 |
+| `pnpm test:sakura` | 一轮自然结束、持续飘落开关与资源释放 |
+| `pnpm test:stylophone` | 音符映射、音片命中与输入释放 |
+| `pnpm sync-github` | 联网更新可提交的 GitHub 快照，仅在需要刷新数据时执行 |
+
+当前没有统一的 `pnpm test`。修改共享逻辑时运行受影响的多组测试；单元测试不能代替浏览器交互、真实音色或性能验收。`pnpm format` 与 `pnpm lint` 都会写入 `src/`，需要格式检查时使用 `pnpm exec biome check <改动文件>`，仅检查 Biome 支持且纳入配置的文件。
+
+## 目录职责与事实来源
+
+- `src/pages/`、`src/layouts/`：页面组合、路由和全局生命周期；Swup 容器配置见 `astro.config.mjs`。
+- `src/components/`：通用、阅读、设置与页面组件，索引见 [组件说明](src/components/README.md)。
+- `src/config/`、`src/types/config.ts`：配置及其类型，说明见 [配置说明](src/config/README.md)；新增配置同步检查导出与消费者。
+- `src/features/other/`：玩具注册表与具体工具运行时；音频和输入不迁入通用布局。
+- `scripts/`、`tests/`：维护脚本与针对性验证；`src/constants/icons.ts` 由 `pnpm icons`／构建生成，新增图标应修改使用处后重新生成。
+- `docs/design/`、`docs/plans/`：设计规范、素材记录和执行计划。`guide/` 是上游写作语法参考，不能作为当前已启用功能的清单。
 
 ## 实现原则
 
@@ -39,8 +71,9 @@
 - 浏览器 API 只能在客户端执行；禁止 SSR 阶段创建 Canvas、AudioContext、ResizeObserver 或访问 localStorage。
 - 每个交互模块有明确资源所有者，进入初始化，退出释放；Swup 往返不会重复绑定。
 - 清理 observer、timer、requestAnimationFrame、库实例、音频节点与监听。异步初始化结束前若组件已销毁，不能重新创建资源。
-- 场景统一管理季节／天气和粒子实例；新场景接入完成再删除旧樱花和轮播。
-- 场景素材必须遵循 `docs/design/seasonal-scene-prompts.md`：小省城居民区两层小卖部（一楼开放售货窗和门、二楼住宅），相邻住宅、白墙内嵌铁栏与少量藤蔓、直立茂盛树木和步道砖地是固定场景；采用简约大形体和色块。先验收母版，之后参考图编辑派生；禁止随意改建筑、门窗、树木、镜头或画风。规范变更先更新文档和版本，再生成对应素材。
+- wallpaper 壁纸镶嵌以动态素材为主，按 `docs/plans/01-wallpaper.md` 尽可能兼容不同格式；逐类验证浏览器与静态部署支持，提供静态兜底。接入完成后仅清理实际被替换的背景逻辑，不自动删除樱花或轮播。
+- 当前樱花默认打开时仅飘落一轮，Swup 切页不重播；保留显示设置中的数量、速度和持续飘落开关。关闭持续飘落后不再补充花瓣，已有花瓣自然结束，全部结束后释放动画资源。
+- 原四季场景计划已取消；`docs/design/seasonal-scene-prompts.md` 与已有素材仅作历史资料保留，不约束 wallpaper 选材，也不继续生成季节／天气变体。壁纸需记录来源、授权与兼容性；动态壁纸隐藏或离屏暂停，减少动态效果时使用静态兜底。
 - 玩具通过注册表懒加载，Shell／输入／音频分层；触笔电子琴仅保留自由演奏，不引入简谱、曲库、试听播放、跟弹、导入或评分。不得把玩具音频管理器放进全局 Layout。
 - 无用户操作不发声；blur、pointercancel、标签隐藏、切页和 dispose 时停音。
 
@@ -61,6 +94,7 @@
 ## 验证与提交
 
 - 文档修改检查内部链接、命令与事实；代码修改运行 `pnpm check`、`pnpm build`。
+- `.github/workflows/deploy.yml` 目前在 `main` 推送时安装依赖、构建并发布，未配置 `pnpm check` 或上述测试；不能把构建成功或规则文档当作这些检查已经执行的证据。没有相关需求时不顺带修改 CI。
 - 运行脚本前检查 `package.json`；`pnpm lint` 带 `--write`，不能把它当只读检查或无差别格式化全仓库。
 - 为音符映射、音片命中、输入释放、数据故障保护等关键逻辑提供针对性验证；不为纯文案改动添加镜像测试。
 - UI 修改检查 375px、768px、1440px、深浅主题、直接刷新、Swup 往返和 `/blog/` 子路径。无法完成的检查明确说明，不宣称截图等同全部 QA。

@@ -2,7 +2,7 @@
 
 版本：1.0；确定日期：2026-10-16。
 
-用户验收参考为 Orca 文章的 `cover.png`、`worktrees.png` 和 `workflow.png`，位置：`src/content/posts/orca-agent-workspace/images/`。本规范用于文章配图，不替代季节场景素材规范，不改变站点主题或头像等界面素材。
+用户验收参考为 Orca 文章的 `cover.png`、`worktrees.png` 和 `workflow.png`，位置：`src/content/posts/orca-agent-workspace/images/`。本规范用于文章配图，不约束 wallpaper 壁纸素材，不改变站点主题或头像等界面素材。
 
 ## 视觉要求
 
