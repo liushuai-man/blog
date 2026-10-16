@@ -1,0 +1,19 @@
+{
+  "article": "src/content/posts/orca-agent-workspace/index.md",
+  "date": "2026-10-16",
+  "source": "Generated with built-in image_gen; conceptual illustrations, not Orca screenshots or official logos.",
+  "assets": [
+    {
+      "path": "src/content/posts/orca-agent-workspace/images/cover.png",
+      "prompt": "Use case: illustration-story. Create a wide landscape 16:9 technical personal blog cover. Pure white background, only black fineliner pen, sparse imperfect hand-drawn outlines and handwritten lettering, no colors, no grey background, no paper texture, no gradients, no 3D. Large legible handwritten title 'Orca'. Smaller Chinese subtitle exactly '把 AI 编程任务组织起来'. A person seen from behind at a simple desk, facing three small task windows connected by loose arrows to one review checklist; a tiny friendly orca doodle at the side, mostly white with black ink. Airy restrained composition, generous white margins, editorial sketchbook feeling, a thoughtful human organizing work rather than an army of robots. Only additional text: '任务', 'Agent', '审查'. No performance numbers, no official logo, no screenshot, no watermark. Save image for use in this blog."
+    },
+    {
+      "path": "src/content/posts/orca-agent-workspace/images/worktrees.png",
+      "prompt": "Use case: infographic-diagram. Create one wide landscape 3:2 explanatory diagram in pure black fineliner pen on pure white background. All shapes and labels look hand-drawn and handwritten, gently imperfect lines, sparse and very clear, no colors, no shading, no textures, no gradients. Title exactly '分开做，最后一起验'. Top center one small repository box labeled 'Git 仓库'. Three arrows down to three separate outlined folder boxes in a horizontal row, labels exactly 'worktree A', 'worktree B', 'worktree C'. Inside each box a tiny terminal and labels respectively '修复搜索', '调整样式', '更新文档'. Each box has separate small branch doodle. Three arrows converge downward to one checklist labeled '审查 + 集成测试'. Below, small caution handwritten '文件分开 ≠ 没有冲突'. This is a conceptual workflow, not the actual Orca UI. Keep all words accurate and readable, wide safe margins, no other text, no watermark."
+    },
+    {
+      "path": "src/content/posts/orca-agent-workspace/images/workflow.png",
+      "prompt": "Use case: infographic-diagram. One landscape 3:2 educational sketch, pure white background and black fineliner only. Simple hand-drawn boxes, imperfect arrows, handwritten Chinese, minimal sparse editorial notebook diagram, no color, no grey backdrop, no textures, no gradients. Title exactly '让一次任务真正结束'. Four boxes in clear clockwise loop: upper left '1 明确验收', upper right '2 独立实现', lower right '3 检查改动', lower left '4 运行验证'. Clockwise arrows connect 1 to 2 to 3 to 4. From 4 a small curved arrow back to 2 labeled '失败：修正'. From 4 a separate arrow down to a checkmark labeled '通过：人工决定合并'. Tiny person doodle holding pen near review box, tiny terminal icon near implementation. No arrows back to 1 needed. Clear hierarchy, generous margins. Conceptual diagram, no claimed actual Orca screenshot, no watermark."
+    }
+  ]
+}

@@ -23,6 +23,9 @@
 	const input = createInput();
 	const notes = $derived(pads.map((name, index) => ({ name, index })).filter(({ index }) => !compact || (windowIndex === 0 ? index <= 6 : index >= 7)));
 	const noteLabel = (index: number) => `${pads[index]}${(index === 12 ? 5 : 4) + octave}`;
+	const digits = ["1", "♯1", "2", "♯2", "3", "4", "♯4", "5", "♯5", "6", "♯6", "7", "1"];
+	const relativeOctave = (index: number) => octave + (index === 12 ? 1 : 0);
+	const digitLabel = (index: number) => `${relativeOctave(index) === -1 ? "低音" : relativeOctave(index) === 1 ? "高音" : relativeOctave(index) === 2 ? "倍高音" : "中音"} ${digits[index]}`;
 
 	function sound(index: number | null) {
 		if (!ready || muted || !visible || disposed) index = null;
@@ -129,15 +132,15 @@
 	<div class="readout"><span class:lit={ready && !muted} class="led" aria-hidden="true"></span><span role="status">{!ready ? "点击开始演奏，开启声音" : muted ? "已静音" : active === null ? "按住音片 · 滑动演奏" : `正在演奏 ${noteLabel(active)}`}</span><span class="range">{noteLabel(notes[0].index)} — {noteLabel(notes.at(-1)!.index)}</span></div>
 	<div class="surface" bind:this={surface} role="group" aria-label="金属音片演奏区" onpointerdown={down} onpointermove={move} onpointerup={up} onpointercancel={up} onlostpointercapture={up}>
 		{#each notes as note (note.index)}
-			<button type="button" class="pad" class:sharp={isSharp(note.index)} class:active={active === note.index} data-pad={note.index} aria-label={`${noteLabel(note.index)}，快捷键 ${shortcuts[note.index]}`} aria-pressed={active === note.index} disabled={!ready || muted}>
-				<span class="engraving">{note.name}</span><span class="shortcut">{shortcuts[note.index]}</span>
+			<button type="button" class="pad" class:sharp={isSharp(note.index)} class:active={active === note.index} data-pad={note.index} aria-label={`${digitLabel(note.index)}（${noteLabel(note.index)}），快捷键 ${shortcuts[note.index]}`} aria-pressed={active === note.index} disabled={!ready || muted}>
+				<span class="engraving" class:low={relativeOctave(note.index) < 0} class:high={relativeOctave(note.index) > 0} class:double-high={relativeOctave(note.index) > 1} aria-hidden="true">{digits[note.index]}</span><span class="shortcut" aria-hidden="true">{shortcuts[note.index]}</span>
 			</button>
 		{/each}
 		{#if pen}<span class="pen" style={`left:${pen.x}px;top:${pen.y}px`} aria-hidden="true"></span>{/if}
 	</div>
 	<div class="bottom"><span>接触发声，抬起停音。</span>{#if compact}<div class="windows" role="group" aria-label="音片窗口"><button class="control" aria-label="前半音片 C 至 F 升" aria-pressed={windowIndex === 0} onclick={() => changeWindow(0)}>C — F♯</button><button class="control" aria-label="后半音片 G 至 C" aria-pressed={windowIndex === 1} onclick={() => changeWindow(1)}>G — C</button></div>{/if}</div>
 </div>
-<details class="help text-90"><summary>键盘演奏与操作说明</summary><p>点击「开始演奏」后，按住 A S D F G H J K 演奏自然音，W E T Y U 演奏升音。多键按下时，最后按下的音优先。</p><p>也可以用 Tab 聚焦音片，再按住空格或 Enter。鼠标或手指按住音片并滑动，进入间隙会停音。切换音区、静音或离开页面也会停音。</p></details>
+<details class="help text-90"><summary>键盘演奏与操作说明</summary><p>音片上的 1–7 对应 do、re、mi、fa、sol、la、si，♯ 表示升音。下方小点表示低音，上方小点表示高音，两个上点表示倍高音。</p><p>点击「开始演奏」后，按住 A S D F G H J K 演奏自然音，W E T Y U 演奏升音。多键按下时，最后按下的音优先。</p><p>也可以用 Tab 聚焦音片，再按住空格或 Enter。鼠标或手指按住音片并滑动，进入间隙会停音。切换音区、静音或离开页面也会停音。</p></details>
 
 <style>
 	.instrument { padding:clamp(16px,4vw,32px); border-radius:20px; background:var(--btn-regular-bg); border:1px solid var(--line-divider); box-shadow:inset 0 1px 0 #ffffff30; }
@@ -163,7 +166,11 @@
 	.pad.sharp { height:110px; background:linear-gradient(100deg,#849098,#bac3c8 45%,#8f9ca5); }
 	.pad:disabled { cursor:default; }
 	.pad.active { background:var(--primary); color:var(--card-bg); border-color:var(--primary); }
-	.engraving { font-weight:700; font-size:13px; }
+	.engraving { position:relative; font-weight:700; font-size:15px; line-height:1; }
+	.engraving.low::before,.engraving.high::before,.engraving.double-high::after { content:"•"; position:absolute; left:50%; transform:translateX(-50%); font-size:12px; line-height:1; }
+	.engraving.low::before { top:100%; }
+	.engraving.high::before { bottom:100%; }
+	.engraving.double-high::after { bottom:calc(100% + 7px); }
 	.shortcut { font-size:10px; opacity:.6; }
 	.pen { position:absolute; width:9px; height:66px; border-radius:5px; background:linear-gradient(90deg,#525d66,#e4eaef,#66737e); transform:translate(-50%,-95%) rotate(25deg); transform-origin:bottom; pointer-events:none; box-shadow:2px 2px 4px #0004; }
 	.bottom { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:12px; margin-top:16px; opacity:.85; }
