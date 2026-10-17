@@ -5,7 +5,7 @@ description: 从一次好奇出发，拆开 Orca 的多 Agent、Git worktree 与
 image: './images/cover.png'
 tags: ['AI Agent', 'AI Coding', 'Orca', 'Git Worktree', '工程实践']
 category: Agent
-draft: true
+draft: false
 ---
 
 最近注意到 Orca 这个项目，第一眼很容易被“同时运行多个 AI 编程 Agent”吸引。
