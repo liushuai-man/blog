@@ -1,12 +1,22 @@
 ---
 import type { ToolDefinition } from "@/features/other/types";
+import { Image } from "astro:assets";
 import { url } from "@/utils/url-utils";
 const { tool } = Astro.props as { tool: ToolDefinition };
 ---
-<a href={url(tool.route)} class="card-base flex items-center gap-4 p-4 border border-(--line-divider) hover:border-(--primary) transition-colors">
-	<div class="min-w-0 flex-1">
-		<h2 class="text-lg font-bold text-90">{tool.title}</h2>
-		<p class="text-50 text-sm mt-1">{tool.description}</p>
+<a href={url(tool.route)} class="tool-card card-base aspect-square flex flex-col border border-(--line-divider) hover:border-(--primary) transition-colors">
+	<div class="flex-1 min-h-0 flex items-center bg-(--btn-regular-bg) p-3">
+		<Image src={tool.cover.src} alt={tool.cover.alt} widths={[256, 512]} sizes="256px" loading="lazy" class="w-full h-full object-contain rounded-lg" />
 	</div>
-	<span class="text-(--primary)" aria-hidden="true">↗</span>
+	<div class="flex items-center gap-3 p-4">
+		<div class="min-w-0 flex-1">
+			<h2 class="text-lg font-bold text-90">{tool.title}</h2>
+			<p class="text-50 text-sm mt-1">{tool.description}</p>
+		</div>
+		<span class="text-(--primary)" aria-hidden="true">↗</span>
+	</div>
 </a>
+
+<style>
+	.tool-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
+</style>

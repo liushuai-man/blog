@@ -1,0 +1,40 @@
+---
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import ToolShell from "./ToolShell.svelte";
+import type { ToolDefinition } from "@/features/other/types";
+import { url } from "@/utils/url-utils";
+import { Icon } from "astro-icon/components";
+
+const { tool, compact = false } = Astro.props as { tool: ToolDefinition; compact?: boolean };
+---
+
+<MainGridLayout title={`${tool.title} · 喵喵屋`} description={tool.instructions}>
+	{compact ? <section class="tool-workspace card-base overflow-hidden">
+		<header class="flex items-center gap-3 px-4 py-2 border-b border-(--line-divider)">
+			<a href={url("/other/")} aria-label="返回喵喵屋" title="返回喵喵屋" class="text-75 p-1 rounded-lg"><Icon name="material-symbols:arrow-back-rounded" class="text-xl" /></a>
+			<h2 class="text-90 text-sm font-semibold">{tool.title}</h2>
+		</header>
+		{tool.enabled ? <ToolShell id={tool.id} client:visible /> : <p class="p-4 text-75">模块暂时休息中。</p>}
+		<noscript><p class="p-4 text-75">使用此模块需要 JavaScript，请启用后刷新页面。</p></noscript>
+	</section> : <section class="card-base p-5 md:p-8">
+		<a href={url("/other/")} class="text-(--primary) inline-block mb-5">← 喵喵屋</a>
+		<p class="text-50 text-sm mb-2">{tool.badge}</p>
+		<h2 class="text-3xl font-bold text-90 mb-3">{tool.title}</h2>
+		<p class="text-75 leading-relaxed mb-6">{tool.instructions}</p>
+		{tool.enabled ? <ToolShell id={tool.id} client:visible /> : <p class="text-75">模块暂时休息中。</p>}
+		<noscript><p class="text-75">使用此模块需要 JavaScript，请启用后刷新页面。</p></noscript>
+	</section>}
+</MainGridLayout>
+
+<style is:global>
+	@layer base {
+	body:has(.tool-workspace) #wallpaper-wrapper { visibility: hidden !important; }
+	body:has(.tool-workspace) #canvas_sakura { visibility: hidden !important; }
+	body:has(.tool-workspace) #banner-overlay-container,
+	body:has(.tool-workspace) #banner-dim-container { display: none !important; }
+	body:has(.tool-workspace) .main-panel { top: 5.5rem !important; }
+	body:has(.tool-workspace) #main-grid { transform: none !important; }
+	body:has(.tool-workspace) #top-row { height: 4.5rem !important; }
+	body:has(.tool-workspace) #navbar > div { background: var(--card-bg) !important; }
+	}
+</style>

@@ -1,1 +1,5 @@
-export const otherConfig = { enabled: true, stylophone: true };
+export const otherConfig = {
+	enabled: true,
+	stylophone: true,
+	pixelCanvas: true,
+};

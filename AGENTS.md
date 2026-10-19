@@ -26,7 +26,9 @@
 | `pnpm test:sync-github` | GitHub 同步失败保护、分页和数据统计 |
 | `pnpm test:about` | 精选排序、缺失补位与主语言统计 |
 | `pnpm test:sakura` | 一轮自然结束、持续飘落开关与资源释放 |
+| `pnpm test:other` | 模块独立加载、故障隔离、重试和无效入口保护 |
 | `pnpm test:stylophone` | 音符映射、音片命中与输入释放 |
+| `pnpm test:pixel-canvas` | 像素笔画、撤回与缓存格式 |
 | `pnpm sync-github` | 联网更新可提交的 GitHub 快照，仅在需要刷新数据时执行 |
 
 当前没有统一的 `pnpm test`。修改共享逻辑时运行受影响的多组测试；单元测试不能代替浏览器交互、真实音色或性能验收。`pnpm format` 与 `pnpm lint` 都会写入 `src/`，需要格式检查时使用 `pnpm exec biome check <改动文件>`，仅检查 Biome 支持且纳入配置的文件。

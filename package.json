@@ -19,7 +19,9 @@
     "test:sync-github": "node --test tests/sync-github.test.mjs",
     "test:about": "node --experimental-strip-types --test tests/about-data.test.mjs",
     "test:sakura": "node --experimental-strip-types --test tests/sakura-effect.test.mjs",
-    "test:stylophone": "node --experimental-strip-types --test tests/stylophone-input.test.mjs"
+    "test:other": "node --experimental-strip-types --test tests/other-modules.test.mjs",
+    "test:stylophone": "node --experimental-strip-types --test tests/stylophone-input.test.mjs",
+    "test:pixel-canvas": "node --experimental-strip-types --test tests/pixel-canvas.test.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.8",

@@ -1,5 +1,21 @@
 /* Layout specific styles */
 
+/* 短页让版权页脚落在视口底部，长页仍按内容自然延伸。 */
+.main-panel {
+    min-height: calc(100vh - var(--banner-height) + 3rem);
+}
+.main-panel > div,
+.main-panel #main-grid {
+    min-height: inherit;
+}
+.main-panel .footer {
+    align-self: end;
+}
+#main-grid[data-sidebar-enabled="false"] > #mobile-bottom-sidebar {
+    display: none;
+}
+
+
 /* 用户关闭时隐藏横幅标题 */
 html[data-banner-title-enabled="false"] .banner-home-text-overlay {
     display: none !important;
@@ -43,10 +59,15 @@ html.is-page-transitioning .banner-home-text-overlay {
 /* 移动端无侧边栏布局优化 */
 @media (max-width: 767px) {
     .mobile-no-sidebar {
-        display: block !important;
+        display: flex !important;
+        flex-direction: column;
         width: 100% !important;
     }
     
+    .mobile-no-sidebar > .footer {
+        margin-top: auto;
+    }
+
     .mobile-no-sidebar main {
         width: 100% !important;
         max-width: 100% !important;
