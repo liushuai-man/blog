@@ -1,14 +1,35 @@
-export const pads = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B", "C"];
-export const shortcuts = ["A", "W", "S", "E", "D", "F", "T", "G", "Y", "H", "U", "J", "K"];
+// S-1 contact layout: A–E, twelve natural pads and eight accidentals.
+export const pads = ["A", "A♯", "B", "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B", "C", "C♯", "D", "D♯", "E"];
+export const shortcuts = ["Z", "X", "C", "A", "W", "S", "E", "D", "F", "T", "G", "Y", "H", "U", "J", "K", "O", "L", "P", ";"];
 export const keyNotes = new Map(shortcuts.map((key, index) => [key.toLowerCase(), index]));
-export const isSharp = (index: number) => [1, 3, 6, 8, 10].includes(index);
+export const isSharp = (index: number) => pads[index]?.includes("♯") ?? false;
 export function midiNote(index: number, octave: number) {
-	if (!Number.isInteger(index) || index < 0 || index > 12 || ![-1, 0, 1].includes(octave)) throw new RangeError("Invalid note");
-	return 60 + octave * 12 + index;
+	if (!Number.isInteger(index) || index < 0 || index >= pads.length || ![-1, 0, 1].includes(octave)) throw new RangeError("Invalid note");
+	return 57 + octave * 12 + index;
 }
-export interface PadRect { index: number; left: number; right: number; top: number; bottom: number }
+export type PadPoint = readonly [number, number];
+export interface PadRect { index: number; left: number; right: number; top: number; bottom: number; polygon?: readonly PadPoint[] }
+export function padPolygon(index: number): readonly PadPoint[] {
+	if (isSharp(index)) return [[0, 0], [1, 0], [1, .86], [.86, 1], [.14, 1], [0, .86]];
+	const left = isSharp(index - 1) ? .41 : 0;
+	const right = isSharp(index + 1) ? .59 : 1;
+	return [[left, 0], [right, 0], [right, .43], [1, .43], [1, 1], [0, 1], [0, .43], [left, .43]];
+}
+export function padPosition(index: number, first: number) {
+	let column = 0;
+	for (let i = first; i < index; i++) if (!isSharp(i)) column++;
+	return isSharp(index) ? column - .41 : column;
+}
+function contains(x: number, y: number, polygon: readonly PadPoint[]) {
+	let inside = false;
+	for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+		const [xi, yi] = polygon[i]; const [xj, yj] = polygon[j];
+		if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+	}
+	return inside;
+}
 export function hitPad(x: number, y: number, rects: PadRect[]) {
-	return rects.find((rect) => x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom)?.index ?? null;
+	return rects.find((rect) => x >= rect.left && x < rect.right && y >= rect.top && y < rect.bottom && (!rect.polygon || contains((x - rect.left) / (rect.right - rect.left), (y - rect.top) / (rect.bottom - rect.top), rect.polygon)))?.index ?? null;
 }
 export function createInput() {
 	let pointer: number | null = null;

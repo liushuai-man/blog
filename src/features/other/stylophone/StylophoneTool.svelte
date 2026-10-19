@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import { createAudio, type StylophoneAudio } from "./audio";
-	import { createInput, hitPad, isSharp, keyNotes, midiNote, pads, shortcuts } from "./input";
+	import { createInput, hitPad, isSharp, keyNotes, midiNote, padPolygon, padPosition, pads, shortcuts } from "./input";
 	let frame: HTMLDivElement;
 	let surface: HTMLDivElement;
 	let ready = $state(false);
@@ -21,11 +21,12 @@
 	let audio: StylophoneAudio | null = null;
 	let pending: AbortController | null = null;
 	const input = createInput();
-	const notes = $derived(pads.map((name, index) => ({ name, index })).filter(({ index }) => !compact || (windowIndex === 0 ? index <= 6 : index >= 7)));
-	const noteLabel = (index: number) => `${pads[index]}${(index === 12 ? 5 : 4) + octave}`;
-	const digits = ["1", "♯1", "2", "♯2", "3", "4", "♯4", "5", "♯5", "6", "♯6", "7", "1"];
-	const relativeOctave = (index: number) => octave + (index === 12 ? 1 : 0);
-	const digitLabel = (index: number) => `${relativeOctave(index) === -1 ? "低音" : relativeOctave(index) === 1 ? "高音" : relativeOctave(index) === 2 ? "倍高音" : "中音"} ${digits[index]}`;
+	const notes = $derived(pads.map((name, index) => ({ name, index })).filter(({ index }) => !compact || (windowIndex === 0 ? index <= 10 : index >= 8)));
+	const naturalCount = $derived(notes.filter((note) => !isSharp(note.index)).length);
+	const noteLabel = (index: number) => `${pads[index]}${Math.floor(midiNote(index, octave) / 12) - 1}`;
+	const digits = ["6", "♯6", "7", "1", "♯1", "2", "♯2", "3", "4", "♯4", "5", "♯5", "6", "♯6", "7", "1", "♯1", "2", "♯2", "3"];
+	const relativeOctave = (index: number) => Math.floor(midiNote(index, octave) / 12) - 5;
+	const digitLabel = (index: number) => `${relativeOctave(index) < -1 ? "倍低音" : relativeOctave(index) === -1 ? "低音" : relativeOctave(index) === 1 ? "高音" : relativeOctave(index) === 2 ? "倍高音" : "中音"} ${digits[index]}`;
 
 	function sound(index: number | null) {
 		if (!ready || muted || !visible || disposed) index = null;
@@ -34,7 +35,13 @@
 		if (index === null) audio?.stop();
 		else audio?.play(midiNote(index, octave));
 	}
-	export function pause() { pending?.abort(); input.clear(); sound(null); pen = null; }
+	function releaseContact() {
+		input.clear(); sound(null); pen = null;
+		if (capturedPointer !== null && surface?.hasPointerCapture(capturedPointer)) surface.releasePointerCapture(capturedPointer);
+		capturedPointer = null;
+	}
+	let capturedPointer: number | null = null;
+	export function pause() { pending?.abort(); releaseContact(); }
 	export function reset() { pause(); octave = 0; windowIndex = 0; volume = 50; vibrato = false; audio?.volume(0.5); audio?.vibrato(false); }
 	export function dispose() {
 		if (disposed) return;
@@ -55,21 +62,24 @@
 	export async function activate() { await start(); }
 	function move(event: PointerEvent) {
 		if (!input.owns(event.pointerId)) return;
+		if (event.buttons === 0) { releaseContact(); return; }
 		const box = surface.getBoundingClientRect();
 		pen = { x: event.clientX - box.left, y: event.clientY - box.top };
-		const rects = [...surface.querySelectorAll<HTMLButtonElement>("[data-pad]")].map((button) => ({ index: Number(button.dataset.pad), ...rect(button) }));
+		const rects = [...surface.querySelectorAll<HTMLButtonElement>("[data-pad]")].map((button) => ({ index: Number(button.dataset.pad), polygon: padPolygon(Number(button.dataset.pad)), ...rect(button) }));
 		sound(hitPad(event.clientX, event.clientY, rects));
 	}
 	function rect(button: HTMLButtonElement) { const { left, right, top, bottom } = button.getBoundingClientRect(); return { left, right, top, bottom }; }
 	function down(event: PointerEvent) {
 		if (!ready || muted || event.button !== 0 || !visible) return;
 		if (!input.claim(event.pointerId)) return;
-		event.preventDefault(); surface.setPointerCapture(event.pointerId); move(event);
+		event.preventDefault(); capturedPointer = event.pointerId; surface.setPointerCapture(event.pointerId); move(event);
 	}
 	function up(event: PointerEvent) {
 		if (!input.release(event.pointerId)) return;
-		sound(null); pen = null;
-		if (surface.hasPointerCapture(event.pointerId)) surface.releasePointerCapture(event.pointerId);
+		releaseContact();
+	}
+	function lostCapture(event: PointerEvent) {
+		if (!surface.hasPointerCapture(event.pointerId)) up(event);
 	}
 	function keydown(event: KeyboardEvent) {
 		if (!ready || muted || !visible || event.repeat || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
@@ -98,6 +108,7 @@
 		observer.observe(frame);
 		window.addEventListener("keydown", keydown); window.addEventListener("keyup", keyup);
 		window.addEventListener("blur", blur); window.addEventListener("pagehide", blur);
+		window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
 		document.addEventListener("visibilitychange", visibility);
 		document.addEventListener("astro:before-swap", dispose);
 		document.addEventListener("swup:visit:start", blur);
@@ -105,6 +116,7 @@
 			dispose(); resize.disconnect(); observer.disconnect();
 			window.removeEventListener("keydown", keydown); window.removeEventListener("keyup", keyup);
 			window.removeEventListener("blur", blur); window.removeEventListener("pagehide", blur);
+			window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", up);
 			document.removeEventListener("visibilitychange", visibility);
 			document.removeEventListener("astro:before-swap", dispose);
 			document.removeEventListener("swup:visit:start", blur);
@@ -130,17 +142,17 @@
 	</div>
 	{#if error}<p role="alert" class="error">{error}</p>{/if}
 	<div class="readout"><span class:lit={ready && !muted} class="led" aria-hidden="true"></span><span role="status">{!ready ? "点击开始演奏，开启声音" : muted ? "已静音" : active === null ? "按住音片 · 滑动演奏" : `正在演奏 ${noteLabel(active)}`}</span><span class="range">{noteLabel(notes[0].index)} — {noteLabel(notes.at(-1)!.index)}</span></div>
-	<div class="surface" bind:this={surface} role="group" aria-label="金属音片演奏区" onpointerdown={down} onpointermove={move} onpointerup={up} onpointercancel={up} onlostpointercapture={up}>
+	<div class="surface" bind:this={surface} role="group" aria-label="金属音片演奏区" onpointerdown={down} onpointermove={move} onpointerup={up} onpointercancel={up} onlostpointercapture={lostCapture} style={`--pad-unit:${100 / naturalCount}%`}>
 		{#each notes as note (note.index)}
-			<button type="button" class="pad" class:sharp={isSharp(note.index)} class:active={active === note.index} data-pad={note.index} aria-label={`${digitLabel(note.index)}（${noteLabel(note.index)}），快捷键 ${shortcuts[note.index]}`} aria-pressed={active === note.index} disabled={!ready || muted}>
-				<span class="engraving" class:low={relativeOctave(note.index) < 0} class:high={relativeOctave(note.index) > 0} class:double-high={relativeOctave(note.index) > 1} aria-hidden="true">{digits[note.index]}</span><span class="shortcut" aria-hidden="true">{shortcuts[note.index]}</span>
+			<button type="button" class="pad" class:sharp={isSharp(note.index)} class:active={active === note.index} style={`--pad-left:${padPosition(note.index, notes[0].index)};clip-path:polygon(${padPolygon(note.index).map(([x, y]) => `${x * 100}% ${y * 100}%`).join(",")})`} data-pad={note.index} aria-label={`${digitLabel(note.index)}（${noteLabel(note.index)}），快捷键 ${shortcuts[note.index]}`} aria-pressed={active === note.index} disabled={!ready || muted}>
+				<span class="engraving" class:low={relativeOctave(note.index) < 0} class:double-low={relativeOctave(note.index) < -1} class:high={relativeOctave(note.index) > 0} class:double-high={relativeOctave(note.index) > 1} aria-hidden="true">{digits[note.index]}</span><span class="shortcut" aria-hidden="true">{shortcuts[note.index]}</span>
 			</button>
 		{/each}
 		{#if pen}<span class="pen" style={`left:${pen.x}px;top:${pen.y}px`} aria-hidden="true"></span>{/if}
 	</div>
-	<div class="bottom"><span>接触发声，抬起停音。</span>{#if compact}<div class="windows" role="group" aria-label="音片窗口"><button class="control" aria-label="前半音片 C 至 F 升" aria-pressed={windowIndex === 0} onclick={() => changeWindow(0)}>C — F♯</button><button class="control" aria-label="后半音片 G 至 C" aria-pressed={windowIndex === 1} onclick={() => changeWindow(1)}>G — C</button></div>{/if}</div>
+	<div class="bottom"><span>接触发声，抬起停音。</span>{#if compact}<div class="windows" role="group" aria-label="音片窗口"><button class="control" aria-label="前半音片 A 至 G" aria-pressed={windowIndex === 0} onclick={() => changeWindow(0)}>A — G</button><button class="control" aria-label="后半音片 F 至 E" aria-pressed={windowIndex === 1} onclick={() => changeWindow(1)}>F — E</button></div>{/if}</div>
 </div>
-<details class="help text-90"><summary>键盘演奏与操作说明</summary><p>音片上的 1–7 对应 do、re、mi、fa、sol、la、si，♯ 表示升音。下方小点表示低音，上方小点表示高音，两个上点表示倍高音。</p><p>点击「开始演奏」后，按住 A S D F G H J K 演奏自然音，W E T Y U 演奏升音。多键按下时，最后按下的音优先。</p><p>也可以用 Tab 聚焦音片，再按住空格或 Enter。鼠标或手指按住音片并滑动，进入间隙会停音。切换音区、静音或离开页面也会停音。</p></details>
+<details class="help text-90"><summary>键盘演奏与操作说明</summary><p>音片上的 1–7 对应 do、re、mi、fa、sol、la、si，♯ 表示升音。下方小点表示低音，上方小点表示高音，两个点表示再相差一个八度。</p><p>点击「开始演奏」后，按住 A S D F G H J K 演奏 C4–C5，W E T Y U 演奏其间升音；Z X C 对应下方 A、A♯、B，O L P ; 继续向上演奏 C♯、D、D♯、E。音区按钮整体移调一个八度。多键按下时，最后按下的音优先。</p><p>也可以用 Tab 聚焦音片，再按住空格或 Enter。鼠标或手指按住音片并滑动，进入间隙会停音。切换音区、静音或离开页面也会停音。</p></details>
 
 <style>
 	.instrument { padding:clamp(16px,4vw,32px); border-radius:20px; background:var(--btn-regular-bg); border:1px solid var(--line-divider); box-shadow:inset 0 1px 0 #ffffff30; }
@@ -161,14 +173,15 @@
 	.led { width:7px; height:7px; border-radius:50%; background:var(--line-divider); }
 	.led.lit { background:var(--primary); }
 	.range { margin-left:auto; opacity:.6; }
-	.surface { position:relative; display:flex; gap:4px; align-items:flex-end; height:168px; padding:12px 6px; border-radius:12px; background:#20252c; touch-action:none; user-select:none; }
-	.pad { flex:1; min-width:0; height:144px; border:1px solid #f4f6f7; border-radius:3px; background:linear-gradient(100deg,#b0b8bd,#e3e7e9 45%,#c2cace 60%,#929da5); color:#27313a; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:12px 0; gap:10px; cursor:crosshair; box-shadow:inset 0 0 0 2px #ffffff30; }
-	.pad.sharp { height:110px; background:linear-gradient(100deg,#849098,#bac3c8 45%,#8f9ca5); }
-	.pad:disabled { cursor:default; }
+	.surface { position:relative; height:168px; border:8px solid #20252c; border-radius:12px; background:#20252c; touch-action:none; user-select:none; -webkit-user-select:none; }
+	.pad { position:absolute; left:calc(var(--pad-left) * var(--pad-unit) + 1px); top:0; width:calc(var(--pad-unit) - 2px); height:100%; border:0; border-radius:0; background:linear-gradient(100deg,#b0b8bd,#e3e7e9 45%,#c2cace 60%,#929da5); color:#27313a; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:12px 0; gap:10px; cursor:crosshair; box-shadow:inset 0 0 0 2px #ffffff30; }
+	.pad.sharp { width:calc(var(--pad-unit) * .82 - 2px); height:43%; z-index:1; padding:8px 0; gap:5px; background:linear-gradient(100deg,#849098,#bac3c8 45%,#8f9ca5); }
+	.pad:disabled { cursor:default; pointer-events:none; }
 	.pad.active { background:var(--primary); color:var(--card-bg); border-color:var(--primary); }
 	.engraving { position:relative; font-weight:700; font-size:15px; line-height:1; }
-	.engraving.low::before,.engraving.high::before,.engraving.double-high::after { content:"•"; position:absolute; left:50%; transform:translateX(-50%); font-size:12px; line-height:1; }
+	.engraving.low::before,.engraving.high::before,.engraving.double-high::after,.engraving.double-low::after { content:"•"; position:absolute; left:50%; transform:translateX(-50%); font-size:12px; line-height:1; }
 	.engraving.low::before { top:100%; }
+	.engraving.double-low::after { top:calc(100% + 7px); }
 	.engraving.high::before { bottom:100%; }
 	.engraving.double-high::after { bottom:calc(100% + 7px); }
 	.shortcut { font-size:10px; opacity:.6; }
