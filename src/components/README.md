@@ -9,7 +9,7 @@
 | `controls/` | 搜索、主题、显示设置、目录和返回按钮 |
 | `features/` | 当前樱花、打字机、图片查看、字体、数学公式和文章加密 |
 | `about/` | d3-cloud 标签词云适配，含文本链接降级 |
-| `other/` | 妙妙屋工具卡片与懒加载 Shell，乐器实现位于 `src/features/other/stylophone/` |
+| `other/` | 喵喵屋工具卡片与懒加载 Shell，乐器实现位于 `src/features/other/stylophone/` |
 | `widget/` | 个人资料、公告、分类、标签、统计和阅读目录 |
 | `misc/` | 许可声明、相关文章与分享海报 |
 | `pages/` | 高级搜索 |

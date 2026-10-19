@@ -74,8 +74,8 @@ draft: false
 - `src/config/siteConfig.ts`：站点信息、主题、布局、分页、图片优化。
 - `src/config/backgroundWallpaper.ts` / `sakuraConfig.ts`：当前 wallpaper 背景与樱花；动态壁纸镶嵌方案待实施。
 - `src/config/profileConfig.ts` / `aboutConfig.ts`：姓名、头像、介绍、联系入口和展示数量。
-- `src/config/navBarConfig.ts`：首页、归档、关于、妙妙屋导航。
-- `src/config/otherConfig.ts`：妙妙屋及触笔电子琴入口开关。
+- `src/config/navBarConfig.ts`：首页、归档、关于、喵喵屋导航。
+- `src/config/otherConfig.ts`：喵喵屋及触笔电子琴入口开关。
 - `src/config/sidebarConfig.ts`：阅读相关布局组件，当前关闭侧栏。
 
 [配置说明](src/config/README.md) · [组件说明](src/components/README.md)
@@ -133,9 +133,9 @@ guide/                     上游文章写作语法参考（非生产内容）
 
 1. [wallpaper 壁纸镶嵌](docs/plans/01-wallpaper.md)：以动态壁纸为主，按素材格式尽可能兼容并提供静态兜底；待实施。
 2. [GitHub 与博客关于页](docs/plans/02-about-github.md)：基础版、精选配置和项目主语言分布已实现；贡献活动与自动同步仍为可选后续项。
-3. [「妙妙屋」栏目与触笔电子琴](docs/plans/03-other-stylophone.md)：基础版已实现，仅提供自由演奏；金属音片点触与滑奏、单音电子音色、键盘替代、三个音区、音量、静音和颤音；真机触屏与音色听感仍需验收。
+3. [「喵喵屋」栏目与触笔电子琴](docs/plans/03-other-stylophone.md)：基础版已实现，仅提供自由演奏；金属音片点触与滑奏、单音电子音色、键盘替代、三个音区、音量、静音和颤音；真机触屏与音色听感仍需验收。
 
-当前已接入 d3-cloud 和 Tone.js；wallpaper 新方案尚未接入。触笔电子琴位于 `/blog/other/stylophone/`，从妙妙屋进入；关闭 `otherConfig.ts` 的入口可停用。乐器组件按需加载，Tone.js 仅在用户开启演奏后加载，不影响首页和文章首屏。不含简谱或曲库。
+当前已接入 d3-cloud 和 Tone.js；wallpaper 新方案尚未接入。触笔电子琴位于 `/blog/other/stylophone/`，从喵喵屋进入；关闭 `otherConfig.ts` 的入口可停用。乐器组件按需加载，Tone.js 仅在用户开启演奏后加载，不影响首页和文章首屏。不含简谱或曲库。
 
 原四季微动画场景计划已取消，改为 wallpaper 壁纸镶嵌。优先验证动态视频、Web 壁纸及其他素材在普通浏览器和静态部署下的兼容性，具体支持范围以实际样例验证为准。已有[场景提示词与素材记录](docs/design/seasonal-scene-prompts.md)仅作历史资料保留，不再要求生成固定场景或季节变体。
 

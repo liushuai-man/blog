@@ -4,14 +4,9 @@ import ToolCard from "@/components/other/ToolCard.astro";
 import { tools } from "@/features/other/registry";
 const enabled = tools.filter((tool) => tool.enabled);
 ---
-<MainGridLayout title="妙妙屋" description="随手玩一会儿，探索声音与交互。">
-	<div class="flex flex-col gap-6">
-		<section class="card-base p-6 md:p-10">
-			<p class="text-(--primary) font-medium mb-3">小玩具 · 小乐趣</p>
-			<h2 class="text-3xl md:text-4xl font-bold text-90 mb-4">妙妙屋</h2>
-			<p class="text-75 leading-relaxed">写代码之外，也给好奇心留一点空间。挑一个小玩具，随手玩一会儿。</p>
-		</section>
-		<div class="grid md:grid-cols-2 gap-6">
+<MainGridLayout title="喵喵屋" description="随手玩一会儿，探索声音与交互。">
+	<div class="flex flex-col gap-4">
+		<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
 			{enabled.map((tool) => <ToolCard tool={tool} />)}
 		</div>
 		{enabled.length === 0 && <p class="card-base p-6 text-75">小玩具正在休息，过段时间再来看看。</p>}
