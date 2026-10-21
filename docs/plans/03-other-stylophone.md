@@ -51,25 +51,7 @@ src/config/otherConfig.ts
 
 Astro 页面负责静态说明、布局与元信息；ToolShell 负责加载、简短操作提示、错误和声音控制，工具内部管理资源。页面围绕一台触笔电子琴展开，提示“按住音片并滑动即可演奏”，键盘映射说明可折叠。非首屏交互优先 `client:visible`，大型库动态导入。注册表只包含元数据与懒加载函数。导航与卡片链接使用 `url()`，部署路径为 `/blog/other/` 和 `/blog/other/stylophone/`。
 
-```ts
-interface ToolDefinition {
-  id: string;
-  title: string;
-  description: string;
-  route: string;
-  enabled: boolean;
-  capabilities: Array<'audio' | 'keyboard' | 'pointer'>;
-  // 实现时用 Svelte Component 类型约束返回模块。
-  load: () => Promise<unknown>;
-}
-
-interface ToolController {
-  activate(): Promise<void>;
-  pause(): void;
-  reset(): void;
-  dispose(): void;
-}
-```
+静态定义、模块返回值与控制器的当前类型以 [types.ts](../../src/features/other/types.ts) 为准；独立目录和接入步骤见 [模块说明](../../src/features/other/README.md)。静态定义不再包含运行时加载函数。
 
 每个工具独立配置和存储 key；接口方法可重复调用且安全。Shell 不理解音符，音频 adapter 不操作 DOM，输入 adapter 不依赖 Tone.js。第一版不做微前端或插件沙箱。
 
@@ -133,8 +115,29 @@ Astro 预渲染操作说明，Svelte 增强演奏与音片反馈。关闭 JavaSc
 
 ## 2026-10-19 调整
 
-- 栏目统一命名为「喵喵屋」；栏目页移除顶部介绍，入口改为紧凑列表卡片。
+- 栏目统一命名为「喵喵屋」；栏目页移除顶部介绍；入口后续调整为最大 256px 的正方形封面卡片，封面单独通过 imagegen 生成（src/features/other/stylophone/cover.png），不使用运行界面截图，使用 Astro 图片优化和懒加载；工具注册数据统一提供封面与替代文本。短页版权页脚落在视口底部，长页继续跟随内容。
 - 音片几何参考 [S-1 官方产品图片](https://stylophone.com/wp-content/uploads/2026/04/s1-pdi-01-1-1024x1024.webp)，只参考排列与轮廓，未将官方素材加入网站。用 CSS 绘制 20 个镶嵌音片，命中按相同多边形判断，手机分为 A–G、F–E 两个重叠窗口。
 - 切换音区／窗口和暂停时清除输入并释放指针捕获；丢失捕获、窗口松开和取消也释放音符，新的捕获不被旧捕获事件误清理。
 - 本轮 `pnpm test:stylophone` 6 项通过，覆盖音域、镶嵌形状、斜角空隙及输入重置；`pnpm check` 0 errors／0 warnings／1 条既有 SakuraEffect hint；`pnpm build` 通过（46 页，Pagefind 35 篇）。
 - 浏览器检查 375px、768px、1440px 无横向溢出，查看深浅主题；实际拖动采集到低音 A2→B2→D3 等音符变化，切回中音后采集到 C♯4／F♯4／G♯4 等变化，松开均回到停止状态。手机音片窗口可切换，Swup 往返与直接刷新后重新等待用户开启声音，控制台未见 error／warn。真机触屏、全部中断场景和音色听感仍需单独验收。
+
+## 模块独立与生成封面（2026-10-19）
+
+- 每个模块自行管理 definition.ts、cover.png、index.ts 和运行时；图库注册表只收集静态定义。公共 ToolCard／ToolPage／ToolShell 复用卡片、页面和加载／重试界面。
+- 运行入口通过 import.meta.glob 按需加载；导入失败和组件渲染／effect 错误在各自 Shell 中显示失败提示，重试前释放已有实例。离开页面后忽略迟到的导入结果。事件、异步回调和外部资源仍由模块自身负责防错与清理，不是 iframe 沙箱。
+- 独立生成的电子琴概念封面及提示词见 [封面记录](../design/other-module-covers.md)；封面不是实物照片，也不是运行证据。
+- 故障验证：临时页面同时放置加载失败、渲染失败和正常电子琴三个 Shell；前两者分别显示重试，渲染失败重试后，正常电子琴仍能开启声音、启用音片。临时页面和故障模块已删除，不发布测试入口。
+- 本轮 `pnpm test:other` 3 项、`pnpm test:stylophone` 6 项通过；最终 `pnpm check` 0 errors／0 warnings／1 条既有樱花 hint；构建 46 页、Pagefind 35 篇。生产预览的 375px／768px／1440px、深浅主题、模块往返与刷新已查看，新封面正常加载，未见横向溢出和控制台 error／warn。
+
+## 演奏区金属材质细化（2026-10-19）
+
+- 新增模块私有 MetalContact.svelte，使用 SVG 的柔和银色反光、细拉丝和轮廓双层描边，替代原有高反差条状渐变。刻印字号、字重和上下位置同步细化，音区点与快捷键分开排布。
+- 材质与命中测试共用 padPolygon，不更改音片位置、尺寸或输入算法；装饰层不接收指针事件，选中时保留金属层次并叠加主题色，键盘焦点沿音片轮廓显示。该轮未引入纹理图片；纹理及转角随后按下节调整。
+- `pnpm test:stylophone` 6 项、`pnpm check`、`pnpm build` 通过（检查仅有既有樱花 hint）。浏览器拖动采集到自然音与升音变化，每次仅一个材质高亮，松开后清除；真机触屏和音色听感未重新验收。
+
+## 拉丝铝纹理与升音片转角修正（2026-10-19）
+
+- 以独立生成的拉丝铝纹理替换规则 SVG 横线，叠加中性银色反光与边缘高光，去除偏绿底色。768px WebP 约 125 kB，随电子琴模块按需加载，多个音片复用同一资源；生成和压缩信息见 [材质记录](../design/stylophone-material.md)。
+- 原升音片的大斜切角与下方直角凹口不匹配，会露出黑色三角洞。现在升音片底角与左右自然音凹口共用一条小圆角轮廓，视觉与命中继续使用同一组数据；保留音片之间的细绝缘缝。
+- 新增转角两侧命中断言及接缝扫描验证，防止再次出现额外三角空隙；保留既有音域、输入所有权和释放验证。
+- 本轮 `pnpm test:stylophone` 6 项、`pnpm check`、`pnpm build` 通过（仅既有樱花 hint）。生产预览已查看 375px／768px／1440px、深浅主题、直接刷新及 Swup 往返；实际拖动跨越多枚升音与自然音后松开，高亮清除，控制台无 error／warn。真机触屏和音色听感未重新验收。

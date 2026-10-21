@@ -6,7 +6,7 @@ const enabled = tools.filter((tool) => tool.enabled);
 ---
 <MainGridLayout title="喵喵屋" description="随手玩一会儿，探索声音与交互。">
 	<div class="flex flex-col gap-4">
-		<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
+		<div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,14rem),16rem))] gap-4">
 			{enabled.map((tool) => <ToolCard tool={tool} />)}
 		</div>
 		{enabled.length === 0 && <p class="card-base p-6 text-75">小玩具正在休息，过段时间再来看看。</p>}

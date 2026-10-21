@@ -1,16 +1,5 @@
 ---
-import MainGridLayout from "@/layouts/MainGridLayout.astro";
-import ToolShell from "@/components/other/ToolShell.svelte";
-import { otherConfig } from "@/config/otherConfig";
-import { url } from "@/utils/url-utils";
+import ToolPage from "@/components/other/ToolPage.astro";
+import stylophone from "@/features/other/stylophone/definition";
 ---
-<MainGridLayout title="触笔电子琴 · 喵喵屋" description="用触笔点触或滑过金属音片，自由演奏电子旋律。">
-	<section class="card-base p-5 md:p-8">
-		<a href={url("/other/")} class="text-(--primary) inline-block mb-5">← 喵喵屋</a>
-		<p class="text-50 text-sm mb-2">MOD 01 · STYLOPHONE</p>
-		<h2 class="text-3xl font-bold text-90 mb-3">触笔电子琴</h2>
-		<p class="text-75 leading-relaxed mb-6">按住金属音片并滑动即可演奏，也可以用电脑键盘弹奏。松开触笔，声音就会停下。</p>
-		{otherConfig.enabled && otherConfig.stylophone ? <ToolShell id="stylophone" client:visible /> : <p class="text-75">乐器暂时休息中。</p>}
-		<noscript><p class="text-75">演奏需要 JavaScript，请启用后刷新页面。</p></noscript>
-	</section>
-</MainGridLayout>
+<ToolPage tool={stylophone} />

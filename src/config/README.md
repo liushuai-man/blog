@@ -10,7 +10,7 @@
 | `profileConfig.ts` | 姓名、头像、签名和 GitHub 链接 |
 | `aboutConfig.ts` | 关于页简介、邮箱、GitHub 用户、展示数量和精选仓库／个人解读 |
 | `navBarConfig.ts` | 首页、归档、关于、喵喵屋及 Pagefind 搜索 |
-| `otherConfig.ts` | 喵喵屋与触笔电子琴开关；无启用工具时隐藏导航 |
+| `otherConfig.ts` | 喵喵屋、触笔电子琴与像素画布开关；无启用工具时隐藏导航 |
 | `sidebarConfig.ts` | 阅读相关侧栏配置，目前总开关关闭 |
 | `announcementConfig.ts` | 站点公告 |
 | `coverImageConfig.ts` | 文章封面 |

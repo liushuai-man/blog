@@ -52,7 +52,13 @@ test("S-1 layout interlocks twelve natural and eight upper contact pads", () => 
 	assert.equal(hitPad(80, 110, rects), 0);
 	assert.equal(hitPad(120, 20, rects), 1);
 	assert.equal(hitPad(120, 110, rects), 2);
-	assert.equal(hitPad(60, 67, rects), null); // Bevel cutout
+	assert.equal(hitPad(59.5, 68, rects), 0); // Rounded corner meets the neighbouring pad
+	assert.equal(hitPad(140.5, 68, rects), 2);
+	assert.equal(hitPad(100, 68, rects), 1);
+	// There must be no exposed triangular holes alongside the upper pad's lower corners.
+	for (let x = 55; x < 145; x += .5) {
+		for (let y = 60; y < 70; y += .5) assert.notEqual(hitPad(x, y, rects), null);
+	}
 	assert.equal(hitPad(201, 110, rects), null);
 });
 test("range reset permits a fresh mouse contact and clears stale keyboard ownership", () => {

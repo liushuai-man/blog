@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import MetalContact from "./MetalContact.svelte";
 	import { createAudio, type StylophoneAudio } from "./audio";
 	import { createInput, hitPad, isSharp, keyNotes, midiNote, padPolygon, padPosition, pads, shortcuts } from "./input";
 	let frame: HTMLDivElement;
@@ -145,6 +146,7 @@
 	<div class="surface" bind:this={surface} role="group" aria-label="金属音片演奏区" onpointerdown={down} onpointermove={move} onpointerup={up} onpointercancel={up} onlostpointercapture={lostCapture} style={`--pad-unit:${100 / naturalCount}%`}>
 		{#each notes as note (note.index)}
 			<button type="button" class="pad" class:sharp={isSharp(note.index)} class:active={active === note.index} style={`--pad-left:${padPosition(note.index, notes[0].index)};clip-path:polygon(${padPolygon(note.index).map(([x, y]) => `${x * 100}% ${y * 100}%`).join(",")})`} data-pad={note.index} aria-label={`${digitLabel(note.index)}（${noteLabel(note.index)}），快捷键 ${shortcuts[note.index]}`} aria-pressed={active === note.index} disabled={!ready || muted}>
+				<MetalContact index={note.index} active={active === note.index} />
 				<span class="engraving" class:low={relativeOctave(note.index) < 0} class:double-low={relativeOctave(note.index) < -1} class:high={relativeOctave(note.index) > 0} class:double-high={relativeOctave(note.index) > 1} aria-hidden="true">{digits[note.index]}</span><span class="shortcut" aria-hidden="true">{shortcuts[note.index]}</span>
 			</button>
 		{/each}
@@ -173,18 +175,22 @@
 	.led { width:7px; height:7px; border-radius:50%; background:var(--line-divider); }
 	.led.lit { background:var(--primary); }
 	.range { margin-left:auto; opacity:.6; }
-	.surface { position:relative; height:168px; border:8px solid #20252c; border-radius:12px; background:#20252c; touch-action:none; user-select:none; -webkit-user-select:none; }
-	.pad { position:absolute; left:calc(var(--pad-left) * var(--pad-unit) + 1px); top:0; width:calc(var(--pad-unit) - 2px); height:100%; border:0; border-radius:0; background:linear-gradient(100deg,#b0b8bd,#e3e7e9 45%,#c2cace 60%,#929da5); color:#27313a; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:12px 0; gap:10px; cursor:crosshair; box-shadow:inset 0 0 0 2px #ffffff30; }
-	.pad.sharp { width:calc(var(--pad-unit) * .82 - 2px); height:43%; z-index:1; padding:8px 0; gap:5px; background:linear-gradient(100deg,#849098,#bac3c8 45%,#8f9ca5); }
+	.surface { position:relative; height:168px; border:8px solid #24272a; border-radius:10px; background:#303438; box-shadow:0 1px 0 #ffffff24,inset 0 2px 5px #0007; touch-action:none; user-select:none; -webkit-user-select:none; }
+	.pad { position:absolute; left:calc(var(--pad-left) * var(--pad-unit) + 1px); top:0; width:calc(var(--pad-unit) - 2px); height:100%; border:0; border-radius:0; background:transparent; color:#3b443c; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; padding:0; cursor:crosshair; }
+	.pad.sharp { width:calc(var(--pad-unit) * .82 - 2px); height:43%; z-index:1; }
 	.pad:disabled { cursor:default; pointer-events:none; }
-	.pad.active { background:var(--primary); color:var(--card-bg); border-color:var(--primary); }
-	.engraving { position:relative; font-weight:700; font-size:15px; line-height:1; }
+	.pad.active { color:#202a21; }
+	.engraving { position:absolute; bottom:45px; font-weight:500; font-size:14px; line-height:1; letter-spacing:.02em; text-shadow:0 1px 0 #ffffff75; pointer-events:none; }
+	.pad.sharp .engraving { bottom:27px; font-size:12px; }
+	.pad.sharp .engraving.low { bottom:38px; }
+	.pad.sharp .engraving.high { bottom:23px; }
 	.engraving.low::before,.engraving.high::before,.engraving.double-high::after,.engraving.double-low::after { content:"•"; position:absolute; left:50%; transform:translateX(-50%); font-size:12px; line-height:1; }
 	.engraving.low::before { top:100%; }
 	.engraving.double-low::after { top:calc(100% + 7px); }
 	.engraving.high::before { bottom:100%; }
 	.engraving.double-high::after { bottom:calc(100% + 7px); }
-	.shortcut { font-size:10px; opacity:.6; }
+	.shortcut { position:absolute; bottom:11px; font-size:9px; line-height:1; opacity:.55; pointer-events:none; }
+	.pad.sharp .shortcut { bottom:5px; font-size:8px; }
 	.pen { position:absolute; width:9px; height:66px; border-radius:5px; background:linear-gradient(90deg,#525d66,#e4eaef,#66737e); transform:translate(-50%,-95%) rotate(25deg); transform-origin:bottom; pointer-events:none; box-shadow:2px 2px 4px #0004; }
 	.bottom { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; font-size:12px; margin-top:16px; opacity:.85; }
 	.help { margin-top:20px; font-size:14px; line-height:1.8; }

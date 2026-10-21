@@ -1,30 +1,45 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import type { Component } from "svelte";
-	import { tools } from "@/features/other/registry";
+	import { loadTool } from "@/features/other/load-tool";
+	import type { ToolController, ToolModule } from "@/features/other/types";
+	import ToolFailure from "./ToolFailure.svelte";
 	let { id }: { id: string } = $props();
-	let Tool = $state<Component | null>(null);
-	let failed = $state(false);
+	let Tool = $state<ToolModule["default"] | null>(null);
+	let loadFailed = $state(false);
+	let instance = $state<ToolController | undefined>();
 	let disposed = false;
-	async function load() {
-		failed = false;
-		try {
-			const definition = tools.find((tool) => tool.id === id && tool.enabled);
-			if (!definition) throw new Error("Tool disabled");
-			const module = await definition.load();
-			if (!disposed) Tool = module.default;
-		} catch { if (!disposed) failed = true; }
+	let generation = 0;
+
+	function release() {
+		try { instance?.dispose(); } catch { /* A broken cleanup must not break the shell. */ }
+		instance = undefined;
 	}
-	onMount(() => { void load(); return () => { disposed = true; }; });
+	async function load() {
+		const attempt = ++generation;
+		loadFailed = false;
+		release();
+		Tool = null;
+		try {
+			const module = await loadTool(id);
+			if (!disposed && generation === attempt) Tool = module.default;
+		} catch { if (!disposed && generation === attempt) loadFailed = true; }
+	}
+
+	onMount(() => {
+		void load();
+		return () => { disposed = true; generation++; release(); };
+	});
 </script>
 
-{#if Tool}
-	<Tool />
-{:else if failed}
-	<div role="alert" class="p-6 text-75">
-		<p>乐器暂时无法加载，请检查网络后重试。</p>
-		<button class="btn-regular px-4 py-2 rounded-lg mt-3" onclick={load}>重新加载</button>
-	</div>
-{:else}
-	<p role="status" class="p-6 text-75">正在准备乐器…</p>
-{/if}
+<svelte:boundary onerror={release}>
+	{#if Tool}
+		<Tool bind:this={instance} />
+	{:else if loadFailed}
+		<ToolFailure onretry={load} />
+	{:else}
+		<p role="status" class="p-6 text-75">正在准备模块…</p>
+	{/if}
+	{#snippet failed(_error, reset)}
+		<ToolFailure onretry={() => { Tool = null; reset(); void load(); }} />
+	{/snippet}
+</svelte:boundary>
