@@ -1,11 +1,15 @@
 <script lang="ts">
 	import { onMount } from "svelte";
 	import Icon from "@/components/common/Icon.svelte";
+	import ColorPanel from "./ColorPanel.svelte";
 	import { cellAt, lineCells, PixelDrawing, pixelBounds, restorePixels, restoreView, serializePixels, STORAGE_KEY, zoomView, type Cell, type Pixel, type View } from "./model";
 
 	const palette = ["#222222", "#ffffff", "#ef4444", "#f97316", "#facc15", "#22c55e", "#3b82f6", "#8b5cf6"];
 	let drawing = new PixelDrawing();
 	let color = $state("#f97316");
+	let showColors = $state(false);
+	let recentColors = $state<string[]>([]);
+	let colorButton: HTMLButtonElement;
 	let tool = $state<"pen" | "eraser" | "hand">("pen");
 	let view = $state<View>({ x: 0, y: 0, size: 20 });
 	let canUndo = $state(false);
@@ -64,12 +68,16 @@
 		for (const point of lineCells(last ?? cell, cell)) changed = drawing.paint(point, strokeColor) || changed;
 		last = cell; cursor = cell; if (changed) update();
 	}
+	function rememberColor(value: Pixel) { if (value) recentColors = [value, ...recentColors.filter((entry) => entry !== value)].slice(0, 16); }
+	function selectColor(value: string) { finish(); color = value; tool = "pen"; }
+	function closeColors() { showColors = false; colorButton?.focus(); }
 	function down(event: PointerEvent) {
 		if (disposed || pointer !== null || ![0, 1, 2].includes(event.button)) return;
 		event.preventDefault(); const point = position(event);
 		pointer = event.pointerId; surface.setPointerCapture(pointer); surface.focus({ preventScroll: true });
 		if ((tool === "hand" && event.button === 0) || event.button === 1) { pan = { ...point, view: { ...view } }; return; }
 		strokeColor = event.button === 2 || tool === "eraser" ? null : color;
+		rememberColor(strokeColor);
 		paintTo(cellAt(view, point.x, point.y));
 	}
 	function move(event: PointerEvent) {
@@ -95,7 +103,8 @@
 		}
 		if ([" ", "Enter", "Delete", "Backspace"].includes(event.key)) {
 			event.preventDefault(); if (event.repeat || pointer !== null) return;
-			drawing.paint(cursor, ["Delete", "Backspace"].includes(event.key) || tool === "eraser" ? null : color); drawing.commit(); update(); save();
+			const next = ["Delete", "Backspace"].includes(event.key) || tool === "eraser" ? null : color;
+			rememberColor(next); drawing.paint(cursor, next); drawing.commit(); update(); save();
 		}
 		if (event.key === "+" || event.key === "=") { event.preventDefault(); zoom(1.25); }
 		if (event.key === "-") { event.preventDefault(); zoom(.8); }
@@ -131,6 +140,8 @@
 	});
 </script>
 
+<svelte:window onkeydown={(event) => { if (showColors && event.key === "Escape") { event.preventDefault(); closeColors(); } }} />
+
 <div class="studio text-75">
 	<div class="toolbar" aria-label="画布工具">
 		<div class="tool-group">
@@ -140,9 +151,14 @@
 			<button title="撤回一笔" aria-label="撤回一笔" disabled={!canUndo} onclick={undo}><Icon icon="material-symbols:undo-rounded" size="xl" /></button>
 		</div>
 		<div class="palette" aria-label="颜色">
-			{#each palette as swatch}<button class="swatch" class:selected={color === swatch} style:background={swatch} title={swatch} aria-label={`颜色 ${swatch}`} aria-pressed={color === swatch} onclick={() => { finish(); color = swatch; tool = "pen"; }}></button>{/each}
-			<input type="color" aria-label="自选颜色" title="自选颜色" bind:value={color} oninput={() => { finish(); tool = "pen"; }} />
+			{#each palette as swatch}<button class="swatch" class:selected={color === swatch} style:background={swatch} title={swatch} aria-label={`颜色 ${swatch}`} aria-pressed={color === swatch} onclick={() => selectColor(swatch)}></button>{/each}
+			<button bind:this={colorButton} class="color-toggle" title="更多颜色" aria-label={`更多颜色，当前 ${color}`} aria-expanded={showColors} aria-controls="pixel-colors" onclick={() => { finish(); showColors = !showColors; }}><span style:background={color}></span><span>调色</span></button>
 		</div>
+		{#if showColors}
+			<div id="pixel-colors" class="color-popover">
+				<ColorPanel {color} recent={recentColors} onselect={selectColor} onclose={closeColors} />
+			</div>
+		{/if}
 		<div class="tool-group zoom">
 			<button title="缩小" aria-label="缩小" disabled={view.size <= 4} onclick={() => zoom(.8)}><Icon icon="material-symbols:remove-rounded" size="xl" /></button>
 			<output aria-label="缩放比例">{Math.round(view.size / 20 * 100)}%</output>
@@ -165,7 +181,7 @@
 
 <style>
 	.studio { display: flex; flex-direction: column; height: max(430px, calc(100svh - 11rem)); min-width: 0; }
-	.toolbar { display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; padding: .65rem .8rem; border-bottom: 1px solid var(--line-divider); }
+	.toolbar { position: relative; display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; padding: .65rem .8rem; border-bottom: 1px solid var(--line-divider); }
 	.tool-group, .palette { display: flex; align-items: center; gap: .25rem; }
 	.tool-group + .palette, .zoom { border-left: 1px solid var(--line-divider); padding-left: .65rem; }
 	button { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: .5rem; color: inherit; cursor: pointer; }
@@ -176,7 +192,9 @@
 	.palette { gap: .45rem; }
 	.palette .swatch { width: 22px; height: 22px; border: 1px solid #8886; border-radius: 5px; }
 	.swatch.selected { outline: 2px solid var(--primary); outline-offset: 2px; }
-	input[type="color"] { width: 28px; height: 28px; padding: 0; border: 0; background: transparent; cursor: pointer; }
+	.color-toggle { width: auto; gap: .35rem; padding: 0 .4rem; font-size: .75rem; }
+	.color-toggle span:first-child { width: 20px; height: 20px; border: 1px solid #8886; border-radius: 4px; }
+	.color-popover { position: absolute; z-index: 10; left: .5rem; top: calc(100% + .35rem); width: min(330px, calc(100% - 1rem)); max-height: min(65svh, 570px); overflow-y: auto; overscroll-behavior: contain; }
 	output { width: 3.2rem; text-align: center; font-size: .75rem; font-variant-numeric: tabular-nums; }
 	.actions { margin-left: auto; }
 	.save { display: flex; padding: .3rem; opacity: .6; }

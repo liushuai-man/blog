@@ -74,7 +74,8 @@
     "tone": "15.1.22",
     "turndown": "^7.2.4",
     "typescript": "^5.9.2",
-    "unist-util-visit": "^5.1.0"
+    "unist-util-visit": "^5.1.0",
+    "vanilla-colorful": "0.7.2"
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "^1.10.7",
