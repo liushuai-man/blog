@@ -4,6 +4,8 @@
 
 第二项 `pixel-canvas/` 为像素画布：无限坐标网格、缩放与拖动视野、点击／拖动填色、右键擦除、自动缓存、按笔撤回与透明 PNG 导出。`model.ts` 管理笔画与缓存格式，组件持有输入和保存定时器。`pnpm test:pixel-canvas` 验证核心逻辑，范围见 [像素画布计划](../../../docs/plans/04-pixel-canvas.md)。
 
+调色面板提供 48 个预设色、连续调色、HEX 输入和最多 16 个最近用色（仅当前打开期间）。使用 MIT 许可的 [vanilla-colorful](https://github.com/web-padawan/vanilla-colorful)，在面板打开时动态加载；`ColorPanel.svelte` 持有选色器实例与监听，加载失败保留系统选色。依赖、兼容性与构建体积记录在像素画布计划中。
+
 ```text
 stylophone/
   definition.ts          静态信息、入口开关、路由、说明和封面
