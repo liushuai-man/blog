@@ -2,7 +2,7 @@
 
 - 日期：2026-10-24。
 - 文章：`src/content/posts/web-in-a-shell/index.md`。
-- 图片：`src/content/posts/web-in-a-shell/images/cover.png`，同时用于封面与正文。
+- 图片：`src/content/posts/web-in-a-shell/images/cover.png`
 - 方式：内置 imagegen 生成，非截图；无外部图片素材。风格参考项目内 Orca 封面（人工查看，未作为工具图片输入）。
 - 来源与授权：本次 AI 生成素材；不冒充官方插图，不引用外部品牌图标，不将仓库 MIT 许可证扩展为第三方素材授权。
 - 核验：白底黑笔，标题和 HTML / CSS / JS、Electron、Tauri、Capacitor、示意图文字正确；三个箭头分别从网页指向三个容器，各屏幕均为两项清单。图仅表达界面复用，不表示三个方案覆盖的平台完全相同。
