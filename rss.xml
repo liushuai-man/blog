@@ -1,4 +1,180 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>个人博客</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.1.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年10月28日 13:54:40</lastBuildDate><item><title>“当我们”第一次开发小程序，我们应该做什么？</title><link>https://liushuai-man.github.io/blog/posts/first-miniprogram/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/first-miniprogram/</guid><description>突然接到微信小程序需求，从哪里开始？以一个原生账户小程序为例，聊选型、架构、开发测试、上线和工期，以及 Web 开发经验能带来什么。</description><pubDate>Wed, 28 Oct 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;假设某天工作群里多了一条消息：“这个功能再做个微信小程序吧，应该跟网页差不多。”&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>个人博客</title><description>个人博客网站</description><link>https://liushuai-man.github.io/</link><templateTheme>Firefly</templateTheme><templateThemeVersion>0.1.0</templateThemeVersion><templateThemeUrl>https://github.com/CuteLeaf/Firefly</templateThemeUrl><lastBuildDate>2026年11月7日 15:40:50</lastBuildDate><item><title>grep 为什么比 RAG 更好？</title><link>https://liushuai-man.github.io/blog/posts/grep-vs-rag/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/grep-vs-rag/</guid><description>从代码检索的特殊性出发，聊聊为什么 AI 编程 Agent 更偏爱 grep/ripgrep 和迭代搜索，而不是向量 RAG，以及 RAG 仍然适合什么。</description><pubDate>Sat, 07 Nov 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;最近听到这么一种说法：在 AI 检索中，grep 比 RAG 更好。&lt;/p&gt;
+&lt;p&gt;乍一听，这像是在抬杠。RAG 过去几年一直被视为让模型用上外部知识的正路，而 grep 只是一个再古老不过的文本搜索命令。&lt;/p&gt;
+&lt;p&gt;但把视线移到 AI 编程 Agent 的真实工作过程，就会发现这个说法并非空穴来风。&lt;/p&gt;
+&lt;p&gt;一边是过去几年被反复讲述的故事：把代码切块、向量化、存进向量数据库，提问时做语义检索，再把相关片段塞给模型。这就是很多人理解的 RAG。&lt;/p&gt;
+&lt;p&gt;另一边是终端里真实发生的操作：&lt;code&gt;rg -n &quot;ECONNREFUSED&quot;&lt;/code&gt;、&lt;code&gt;rg -l &quot;useEffect&quot;&lt;/code&gt;、&lt;code&gt;git grep &quot;TODO&quot;&lt;/code&gt;。没有 embedding，没有向量库，甚至没有索引。&lt;/p&gt;
+&lt;p&gt;一个代表「语义相似」，一个代表「精确命中」。它们迎头撞上时，为什么赢的经常是后者？&lt;/p&gt;
+&lt;p&gt;这个说法值得认真讨论，但不能照字面理解。grep 是一个检索工具，RAG 是一套「检索增强生成」的流程；grep 完全可以成为 RAG 里的一个 retriever。真正要比较的，是两种思路：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;精确检索 + 让 Agent 反复搜索、阅读、验证&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;向量检索 + 一次性取回 top-k 片段塞进上下文&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在代码这个场景里，前者经常赢。原因不是 grep 更「先进」，而是代码这种材料的性质，恰好站在精确检索那一边。&lt;/p&gt;
+&lt;section&gt;&lt;h2&gt;一、先把概念摆正：grep 和 RAG 不在同一个层级&lt;a href=&quot;#一先把概念摆正grep-和-rag-不在同一个层级&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;先把两者放在同一张表里看：&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;/th&gt;&lt;th&gt;grep / ripgrep&lt;/th&gt;&lt;th&gt;常见的向量 RAG&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;输入&lt;/td&gt;&lt;td&gt;字面量、正则、glob&lt;/td&gt;&lt;td&gt;自然语言问题&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;检索单位&lt;/td&gt;&lt;td&gt;文件、行&lt;/td&gt;&lt;td&gt;切块后的 chunk&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;排序依据&lt;/td&gt;&lt;td&gt;是否匹配&lt;/td&gt;&lt;td&gt;向量相似度&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;返回内容&lt;/td&gt;&lt;td&gt;文件路径 + 行号 + 原文&lt;/td&gt;&lt;td&gt;top-k 片段 + 相似度分数&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;索引&lt;/td&gt;&lt;td&gt;通常不需要&lt;/td&gt;&lt;td&gt;需要 embedding 索引&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;可验证性&lt;/td&gt;&lt;td&gt;高：能直接回到原文&lt;/td&gt;&lt;td&gt;中：相似不等于正确&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;需要说明的是，&lt;strong&gt;RAG 不等于向量数据库&lt;/strong&gt;。BM25、SQL、grep 都可以是 RAG 的检索器。本文说的 RAG，特指最常见的做法：把文档切成 chunk，用 embedding 做稠密向量检索，再取 top-k 拼进上下文。&lt;/p&gt;&lt;p&gt;所以「grep 比 RAG 更好」更准确的说法是：&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;在代码库里，&lt;strong&gt;精确检索 + 迭代搜索&lt;/strong&gt;往往比&lt;strong&gt;向量相似度 + 一次性注入&lt;/strong&gt;更可靠。&lt;/p&gt;&lt;/blockquote&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;二、代码里的问题，往往是「字面量问题」&lt;a href=&quot;#二代码里的问题往往是字面量问题&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;程序员找代码时，脑子里想的经常不是一段语义，而是一个具体字符串：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;报错信息：&lt;code&gt;ECONNREFUSED 127.0.0.1:5432&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;环境变量：&lt;code&gt;DATABASE_URL&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;接口路径：&lt;code&gt;/api/v1/login&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;配置项：&lt;code&gt;maxRetries&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;函数名：&lt;code&gt;getUserById&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;日志里的 trace id、错误码、feature flag&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;这些查询的共同点是：&lt;strong&gt;答案必须精确匹配，差一个字符都不行。&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;向量检索擅长「意思差不多」，但代码里「意思差不多」常常意味着「不是这个」。&lt;code&gt;getUserById&lt;/code&gt; 和 &lt;code&gt;getUserByID&lt;/code&gt; 在语义上几乎一样，在编译器眼里却是两个符号；&lt;code&gt;timeout&lt;/code&gt; 和 &lt;code&gt;timeOut&lt;/code&gt; 也可能是两个配置项。&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;你要找的&lt;/th&gt;&lt;th&gt;grep&lt;/th&gt;&lt;th&gt;向量检索&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;ECONNREFUSED&lt;/code&gt;&lt;/td&gt;&lt;td&gt;直接命中配置或日志&lt;/td&gt;&lt;td&gt;可能返回「数据库连接失败」的泛泛段落&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;useEffect&lt;/code&gt; 的调用点&lt;/td&gt;&lt;td&gt;精确列出文件和行&lt;/td&gt;&lt;td&gt;可能把 &lt;code&gt;useLayoutEffect&lt;/code&gt; 也排进来&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;&lt;code&gt;X-Auth-Token&lt;/code&gt;&lt;/td&gt;&lt;td&gt;精确命中请求头&lt;/td&gt;&lt;td&gt;可能召回「鉴权」相关但错误的代码&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;这并不是说 embedding 处理不了代码。代码模型也能学到标识符和结构，但对于一大类代码查询，精确匹配同时更便宜、更可靠，也更容易解释。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;三、代码的正确性，靠的是位置和引用&lt;a href=&quot;#三代码的正确性靠的是位置和引用&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;代码不是散文。一个函数的意义，来自它在哪里定义、被谁调用、依赖什么类型、被哪些测试覆盖。RAG 把代码切成 chunk，天然会切断这些关系：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;函数签名和函数体被切开；&lt;/li&gt;
+&lt;li&gt;import 和实际使用被切开；&lt;/li&gt;
+&lt;li&gt;类型定义、实现、调用点分散在不同 chunk；&lt;/li&gt;
+&lt;li&gt;注释和它解释的那行代码分开。&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;然后向量检索按「这段文字像不像问题」来排序。它可以找到「看起来相关」的段落，却不一定找到「真正影响这次修改」的位置。&lt;/p&gt;&lt;p&gt;grep 返回的是 &lt;code&gt;path:line&lt;/code&gt;。这个信息很朴素，但它让 Agent 能继续往下走：打开文件、看上下文、找调用点、读测试。检索不是终点，而是定位的起点。&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;向量检索回答的是「哪段文字最像」，grep 回答的是「这个东西在哪里」。在代码里，后者通常更有用。&lt;/p&gt;&lt;/blockquote&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;四、代码库是活的，索引不是&lt;a href=&quot;#四代码库是活的索引不是&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;向量索引最怕的不是建不起来，而是建起来之后没人敢信。&lt;/p&gt;&lt;p&gt;一个正在开发的项目，随时可能出现这些变化：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;刚改过但还没提交的文件；&lt;/li&gt;
+&lt;li&gt;切换分支后完全不同的一套代码；&lt;/li&gt;
+&lt;li&gt;构建生成的产物、临时文件、被 gitignore 的本地配置；&lt;/li&gt;
+&lt;li&gt;monorepo 里频繁变动的子包；&lt;/li&gt;
+&lt;li&gt;新增的依赖和自动生成的类型。&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;grep 每次读的都是当前磁盘上的内容，天然不会过期。向量索引则要考虑增量更新、删除同步、分支隔离、权限过滤，以及「索引里到底有没有包含我刚刚写的那一行」。&lt;/p&gt;&lt;p&gt;这不是说索引一定做不好，而是说它引入了一整类新的维护问题。对个人项目和小团队来说，&lt;strong&gt;没有索引，很多时候就是最好的索引&lt;/strong&gt;。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;五、Agent 把检索从「一次性管道」变成了「循环」&lt;a href=&quot;#五agent-把检索从一次性管道变成了循环&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;这是我认为最关键的一点。&lt;/p&gt;&lt;p&gt;经典 RAG 的流程是线性的：&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;用户问题 → 检索 top-k → 拼接上下文 → 模型回答&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;它假设你在提问的那一刻，就已经能把问题描述清楚，并且一次检索就能召回足够的信息。&lt;/p&gt;&lt;p&gt;但真实的调试过程不是这样。比如「登录偶尔失败」这个模糊的问题，人通常会这样查：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;rg -n &quot;login failed|invalid session&quot; src&lt;/code&gt;，先找错误信息；&lt;/li&gt;
+&lt;li&gt;打开命中的 session 中间件，发现 token 有一个过期时间；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rg -n &quot;SESSION_TTL|maxAge&quot; .&lt;/code&gt;，追到配置；&lt;/li&gt;
+&lt;li&gt;读相关测试，发现测试里用了伪造时钟；&lt;/li&gt;
+&lt;li&gt;再回到代码，确认边界条件。&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;每一步的搜索结果，都会改变下一步要搜什么。词汇是在读代码的过程中逐渐长出来的，而不是提问前就想好的。&lt;/p&gt;&lt;p&gt;Agent 把这个过程变成了可执行的循环：&lt;/p&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;问题 → grep → 读文件 → 形成假设 → 再 grep → 读测试 → 验证 → 回答或修改&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;&lt;p&gt;单次 grep 很便宜，所以 Agent 可以失败很多次。查不到就换关键词，结果太多就加 glob，命中太少就放宽正则。相比之下，RAG 的一次 top-k 更像「一锤子买卖」：召回错了，模型只能在错误的上下文里继续推理。&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;RAG 假设你能在提问时把问题描述清楚；Agent 搜索允许你在读代码的过程中，逐步把问题描述清楚。&lt;/p&gt;&lt;/blockquote&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;六、成本账：不只算 token&lt;a href=&quot;#六成本账不只算-token&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;RAG 的成本经常被低估。它不只是「调用一次 embedding API」：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;要选 embedding 模型，还要跟随模型升级重建索引；&lt;/li&gt;
+&lt;li&gt;要决定 chunk 大小、重叠长度和切分方式；&lt;/li&gt;
+&lt;li&gt;要维护向量库、元数据和增量更新；&lt;/li&gt;
+&lt;li&gt;要做权限过滤，避免把不该看的内容召回；&lt;/li&gt;
+&lt;li&gt;要调 top-k、相似度阈值和 rerank 策略；&lt;/li&gt;
+&lt;li&gt;要评估检索质量，而不仅是最终回答看起来对不对。&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;grep 的成本主要花在「搜索策略」上：关键词怎么选、范围怎么限定、结果怎么读。它不需要额外服务，不依赖网络，通常在本地几秒内就能跑完。&lt;/p&gt;&lt;p&gt;当然，grep 也不是没有代价。搜索范围太大时，输出会非常吵；一个常见词可能命中几千行。所以真正有效的用法不是「无脑 grep」，而是带着约束去搜：限定目录、文件类型、单词边界和上下文行数。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;七、但 grep 不是万能的：RAG 仍然赢的场景&lt;a href=&quot;#七但-grep-不是万能的rag-仍然赢的场景&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;如果文章停在这里，就容易变成「向量检索一无是处」的情绪输出。事实上，RAG 在另一类问题上明显更强。&lt;/p&gt;&lt;section&gt;&lt;h3&gt;1. 自然语言知识库&lt;a href=&quot;#1-自然语言知识库&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;设计文档、RFC、会议记录、工单、聊天历史、PDF 手册，这些内容本来就用自然语言写成。用户的问题也往往是模糊的：&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;「我们之前为什么决定不用消息队列？」&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;这种问题没有唯一的字面量锚点，语义检索更合适。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;2. 你不知道代码里的词汇&lt;a href=&quot;#2-你不知道代码里的词汇&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;假设你想找「哪里处理了限流」，但代码里用的是 &lt;code&gt;token bucket&lt;/code&gt;、&lt;code&gt;throttle&lt;/code&gt; 或 &lt;code&gt;rate limiter&lt;/code&gt;。如果你一个词都猜不到，grep 就会空手而归；语义检索可以从概念层面把相关代码捞出来。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;3. 精确词太常见，需要排序&lt;a href=&quot;#3-精确词太常见需要排序&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;搜索 &lt;code&gt;timeout&lt;/code&gt; 可能命中几千处。这时需要的不是「是否匹配」，而是「哪几处最相关」。全文排序（BM25）或向量 rerank 就派上用场了。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;4. 跨语言、同义词和改写&lt;a href=&quot;#4-跨语言同义词和改写&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;同一个概念可能以中文注释、英文变量名、缩写和业务黑话同时存在。语义检索在词汇不统一时更有优势。&lt;/p&gt;&lt;/section&gt;&lt;section&gt;&lt;h3&gt;5. 非文本或多模态内容&lt;a href=&quot;#5-非文本或多模态内容&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;图片、音频、扫描件、演示文稿，grep 天然无能为力。这类内容需要另一套检索方式。&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;任务&lt;/th&gt;&lt;th&gt;更合适的选择&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;找某个函数的所有调用点&lt;/td&gt;&lt;td&gt;grep + LSP&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;查报错信息对应的配置&lt;/td&gt;&lt;td&gt;grep&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;在大量文档里找相关设计&lt;/td&gt;&lt;td&gt;向量检索 / BM25&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;不知道关键词，只知道大概意思&lt;/td&gt;&lt;td&gt;语义检索&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;确认某行代码是否真的执行&lt;/td&gt;&lt;td&gt;读代码 + 运行测试&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;在图片或 PDF 里找信息&lt;/td&gt;&lt;td&gt;多模态检索&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/section&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;八、更好的答案：检索阶梯，而不是站队&lt;a href=&quot;#八更好的答案检索阶梯而不是站队&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;与其争论「grep 还是 RAG」，不如把检索看成一个阶梯。每次先用最便宜、最可验证的那一级，不够再往上走：&lt;/p&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;精确字符串 / 正则&lt;/strong&gt;：&lt;code&gt;rg&lt;/code&gt;、&lt;code&gt;git grep&lt;/code&gt;，用于标识符、报错、配置项；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;符号与引用&lt;/strong&gt;：LSP、ctags，用于定义、跳转、找引用；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;全文排序&lt;/strong&gt;：BM25，用于关键词太常见、需要排序的场景；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;向量 / 语义检索&lt;/strong&gt;：用于自然语言问题、词汇不统一、跨文档召回；&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;问人 / 读文档&lt;/strong&gt;：用于前四级都无法消化的模糊问题。&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;对 AI 编程 Agent 来说，一个实用的默认组合是：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;代码定位：优先 &lt;code&gt;ripgrep&lt;/code&gt;；&lt;/li&gt;
+&lt;li&gt;定义与引用：接 LSP 或语言服务器；&lt;/li&gt;
+&lt;li&gt;文档与历史讨论：语义检索；&lt;/li&gt;
+&lt;li&gt;最终判断：读原文、跑测试、看 diff。&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;这不是「grep 打败了 RAG」，而是「检索终于回到了它该在的位置」：&lt;strong&gt;检索是为了获得下一步可验证的信息，而不是为了把上下文塞满。&lt;/strong&gt;&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;九、几个可直接用的 grep 习惯&lt;a href=&quot;#九几个可直接用的-grep-习惯&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;最后放几个日常写代码和用 Agent 时都实用的习惯：&lt;/p&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;&lt;figure&gt;&lt;figcaption&gt;&lt;span&gt;&lt;/span&gt;&lt;span&gt;Terminal window&lt;/span&gt;&lt;span&gt;展开&lt;/span&gt;&lt;span&gt;收起&lt;/span&gt;&lt;/figcaption&gt;&lt;pre&gt;&lt;code&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;1&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;# 精确查找标识符，避免匹配到更长的单词&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;2&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;rg&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-n&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-w&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;getUserById&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;src&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;3&lt;/div&gt;&lt;/div&gt;&lt;div&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;4&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;# 查找报错信息，并带 3 行上下文&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;5&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;rg&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-n&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-C&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;3&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;ECONNREFUSED|connection refused&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;6&lt;/div&gt;&lt;/div&gt;&lt;div&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;7&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;# 限定文件类型，排除依赖目录&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;8&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;rg&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-n&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-g&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;*.ts&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-g&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;!node_modules&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;TODO|FIXME&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;9&lt;/div&gt;&lt;/div&gt;&lt;div&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;10&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;# 只列出命中的文件，先看范围&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;11&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;rg&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-l&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;useEffect&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;src&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;12&lt;/div&gt;&lt;/div&gt;&lt;div&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;13&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;# 搜索隐藏文件（-u 可以进一步包含被 .gitignore 忽略的文件）&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;14&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;rg&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-n&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;--hidden&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-g&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;!.git&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;apiKey&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;15&lt;/div&gt;&lt;/div&gt;&lt;div&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;16&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;# 把模式当成固定字符串，避免正则元字符干扰&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;div&gt;&lt;div&gt;17&lt;/div&gt;&lt;/div&gt;&lt;div&gt;&lt;span&gt;rg&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-n&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;-F&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;&apos;user.name&apos;&lt;/span&gt;&lt;span&gt; &lt;/span&gt;&lt;span&gt;.&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;div&gt;&lt;div&gt;&lt;/div&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/figure&gt;&lt;div&gt;&lt;/div&gt;&lt;/div&gt;&lt;span&gt;展开&lt;/span&gt;&lt;span&gt;收起&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;p&gt;几个小建议：&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;搜不到时，先换同义词、缩写和更短的片段，不要急着认定「代码里没有」；&lt;/li&gt;
+&lt;li&gt;搜到太多时，加 &lt;code&gt;-g&lt;/code&gt; 限定目录或文件类型，而不是直接翻几千行；&lt;/li&gt;
+&lt;li&gt;别只搜 &lt;code&gt;src&lt;/code&gt;，配置、测试、脚本和文档里经常藏着答案；&lt;/li&gt;
+&lt;li&gt;找到定义之后，继续找调用点和测试，才算真正定位。&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;十、结论：grep 赢的不是搜索，而是可验证的迭代&lt;a href=&quot;#十结论grep-赢的不是搜索而是可验证的迭代&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;「grep 比 RAG 更好」这句话，在代码场景下有一半是真的。&lt;/p&gt;&lt;p&gt;grep 的优势是精确、实时、便宜、可验证，而且非常适合 Agent 反复试错。RAG 的优势是模糊召回、自然语言理解、跨文档泛化和语义相似。它们解决的不是同一个问题，也不应该被迫二选一。&lt;/p&gt;&lt;p&gt;真正值得记住的是：&lt;/p&gt;&lt;blockquote&gt;&lt;p&gt;&lt;strong&gt;在代码里，最好的检索不是一次漂亮的相似度排序，而是一条能走到底、并且每一步都能验证的线索。&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;所以，与其问「grep 还是 RAG」，不如问：&lt;/p&gt;&lt;p&gt;&lt;strong&gt;我需要的是一次「看起来相关」的召回，还是一条「可以继续查下去」的路径？&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;对大多数代码任务，答案往往是后者。也正因为如此，grep 才会在 AI 编程工具里反复出现——它不是复古，而是回到了检索最朴素、也最可靠的样子。&lt;/p&gt;&lt;/section&gt;
+&lt;section&gt;&lt;h2&gt;延伸阅读&lt;a href=&quot;#延伸阅读&quot;&gt;&lt;span&gt;#&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/BurntSushi/ripgrep&quot; target=&quot;_blank&quot;&gt;ripgrep 官方仓库&lt;/a&gt;：理解 &lt;code&gt;rg&lt;/code&gt; 的速度来源与用法。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents&quot; target=&quot;_blank&quot;&gt;Anthropic: Effective context engineering for AI agents&lt;/a&gt;：关于上下文选择与 Agent 工作循环的讨论。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.anthropic.com/engineering/building-effective-agents&quot; target=&quot;_blank&quot;&gt;Anthropic: Building effective agents&lt;/a&gt;：理解「工具调用 + 迭代」为什么比一次性管道更稳。&lt;/li&gt;
+&lt;/ul&gt;&lt;/section&gt;</content:encoded></item><item><title>“当我们”第一次开发小程序，我们应该做什么？</title><link>https://liushuai-man.github.io/blog/posts/first-miniprogram/</link><guid isPermaLink="true">https://liushuai-man.github.io/blog/posts/first-miniprogram/</guid><description>突然接到微信小程序需求，从哪里开始？以一个原生账户小程序为例，聊选型、架构、开发测试、上线和工期，以及 Web 开发经验能带来什么。</description><pubDate>Wed, 28 Oct 2026 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;假设某天工作群里多了一条消息：“这个功能再做个微信小程序吧，应该跟网页差不多。”&lt;/p&gt;
 &lt;p&gt;如果之前一直写 Web，第一反应多半是：用 Vue 还是 React？页面能不能直接搬？开发者工具又是什么？&lt;/p&gt;
 &lt;p&gt;先别急着建项目。页面之外，账号权限、登录方式、真机差异、备案和版本审核，都是排期里容易漏掉的工作。&lt;/p&gt;
 &lt;p&gt;下面拿 &lt;code&gt;exai-miniprogram&lt;/code&gt; 做案例。它是一个账户类小程序，包含钱包、卡册、兑换、转赠和资料编辑。&lt;strong&gt;目前是可交互的前端演示，正式登录、验证码、支付和资产归属仍待后端接入。&lt;/strong&gt; 本文以微信为主，也会说明和支付宝小程序的共通点。&lt;/p&gt;
