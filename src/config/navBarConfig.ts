@@ -2,7 +2,7 @@ import { LinkPreset, type NavBarConfig, type NavBarSearchConfig, NavBarSearchMet
 import { otherConfig } from "./otherConfig";
 
 export const navBarConfig: NavBarConfig = {
-  links: [LinkPreset.Home, LinkPreset.Archive, LinkPreset.About, ...(otherConfig.enabled && (otherConfig.stylophone || otherConfig.pixelCanvas) ? [{ name: "喵喵屋", url: "/other/" }] : [])],
+  links: [LinkPreset.Home, LinkPreset.Archive, LinkPreset.About, ...(otherConfig.enabled && (otherConfig.stylophone || otherConfig.pixelCanvas) ? [{ name: "喵喵屋", url: "/other/", icon: "material-symbols:pets" }] : [])],
 };
 export const navBarSearchConfig: NavBarSearchConfig = {
   method: NavBarSearchMethod.PageFind,
