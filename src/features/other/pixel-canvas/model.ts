@@ -127,6 +127,16 @@ export function lineCells(from: Cell, to: Cell): Cell[] {
 	}
 }
 
+export function brushCells(cell: Cell, size: number): Cell[] {
+	const width = Math.max(1, Math.min(8, Math.floor(size) || 1));
+	const offset = Math.floor((width - 1) / 2);
+	const cells: Cell[] = [];
+	for (let y = 0; y < width; y++)
+		for (let x = 0; x < width; x++)
+			cells.push({ x: cell.x - offset + x, y: cell.y - offset + y });
+	return cells;
+}
+
 export class PixelDrawing {
 	pixels: Map<string, string>;
 	private stroke = new Map<string, Change>();
@@ -136,6 +146,11 @@ export class PixelDrawing {
 	}
 	get canUndo() {
 		return this.history.length > 0;
+	}
+	private record(changes: Change[]) {
+		if (!changes.length) return;
+		this.history.push(changes);
+		if (this.history.length > 100) this.history.shift();
 	}
 	paint(cell: Cell, color: Pixel) {
 		if (!Number.isSafeInteger(cell.x) || !Number.isSafeInteger(cell.y))
@@ -154,14 +169,23 @@ export class PixelDrawing {
 		return true;
 	}
 	commit() {
-		const changes = [...this.stroke.values()].filter(
-			({ before, after }) => before !== after,
+		this.record(
+			[...this.stroke.values()].filter(({ before, after }) => before !== after),
 		);
-		if (changes.length) {
-			this.history.push(changes);
-			if (this.history.length > 100) this.history.shift();
-		}
 		this.stroke.clear();
+	}
+	clear() {
+		this.commit();
+		if (!this.pixels.size) return false;
+		this.record(
+			[...this.pixels].map(([key, before]) => ({
+				key,
+				before,
+				after: null,
+			})),
+		);
+		this.pixels.clear();
+		return true;
 	}
 	undo() {
 		this.commit();
