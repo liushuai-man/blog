@@ -30,11 +30,11 @@
 	const digitLabel = (index: number) => `${relativeOctave(index) < -1 ? "倍低音" : relativeOctave(index) === -1 ? "低音" : relativeOctave(index) === 1 ? "高音" : relativeOctave(index) === 2 ? "倍高音" : "中音"} ${digits[index]}`;
 
 	function sound(index: number | null) {
-		if (!ready || muted || !visible || disposed) index = null;
-		if (index === active) return;
-		active = index;
-		if (index === null) audio?.stop();
-		else audio?.play(midiNote(index, octave));
+		const note = !ready || !visible || disposed ? null : index;
+		if (note === active) return;
+		active = note;
+		if (note === null) audio?.stop();
+		else audio?.play(midiNote(note, octave));
 	}
 	function releaseContact() {
 		input.clear(); sound(null); pen = null;
@@ -43,7 +43,7 @@
 	}
 	let capturedPointer: number | null = null;
 	export function pause() { pending?.abort(); releaseContact(); }
-	export function reset() { pause(); octave = 0; windowIndex = 0; volume = 50; vibrato = false; audio?.volume(0.5); audio?.vibrato(false); }
+	export function reset() { pause(); octave = 0; windowIndex = 0; volume = 50; vibrato = false; audio?.volume(muted ? 0 : 0.5); audio?.vibrato(false); }
 	export function dispose() {
 		if (disposed) return;
 		pause(); disposed = true; generation++; audio?.dispose(); audio = null;
@@ -56,7 +56,7 @@
 		try {
 			const result = await createAudio(() => !disposed && generation === attempt && visible && !document.hidden, pending.signal);
 			if (!result) return;
-			audio = result; audio.volume(volume / 100); audio.vibrato(vibrato); ready = true;
+			audio = result; audio.volume(muted ? 0 : volume / 100); audio.vibrato(vibrato); ready = true;
 		} catch { if (!disposed) error = "声音启动失败，请检查浏览器是否支持音频，然后重试。"; }
 		finally { pending = null; if (!disposed) loading = false; }
 	}
@@ -86,7 +86,10 @@
 		if (!ready || muted || !visible || event.repeat || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
 		const target = event.target instanceof HTMLElement ? event.target : null;
 		const focusedPad = target?.closest<HTMLButtonElement>("[data-pad]");
-		if (target?.closest("input, textarea, select, [contenteditable]:not([contenteditable='false']), button, summary, [role='slider'], [role='combobox']") && !focusedPad) return;
+		// A focused control keeps its own Space/Enter behaviour, but letter
+		// shortcuts should still play: after changing octave or vibrato the
+		// control keeps focus, which used to swallow every following note.
+		if (target?.closest("input, textarea, select, [contenteditable]:not([contenteditable='false']), [role='slider'], [role='combobox']") && !focusedPad) return;
 		const index = focusedPad && (event.code === "Space" || event.code === "Enter") ? Number(focusedPad.dataset.pad) : keyNotes.get(event.key.toLowerCase());
 		if (index === undefined || !input.press(event.code, index)) return;
 		event.preventDefault(); sound(index);
@@ -94,10 +97,24 @@
 	function keyup(event: KeyboardEvent) {
 		if (input.lift(event.code)) { event.preventDefault(); sound(input.current()); }
 	}
-	function changeOctave(value: number) { pause(); octave = value; }
+	function changeOctave(value: number) {
+		if (value === octave) return;
+		octave = value;
+		// The real S‑1 range switch retunes the running contact instead of
+		// retriggering it, so a held note keeps sounding at the new octave.
+		if (active !== null) audio?.play(midiNote(active, octave));
+	}
 	function changeWindow(value: number) { pause(); windowIndex = value; }
-	function toggleMute() { pause(); muted = !muted; }
-	function setVolume(event: Event) { volume = Number((event.target as HTMLInputElement).value); if (volume === 0) pause(); audio?.volume(volume / 100); }
+	function toggleMute() {
+		muted = !muted;
+		// Mute is a short gain ramp, not an abrupt stop: a held key can resume
+		// where it left off when the player unmutes.
+		audio?.volume(muted ? 0 : volume / 100);
+	}
+	function setVolume(event: Event) {
+		volume = Number((event.target as HTMLInputElement).value);
+		audio?.volume(muted ? 0 : volume / 100);
+	}
 	function toggleVibrato() { vibrato = !vibrato; audio?.vibrato(vibrato); }
 
 	onMount(() => {
@@ -154,7 +171,7 @@
 	</div>
 	<div class="bottom"><span>接触发声，抬起停音。</span>{#if compact}<div class="windows" role="group" aria-label="音片窗口"><button class="control" aria-label="前半音片 A 至 G" aria-pressed={windowIndex === 0} onclick={() => changeWindow(0)}>A — G</button><button class="control" aria-label="后半音片 F 至 E" aria-pressed={windowIndex === 1} onclick={() => changeWindow(1)}>F — E</button></div>{/if}</div>
 </div>
-<details class="help text-90"><summary>键盘演奏与操作说明</summary><p>音片上的 1–7 对应 do、re、mi、fa、sol、la、si，♯ 表示升音。下方小点表示低音，上方小点表示高音，两个点表示再相差一个八度。</p><p>点击「开始演奏」后，按住 A S D F G H J K 演奏 C4–C5，W E T Y U 演奏其间升音；Z X C 对应下方 A、A♯、B，O L P ; 继续向上演奏 C♯、D、D♯、E。音区按钮整体移调一个八度。多键按下时，最后按下的音优先。</p><p>也可以用 Tab 聚焦音片，再按住空格或 Enter。鼠标或手指按住音片并滑动，进入间隙会停音。切换音区、静音或离开页面也会停音。</p></details>
+<details class="help text-90"><summary>键盘演奏与操作说明</summary><p>音片上的 1–7 对应 do、re、mi、fa、sol、la、si，♯ 表示升音。下方小点表示低音，上方小点表示高音，两个点表示再相差一个八度。</p><p>点击「开始演奏」后，按住 A S D F G H J K 演奏 C4–C5，W E T Y U 演奏其间升音；Z X C 对应下方 A、A♯、B，O L P ; 继续向上演奏 C♯、D、D♯、E。音区按钮整体移调一个八度。多键按下时，最后按下的音优先。</p><p>也可以用 Tab 聚焦音片，再按住空格或 Enter。鼠标或手指按住音片并滑动，进入间隙会停音。演奏中切换音区会直接换到新八度，静音和音量变化平滑过渡；离开页面或切换音片窗口会停音。</p></details>
 
 <style>
 	.instrument { padding:clamp(16px,4vw,32px); border-radius:20px; background:var(--btn-regular-bg); border:1px solid var(--line-divider); box-shadow:inset 0 1px 0 #ffffff30; }
