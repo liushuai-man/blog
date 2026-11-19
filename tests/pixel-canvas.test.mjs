@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
+	brushCells,
 	cellAt,
 	lineCells,
 	PixelDrawing,
@@ -115,4 +116,40 @@ test("cache restores the viewport so offscreen drawings remain reachable after r
 		y: 0,
 		size: 20,
 	});
+});
+
+test("brush sizes stamp square cells and clamp to the supported range", () => {
+	assert.deepEqual(brushCells({ x: 4, y: -2 }, 1), [{ x: 4, y: -2 }]);
+	assert.deepEqual(
+		[...brushCells({ x: 0, y: 0 }, 2)].map(({ x, y }) => `${x},${y}`),
+		["0,0", "1,0", "0,1", "1,1"],
+	);
+	const wide = brushCells({ x: 0, y: 0 }, 99);
+	assert.equal(wide.length, 64);
+	assert.deepEqual(wide[0], { x: -3, y: -3 });
+	assert.deepEqual(wide.at(-1), { x: 4, y: 4 });
+	assert.deepEqual(brushCells({ x: 0, y: 0 }, 0), [{ x: 0, y: 0 }]);
+});
+
+test("clearing the canvas is a single undoable operation", () => {
+	const d = new PixelDrawing();
+	assert.equal(d.clear(), false);
+	assert.equal(d.canUndo, false);
+	d.paint({ x: 0, y: 0 }, "#112233");
+	d.paint({ x: 1, y: 1 }, "#445566");
+	d.commit();
+	assert.equal(d.clear(), true);
+	assert.equal(d.pixels.size, 0);
+	assert.equal(d.canUndo, true);
+	assert.equal(d.undo(), true);
+	assert.deepEqual(
+		[...d.pixels],
+		[
+			["0,0", "#112233"],
+			["1,1", "#445566"],
+		],
+	);
+	assert.equal(d.undo(), true);
+	assert.equal(d.pixels.size, 0);
+	assert.equal(d.undo(), false);
 });

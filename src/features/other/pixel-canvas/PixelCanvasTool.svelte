@@ -2,7 +2,7 @@
 	import { onMount } from "svelte";
 	import Icon from "@/components/common/Icon.svelte";
 	import ColorPanel from "./ColorPanel.svelte";
-	import { cellAt, lineCells, PixelDrawing, pixelBounds, restorePixels, restoreView, serializePixels, STORAGE_KEY, zoomView, type Cell, type Pixel, type View } from "./model";
+	import { brushCells, cellAt, lineCells, PixelDrawing, pixelBounds, restorePixels, restoreView, serializePixels, STORAGE_KEY, zoomView, type Cell, type Pixel, type View } from "./model";
 
 	const palette = ["#222222", "#ffffff", "#ef4444", "#f97316", "#facc15", "#22c55e", "#3b82f6", "#8b5cf6"];
 	let drawing = new PixelDrawing();
@@ -11,6 +11,10 @@
 	let recentColors = $state<string[]>([]);
 	let colorButton: HTMLButtonElement;
 	let tool = $state<"pen" | "eraser" | "hand">("pen");
+	let brushSize = $state(1);
+	let eraserSize = $state(1);
+	const activeSize = $derived(tool === "eraser" ? eraserSize : brushSize);
+	const sizeLabel = $derived(tool === "eraser" ? "橡皮" : "画笔");
 	let view = $state<View>({ x: 0, y: 0, size: 20 });
 	let canUndo = $state(false);
 	let status = $state("画作自动保存在此浏览器");
@@ -65,7 +69,9 @@
 	function position(event: PointerEvent) { const rect = surface.getBoundingClientRect(); return { x: event.clientX - rect.left, y: event.clientY - rect.top }; }
 	function paintTo(cell: Cell) {
 		let changed = false;
-		for (const point of lineCells(last ?? cell, cell)) changed = drawing.paint(point, strokeColor) || changed;
+		const size = strokeColor === null ? eraserSize : brushSize;
+		for (const point of lineCells(last ?? cell, cell))
+			for (const target of brushCells(point, size)) changed = drawing.paint(target, strokeColor) || changed;
 		last = cell; cursor = cell; if (changed) update();
 	}
 	function rememberColor(value: Pixel) { if (value) recentColors = [value, ...recentColors.filter((entry) => entry !== value)].slice(0, 16); }
@@ -90,7 +96,17 @@
 	}
 	function zoom(factor: number) { finish(); view = zoomView(view, Math.max(4, Math.min(96, view.size * factor)), width / 2, height / 2); cursor = cellAt(view, width / 2, height / 2); dirty = true; save(); render(); }
 	function choose(next: typeof tool) { finish(); tool = next; }
+	function setSize(value: number) {
+		finish();
+		const next = Math.max(1, Math.min(8, Math.round(value)));
+		if (tool === "eraser") eraserSize = next;
+		else brushSize = next;
+	}
 	function undo() { finish(); if (drawing.undo()) { update(); save(); } }
+	function clearCanvas() {
+		finish();
+		if (drawing.clear()) { update(); save(); }
+	}
 	function key(event: KeyboardEvent) {
 		if (event.isComposing) return;
 		if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z" && !event.shiftKey) { event.preventDefault(); undo(); return; }
@@ -103,8 +119,12 @@
 		}
 		if ([" ", "Enter", "Delete", "Backspace"].includes(event.key)) {
 			event.preventDefault(); if (event.repeat || pointer !== null) return;
-			const next = ["Delete", "Backspace"].includes(event.key) || tool === "eraser" ? null : color;
-			rememberColor(next); drawing.paint(cursor, next); drawing.commit(); update(); save();
+			const erase = ["Delete", "Backspace"].includes(event.key) || tool === "eraser";
+			const next = erase ? null : color;
+			const size = erase ? eraserSize : brushSize;
+			rememberColor(next);
+			for (const target of brushCells(cursor, size)) drawing.paint(target, next);
+			drawing.commit(); update(); save();
 		}
 		if (event.key === "+" || event.key === "=") { event.preventDefault(); zoom(1.25); }
 		if (event.key === "-") { event.preventDefault(); zoom(.8); }
@@ -147,6 +167,12 @@
 		<div class="tool-group">
 			<button class:chosen={tool === "pen"} title="画笔" aria-label="画笔" aria-pressed={tool === "pen"} onclick={() => choose("pen")}><Icon icon="material-symbols:edit-rounded" size="xl" /></button>
 			<button class:chosen={tool === "eraser"} title="橡皮擦" aria-label="橡皮擦" aria-pressed={tool === "eraser"} onclick={() => choose("eraser")}><Icon icon="material-symbols:ink-eraser-outline-rounded" size="xl" /></button>
+			<label class="size" title={`${sizeLabel}粗细`}>
+				<span aria-hidden="true">{sizeLabel}</span>
+				<select aria-label={`${sizeLabel}粗细`} value={activeSize} onchange={(event) => setSize(Number(event.currentTarget.value))}>
+					{#each [1, 2, 3, 4, 5, 6, 7, 8] as value}<option value={value}>{value} px</option>{/each}
+				</select>
+			</label>
 			<button class:chosen={tool === "hand"} title="移动画布" aria-label="移动画布" aria-pressed={tool === "hand"} onclick={() => choose("hand")}><Icon icon="material-symbols:pan-tool-outline-rounded" size="xl" /></button>
 			<button title="撤回一笔" aria-label="撤回一笔" disabled={!canUndo} onclick={undo}><Icon icon="material-symbols:undo-rounded" size="xl" /></button>
 		</div>
@@ -166,13 +192,14 @@
 		</div>
 		<div class="tool-group actions">
 			<span class="save" class:error={saveFailed} title={status} role="status" aria-label={saving ? "正在保存" : status}><Icon icon="material-symbols:cloud-done-outline-rounded" size="lg" /></span>
+			<button title="清空画布（可撤回）" aria-label="清空画布" onclick={clearCanvas}><Icon icon="material-symbols:delete-sweep-outline-rounded" size="xl" /></button>
 			<button title="导出 PNG" aria-label="导出 PNG" onclick={download}><Icon icon="material-symbols:download-rounded" size="xl" /></button>
 			<button title="操作说明" aria-label="操作说明" aria-expanded={showHelp} onclick={() => { showHelp = !showHelp; }}><Icon icon="material-symbols:help-outline-rounded" size="xl" /></button>
 		</div>
 	</div>
 	<div class="drawing-area">
 		<canvas bind:this={surface} class:hand={tool === "hand"} tabindex="0" aria-label="像素画布" aria-describedby="pixel-help" onpointerdown={down} onpointermove={move} onlostpointercapture={(event) => { if (event.pointerId === pointer) finish(); }} oncontextmenu={(event) => event.preventDefault()} onkeydown={key} onfocus={() => { focused = true; render(); }} onblur={() => { focused = false; finish(); render(); }}>像素画布需要支持 Canvas 的浏览器。</canvas>
-		{#if showHelp}<div class="help-panel" id="pixel-help">左键涂色 · 右键擦除 · 手掌拖动视野<br />缩小看更多格子，放大画细节<br />方向键移动 · 空格填色 · Delete 擦除 · Ctrl / ⌘ Z 撤回<br />自动保存到此浏览器，PNG 导出全部已绘制内容</div>{:else}<span id="pixel-help" class="sr-only">左键或触摸绘画，右键擦除，手掌工具移动画布。方向键移动，空格填色，Delete 擦除，Ctrl 或 Command 加 Z 撤回。</span>{/if}
+		{#if showHelp}<div class="help-panel" id="pixel-help">左键涂色 · 右键擦除 · 手掌拖动视野<br />笔和橡皮可分别设置 1–8 px 粗细<br />工具栏可一键清空，清空后仍可撤回<br />缩小看更多格子，放大画细节<br />方向键移动 · 空格填色 · Delete 擦除 · Ctrl / ⌘ Z 撤回<br />自动保存到此浏览器，PNG 导出全部已绘制内容</div>{:else}<span id="pixel-help" class="sr-only">左键或触摸绘画，右键擦除，手掌工具移动画布。工具栏可分别设置画笔和橡皮粗细，并可一键清空，清空后仍可撤回。方向键移动，空格填色，Delete 擦除，Ctrl 或 Command 加 Z 撤回。</span>{/if}
 		{#if exportError}<p class="notice" role="alert">{exportError}</p>{:else if saveFailed}<p class="notice" role="alert">{status}</p>{/if}
 		{#if exportUrl}<a class="download-again" href={exportUrl} download="pixel-canvas.png" title="再次下载刚才导出的 PNG" aria-label="再次下载刚才导出的 PNG"><Icon icon="material-symbols:download-rounded" size="lg" /></a>{/if}
 	</div>
@@ -183,12 +210,14 @@
 	.studio { display: flex; flex-direction: column; height: max(430px, calc(100svh - 11rem)); min-width: 0; }
 	.toolbar { position: relative; display: flex; align-items: center; gap: .65rem; flex-wrap: wrap; padding: .65rem .8rem; border-bottom: 1px solid var(--line-divider); }
 	.tool-group, .palette { display: flex; align-items: center; gap: .25rem; }
+	.size { display: flex; align-items: center; gap: .3rem; padding-left: .2rem; font-size: .7rem; opacity: .85; }
+	.size select { height: 36px; padding: 0 .3rem; border: 1px solid var(--line-divider); border-radius: .5rem; background: var(--btn-regular-bg); color: inherit; cursor: pointer; }
 	.tool-group + .palette, .zoom { border-left: 1px solid var(--line-divider); padding-left: .65rem; }
 	button { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: .5rem; color: inherit; cursor: pointer; }
 	button:hover { background: var(--btn-regular-bg); }
 	button.chosen { background: var(--primary); color: var(--deep-text); }
 	button:disabled { opacity: .3; cursor: default; }
-	button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+	button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 	.palette { gap: .45rem; }
 	.palette .swatch { width: 22px; height: 22px; border: 1px solid #8886; border-radius: 5px; }
 	.swatch.selected { outline: 2px solid var(--primary); outline-offset: 2px; }

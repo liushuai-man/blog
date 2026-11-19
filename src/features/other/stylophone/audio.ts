@@ -37,17 +37,23 @@ export async function createAudio(valid: () => boolean, signal: AbortSignal): Pr
 		let level = 0.5;
 		let active: number | null = null;
 		let wobble = false;
+		const gainValue = () => level * 0.18;
+		// Keep the output level on its own short ramp. Notes are started and
+		// released by the synth envelope, so changing volume, muting or an
+		// octave/shared control never cuts the waveform at a non-zero sample.
+		const setLevel = (ramp = 0.02) => {
+			if (disposed) return;
+			const now = context.now();
+			output?.gain.rampTo(gainValue(), ramp, now);
+		};
 		const stop = () => {
 			if (disposed) return;
-			output!.gain.cancelScheduledValues(context.now());
-			output!.gain.value = 0;
 			if (active !== null) synth!.triggerRelease(context.now());
 			lfo!.stop(); synth!.detune.value = 0; active = null;
 		};
 		return {
 			play(midi) {
 				if (disposed || active === midi) return;
-				output!.gain.value = level * 0.18;
 				const frequency = 440 * 2 ** ((midi - 69) / 12);
 				if (active === null) synth!.triggerAttack(frequency, context.now());
 				else synth!.setNote(frequency, context.now());
@@ -55,7 +61,7 @@ export async function createAudio(valid: () => boolean, signal: AbortSignal): Pr
 				if (wobble) lfo!.start();
 			},
 			stop,
-			volume(value) { level = Math.min(1, Math.max(0, value)); if (!disposed && active !== null) output!.gain.value = level * 0.18; },
+			volume(value) { level = Math.min(1, Math.max(0, value)); setLevel(); },
 			vibrato(enabled) { wobble = enabled; if (disposed) return; if (enabled && active !== null) lfo!.start(); else { lfo!.stop(); synth!.detune.value = 0; } },
 			dispose,
 		};
