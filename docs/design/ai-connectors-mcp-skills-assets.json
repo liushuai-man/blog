@@ -1,0 +1,12 @@
+{
+  "article": "src/content/posts/ai-connectors-mcp-skills/index.md",
+  "assets": [
+    {
+      "path": "src/content/posts/ai-connectors-mcp-skills/images/copilot-connector-paths-handdrawn.png",
+      "method": "内置 imagegen",
+      "source": "https://learn.microsoft.com/en-us/microsoft-365/copilot/connectors/overview",
+      "styleReference": "src/content/posts/orca-agent-workspace/images/workflow.png",
+      "prompt": "Use case: infographic-diagram. Create a wide landscape 3:2 explainer for a Chinese technical blog. The supplied Orca workflow image is a style reference only. Use a pure white background and only thin black fineliner pen, lightly imperfect hand-drawn boxes and arrows, large unambiguously readable handwritten Simplified Chinese, and broad margins. Top center: one outlined box with exactly “Copilot 连接器”. Exactly two diverging black arrows point down from this top box, one to each of two horizontally aligned outlined boxes. Left box, two lines: “同步连接器” and “先建索引”. Right box, two lines: “联合连接器” and “用 MCP 实时取数”. The branches represent two different connector approaches, with no line between them. Exactly those five text labels, no extra title, no logos, no decoration, no trademark marks, no grey or colored strokes, no shading, paper texture, gradients, shadows, screenshots, or watermarks. Prioritize correct labels and sufficient whitespace for mobile legibility."
+    }
+  ]
+}
